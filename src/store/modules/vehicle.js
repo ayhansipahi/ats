@@ -18,9 +18,9 @@ const state = {
 };
 
 const getters = {
-  getVehicles(state) {
-    return state.items;
-  }
+  getVehicles: state => state.items,
+  getVehicleByCompanyId: state => companyId =>
+    state.items.filter(item => item.CompanyId === companyId)
 };
 
 const actions = {

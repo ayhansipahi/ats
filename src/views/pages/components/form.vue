@@ -24,9 +24,11 @@
                 :placeholder="field.label"
                 :disabled="field.formDisable || !editable"
               >
-                <b-form-select-option :value="null"
-                  >Bir {{ field.label }} seçin</b-form-select-option
-                >
+                <template v-slot:first>
+                  <b-form-select-option :value="null" disabled>
+                    Bir {{ field.label }} seçin
+                  </b-form-select-option>
+                </template>
                 <b-form-select-option
                   :key="option.Id"
                   v-for="option in options[field.options]"
