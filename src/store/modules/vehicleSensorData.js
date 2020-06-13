@@ -1,15 +1,15 @@
 import ApiService from "../../common/api.service";
 
 // action types
-export const FETCH_VEHICLETYPE = "FETCH_VEHICLETYPE";
-export const SAVE_VEHICLETYPE = "SAVE_VEHICLETYPE";
-export const CREATE_VEHICLETYPE = "CREATE_VEHICLETYPE";
-export const DELETE_VEHICLETYPE = "DELETE_VEHICLETYPE";
+export const FETCH_VEHICLESENSORDATA = "FETCH_VEHICLESENSORDATA";
+export const SAVE_VEHICLESENSORDATA = "SAVE_VEHICLESENSORDATA";
+export const CREATE_VEHICLESENSORDATA = "CREATE_VEHICLESENSORDATA";
+export const DELETE_VEHICLESENSORDATA = "DELETE_VEHICLESENSORDATA";
 
 // mutation types
-export const SET_VEHICLETYPE = "SET_VEHICLETYPE";
-export const UPDATE_VEHICLETYPE = "UPDATE_VEHICLETYPE";
-export const REMOVE_VEHICLETYPE = "REMOVE_VEHICLETYPE";
+export const SET_VEHICLESENSORDATA = "SET_VEHICLESENSORDATA";
+export const UPDATE_VEHICLESENSORDATA = "UPDATE_VEHICLESENSORDATA";
+export const REMOVE_VEHICLESENSORDATA = "REMOVE_VEHICLESENSORDATA";
 export const SET_ERROR = "SET_ERROR";
 
 const state = {
@@ -18,19 +18,19 @@ const state = {
 };
 
 const getters = {
-  getVehicleTypes(state) {
+  getVehicleSensorData(state) {
     return state.items;
   }
 };
 
 const actions = {
-  [FETCH_VEHICLETYPE](context) {
-    return ApiService.get("VehicleType", "get-all")
+  [FETCH_VEHICLESENSORDATA](context) {
+    return ApiService.get("VehicleSensorData", "get-all")
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context.commit(SET_VEHICLETYPE, data.Data);
+          context.commit(SET_VEHICLESENSORDATA, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -38,15 +38,15 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [SAVE_VEHICLETYPE](context, payload) {
+  [SAVE_VEHICLESENSORDATA](context, payload) {
     delete payload.CreatedDate;
-    return ApiService.post("VehicleType/update", payload)
+    return ApiService.post("VehicleSensorData/update", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
           //context.commit(UPDATE_VEHICLE_TYPE, data.Data);
-          context.dispatch(FETCH_VEHICLETYPE);
+          context.dispatch(FETCH_VEHICLESENSORDATA);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -54,14 +54,14 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [CREATE_VEHICLETYPE](context, payload) {
-    return ApiService.post("VehicleType/create", payload)
+  [CREATE_VEHICLESENSORDATA](context, payload) {
+    return ApiService.post("VehicleSensorData/create", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context.dispatch(FETCH_VEHICLETYPE);
+          context.dispatch(FETCH_VEHICLESENSORDATA);
           //context.commit(UPDATE_VEHICLE_TYPE, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -69,16 +69,16 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [DELETE_VEHICLETYPE](context, payload) {
-    return ApiService.query("VehicleType/delete", {
+  [DELETE_VEHICLESENSORDATA](context, payload) {
+    return ApiService.query("VehicleSensorData/delete", {
       params: { id: payload.Id }
     })
       .then(({ data }) => {
         if (data.IsSuccess) {
           //context.commit(REMOVE_VEHICLE_TYPE, data.Data);
-          context.dispatch(FETCH_VEHICLETYPE);
+          context.dispatch(FETCH_VEHICLESENSORDATA);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -89,7 +89,7 @@ const actions = {
 };
 
 const mutations = {
-  [SET_VEHICLETYPE](state, payload) {
+  [SET_VEHICLESENSORDATA](state, payload) {
     state.items = payload.map(item => {
       item.CreatedDate = new Date(item.CreatedDate);
       return item;
@@ -98,12 +98,12 @@ const mutations = {
   [SET_ERROR](state, payload) {
     state.errors = payload;
   },
-  [UPDATE_VEHICLETYPE](state, payload) {
+  [UPDATE_VEHICLESENSORDATA](state, payload) {
     state.items = state.items.map(item => {
       return item.Id === payload.Id ? payload : item;
     });
   },
-  [REMOVE_VEHICLETYPE](state, payload) {
+  [REMOVE_VEHICLESENSORDATA](state, payload) {
     state.items = state.items.filter(item => item.Id !== payload.Id);
   }
 };

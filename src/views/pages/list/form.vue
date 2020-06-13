@@ -176,20 +176,13 @@ export default {
         result["Id"] = this.form_id;
       }
       delete result["createdDate"];
-      console.log(result);
 
-      this.$axios
-        .post("/api/" + this.api + "/" + method, result)
-        .then(obj => {
-          console.log(obj);
-          s.$toastr.success("Form başarıyla kaydedildi.");
-          s.$store.state.config.key++;
-          let el = document.getElementsByClassName("modal-backdrop")[0];
-          el.parentNode.removeChild(el);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.$axios.post("/api/" + this.api + "/" + method, result).then(() => {
+        s.$toastr.success("Form başarıyla kaydedildi.");
+        s.$store.state.config.key++;
+        let el = document.getElementsByClassName("modal-backdrop")[0];
+        el.parentNode.removeChild(el);
+      });
     }
   }
 };

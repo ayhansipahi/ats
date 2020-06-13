@@ -103,6 +103,7 @@ export default {
       title: "Araç Haraketleri",
       fetching: false,
       fields: [
+        { options: "company", optionName: "CompanyName" },
         {
           key: "VehicleId",
           label: "Plaka",
@@ -113,12 +114,12 @@ export default {
           formType: "select"
         },
         {
-          key: "CompanyId",
-          label: "Firma",
+          key: "DriverId",
+          label: "Şöför",
           sortable: true,
           type: "select",
-          options: "company",
-          optionName: "CompanyName",
+          options: "driver",
+          optionName: "DriverName",
           formType: "select"
         },
         {
@@ -176,7 +177,7 @@ export default {
   },
   computed: {
     ...mapState({
-      items: state => state.vehicleDevice.items
+      items: state => state.vehicleDetails.items
     }),
     ...mapGetters({
       vehicle: "getVehicles",

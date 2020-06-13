@@ -21,7 +21,8 @@ Vue.use(VueToastr2);
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyAhJg3hOUR4QqA_SsYyyen139UNZ4WSn8A",
-    libraries: "places,drawing,visualization"
+    libraries: "places,drawing,visualization",
+    language: "tr"
   }
 });
 

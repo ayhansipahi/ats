@@ -51,7 +51,7 @@ export default new Router({
     },
     {
       path: "/map",
-      component: () => import("./views/pages/map.vue")
+      component: () => import("./views/pages/mapView.vue")
     },
     {
       path: "/list/:page",

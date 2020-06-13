@@ -1,15 +1,15 @@
 import ApiService from "../../common/api.service";
 
 // action types
-export const FETCH_VEHICLETYPE = "FETCH_VEHICLETYPE";
-export const SAVE_VEHICLETYPE = "SAVE_VEHICLETYPE";
-export const CREATE_VEHICLETYPE = "CREATE_VEHICLETYPE";
-export const DELETE_VEHICLETYPE = "DELETE_VEHICLETYPE";
+export const FETCH_VEHICLESTATIONDISTANCE = "FETCH_VEHICLESTATIONDISTANCE";
+export const SAVE_VEHICLESTATIONDISTANCE = "SAVE_VEHICLESTATIONDISTANCE";
+export const CREATE_VEHICLESTATIONDISTANCE = "CREATE_VEHICLESTATIONDISTANCE";
+export const DELETE_VEHICLESTATIONDISTANCE = "DELETE_VEHICLESTATIONDISTANCE";
 
 // mutation types
-export const SET_VEHICLETYPE = "SET_VEHICLETYPE";
-export const UPDATE_VEHICLETYPE = "UPDATE_VEHICLETYPE";
-export const REMOVE_VEHICLETYPE = "REMOVE_VEHICLETYPE";
+export const SET_VEHICLESTATIONDISTANCE = "SET_VEHICLESTATIONDISTANCE";
+export const UPDATE_VEHICLESTATIONDISTANCE = "UPDATE_VEHICLESTATIONDISTANCE";
+export const REMOVE_VEHICLESTATIONDISTANCE = "REMOVE_VEHICLESTATIONDISTANCE";
 export const SET_ERROR = "SET_ERROR";
 
 const state = {
@@ -18,19 +18,19 @@ const state = {
 };
 
 const getters = {
-  getVehicleTypes(state) {
+  getVehicleStationDistances(state) {
     return state.items;
   }
 };
 
 const actions = {
-  [FETCH_VEHICLETYPE](context) {
-    return ApiService.get("VehicleType", "get-all")
+  [FETCH_VEHICLESTATIONDISTANCE](context) {
+    return ApiService.get("VehicleStationDistance", "get-all")
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context.commit(SET_VEHICLETYPE, data.Data);
+          context.commit(SET_VEHICLESTATIONDISTANCE, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -38,15 +38,15 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [SAVE_VEHICLETYPE](context, payload) {
+  [SAVE_VEHICLESTATIONDISTANCE](context, payload) {
     delete payload.CreatedDate;
-    return ApiService.post("VehicleType/update", payload)
+    return ApiService.post("VehicleStationDistance/update", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
           //context.commit(UPDATE_VEHICLE_TYPE, data.Data);
-          context.dispatch(FETCH_VEHICLETYPE);
+          context.dispatch(FETCH_VEHICLESTATIONDISTANCE);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -54,14 +54,14 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [CREATE_VEHICLETYPE](context, payload) {
-    return ApiService.post("VehicleType/create", payload)
+  [CREATE_VEHICLESTATIONDISTANCE](context, payload) {
+    return ApiService.post("VehicleStationDistance/create", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context.dispatch(FETCH_VEHICLETYPE);
+          context.dispatch(FETCH_VEHICLESTATIONDISTANCE);
           //context.commit(UPDATE_VEHICLE_TYPE, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -69,16 +69,16 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [DELETE_VEHICLETYPE](context, payload) {
-    return ApiService.query("VehicleType/delete", {
+  [DELETE_VEHICLESTATIONDISTANCE](context, payload) {
+    return ApiService.query("VehicleStationDistance/delete", {
       params: { id: payload.Id }
     })
       .then(({ data }) => {
         if (data.IsSuccess) {
           //context.commit(REMOVE_VEHICLE_TYPE, data.Data);
-          context.dispatch(FETCH_VEHICLETYPE);
+          context.dispatch(FETCH_VEHICLESTATIONDISTANCE);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.Message );
         }
         return data;
       })
@@ -89,7 +89,7 @@ const actions = {
 };
 
 const mutations = {
-  [SET_VEHICLETYPE](state, payload) {
+  [SET_VEHICLESTATIONDISTANCE](state, payload) {
     state.items = payload.map(item => {
       item.CreatedDate = new Date(item.CreatedDate);
       return item;
@@ -98,12 +98,12 @@ const mutations = {
   [SET_ERROR](state, payload) {
     state.errors = payload;
   },
-  [UPDATE_VEHICLETYPE](state, payload) {
+  [UPDATE_VEHICLESTATIONDISTANCE](state, payload) {
     state.items = state.items.map(item => {
       return item.Id === payload.Id ? payload : item;
     });
   },
-  [REMOVE_VEHICLETYPE](state, payload) {
+  [REMOVE_VEHICLESTATIONDISTANCE](state, payload) {
     state.items = state.items.filter(item => item.Id !== payload.Id);
   }
 };

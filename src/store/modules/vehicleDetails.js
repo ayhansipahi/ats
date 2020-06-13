@@ -23,19 +23,59 @@ const getters = {
 const actions = {
   [FETCH_VEHICLEDETAILS](
     context,
-    { StartDate, EndDate, CompanyId, VehicleId }
+    {
+      StartDate,
+      EndDate,
+      CompanyId,
+      VehicleId,
+      type = "detail",
+      pageNumber,
+      pageSize
+    }
   ) {
     let base = "VehicleDetails/";
     let route = base + "get-all";
-    if (CompanyId) {
-      route = base + "get-details-by-company";
-    }
-    if (VehicleId) {
-      route = base + "get-details-by-vehicle";
+    if (type === "detail") {
+      if (CompanyId) {
+        route = base + "get-details-by-company";
+      }
+      if (VehicleId) {
+        route = base + "get-details-by-vehicle";
+      }
+
+      pageNumber = 1;
+      pageSize = 100;
+    } else if (type === "location") {
+      if (CompanyId) {
+        route = base + "get-location-by-company";
+      }
+      if (VehicleId) {
+        route = base + "get-last-location-by-vehicle";
+      }
+    } else if (type === "route") {
+      if (CompanyId) {
+        route = base + "get-location-by-company";
+      }
+      if (VehicleId) {
+        route = base + "get-location-by-vehicle-and-date";
+      }
+    } else if (type === "circle") {
+      route = base + "get-location-by-circle";
+    } else {
+      context.commit(SET_ERROR, ["Invalid type"]);
+      return Promise.reject();
     }
 
     return ApiService.query(route, {
-      params: { StartDate, EndDate, CompanyId, VehicleId }
+      params: {
+        StartDate,
+        EndDate,
+        VehicleId,
+        pageNumber,
+        pageSize,
+        CompanyId,
+        companyId: CompanyId
+      }
     })
       .then(({ data }) => {
         if (data.IsSuccess) {
@@ -50,7 +90,7 @@ const actions = {
 };
 
 const mutations = {
-  [SET_VEHICLEDETAILS](state, payload) {
+  [SET_VEHICLEDETAILS](state, payload = []) {
     state.items = payload.map(item => {
       item.CreatedDate = new Date(item.CreatedDate);
       return item;

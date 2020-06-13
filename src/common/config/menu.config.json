@@ -141,7 +141,12 @@
           }
         ]
       },
-
+      {
+        "title": "Tanımlamalar",
+        "root": true,
+        "bullet": "dot",
+        "icon": "",
+        "submenu": [
       {
         "title": "Firmalar",
         "root": true,
@@ -192,7 +197,7 @@
             "page": "product", "root": true,
             "icon": "",
             "bullet": "dot"
-          }
+          }]}
         ,
       {
         "title": "Kullanıcı Ayarları",

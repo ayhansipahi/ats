@@ -239,7 +239,6 @@ export default {
             let val = this.data[itm][this.table_content[item]],
               form = this.form.find(x => x.id === this.table_content[item]),
               type = form.type;
-            console.log(this.data);
             if (
               type === "text" ||
               type === "number" ||
@@ -376,12 +375,11 @@ export default {
             "/delete?id=" +
             del_id[0]
         )
-        .then(obj => {
+        .then(() => {
           s.$toastr.success("Silme işlemi başarıyla gerçekleşti.");
           s.$store.state.config.key++;
           let el = document.getElementsByClassName("modal-backdrop")[0];
           el.parentNode.removeChild(el);
-          console.log(obj);
         });
     },
     info: function(edit_id, index) {
@@ -404,7 +402,6 @@ export default {
             return imgCodw;
           else return value;
         } catch (err) {
-          console.log(err);
           return value;
         }
       }
