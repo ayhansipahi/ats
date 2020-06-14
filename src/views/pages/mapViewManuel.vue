@@ -1,107 +1,9 @@
 <template>
   <div>
     <b-row>
-      <b-modal
-        id="modal-center"
-        size="xl"
-        centered
-        hide-header
-        static
-        @ok="onManuelSelect"
-      >
-        <GmapMap
-          :center="mapCenter"
-          :zoom="mapZoom"
-          map-type-id="terrain"
-          style="width: 100%; height: 500px"
-          :options="mapOptions"
-          ref="drawMapRef"
-        />
-      </b-modal>
-    </b-row>
-    <b-row>
-      <b-col class="col-12 bg-white p-4">
-        <b-form class="row">
-          <b-col>
-            <b-form-select
-              v-model="formCompany"
-              @change="onCompanySelect"
-              :options="formCompanyOptions"
-              required
-            >
-              <template v-slot:first>
-                <b-form-select-option :value="null">
-                  Bir Firma seçin
-                </b-form-select-option>
-              </template>
-            </b-form-select>
-          </b-col>
-
-          <b-col>
-            <b-form-select
-              v-model="formVehicle"
-              :options="formVehicleOptions"
-              @change="onVehicleSelect"
-            >
-              <template v-slot:first>
-                <b-form-select-option :value="null">
-                  Bir Araç seçin
-                </b-form-select-option>
-              </template>
-            </b-form-select>
-          </b-col>
-
-          <b-col>
-            <b-form-datepicker
-              locale="tr"
-              :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-              v-model="startDate"
-              :max="endDate || new Date().toISOString().split('T')[0]"
-              :required="mapType === 'route'"
-            >
-            </b-form-datepicker>
-          </b-col>
-
-          <b-col>
-            <b-form-datepicker
-                locale="tr"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-              v-model="endDate"
-              :min="startDate"
-              :max="new Date().toISOString().split('T')[0]"
-              :required="mapType === 'route'"
-            >
-            </b-form-datepicker>
-          </b-col>
-          <b-col>
-            <b-form-group>
-              <b-form-radio-group v-model="mapType" name="mapType">
-                <b-form-radio value="location">
-                  Konum
-                </b-form-radio>
-                <b-form-radio value="route" :disabled="!formVehicle">
-                  Rota
-                </b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
-          </b-col>
-
-          <b-col>
-            <b-button
-              :variant="!isSearchDisabled ? 'primary' : 'ghost'"
-              block
-              @click="onGetItems"
-              :disabled="isSearchDisabled"
-            >
-              Ara
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button block v-b-modal.modal-center>Sorgula</b-button>
-          </b-col>
-        </b-form>
+      <b-col class="col-12 bg-white">
         <div class="row">
-          <div class="col-12 col-md-8 col-xl-9 order-1 order-md-0">
+          <div class="col-12">
             <GmapMap
               :center="mapCenter"
               :zoom="mapZoom"
@@ -112,8 +14,8 @@
             />
           </div>
           <div
-            class="col-12 col-md-4 col-xl-3 px-4 mb-4 order-0 order-md-1"
-            v-if="selectedItem"
+            class="col-12"
+            v-if="items"
           >
             <div class="row car-info">
               <div class="col-12 px-3 py-2 car-info-title">
@@ -188,9 +90,7 @@ export default {
       formVehicle: 18,
       mapType: "route",
       Map: null,
-      Markers: [],
-      drawingCircle: null,
-      circle: null
+      Markers: []
     };
   },
   computed: {
@@ -248,6 +148,7 @@ export default {
       );
     }
   },
+
   methods: {
     ...mapActions({
       fetchItems: FETCH_VEHICLEDETAILS,
@@ -262,7 +163,6 @@ export default {
     onCompanySelect() {
       this.mapType = "location";
       this.formVehicle = null;
-      this.circle.setMap(null);
     },
     onVehicleSelect(e) {
       this.mapType = e ? "route" : "location";
@@ -273,10 +173,7 @@ export default {
         EndDate: this.endDate,
         CompanyId: this.formCompany,
         VehicleId: this.formVehicle,
-        type: this.mapType,
-        Longitude: this.circle ? this.circle.getCenter().lng() : null,
-        Latitude: this.circle ? this.circle.getCenter().lat() : null,
-        Radius: this.circle ? this.circle.getRadius() / (110 * 1000) : null
+        type: this.mapType
       })
         .then(() => {
           this.setCurrentItem(null);
@@ -294,15 +191,7 @@ export default {
             if (!e) e = item.Longitude;
             else if (e > item.Longitude) e = item.Longitude;
           });
-          if (this.items.length === 0) {
-            s = 38.9637451;
-            w = 35.2433205;
-            n = 38.9637451;
-            e = 35.2433205;
-            this.Map.setZoom(6);
-          } else {
-            this.Map.setZoom(12);
-          }
+          this.Map.setZoom(12);
           this.Map.setCenter(
             new this.google.maps.LatLng((n + s) / 2, (e + w) / 2)
           );
@@ -315,7 +204,7 @@ export default {
           this.directionsRenderer.setMap(null);
           this.Markers.forEach(marker => marker.setMap(null));
           if (this.mapType === "route" && this.formVehicle) this.setRoute();
-          if (["location", "circle"].includes(this.mapType)) {
+          if (this.mapType === "location") {
             this.items.forEach(item => {
               let marker = new this.google.maps.Marker({
                 position: new this.google.maps.LatLng(
@@ -332,7 +221,7 @@ export default {
                   this.setCurrentItem(null);
                 } else {
                   this.setCurrentItem(item);
-                  this.Markers.forEach(marker => marker.setAnimation(null));
+                  this.Markers.forEach(marker=>marker.setAnimation(null));
                   marker.setAnimation(this.google.maps.Animation.BOUNCE);
                 }
               });
@@ -386,59 +275,15 @@ export default {
           }
         }
       );
-    },
-    onManuelSelect() {
-      if (this.circle) this.circle.setMap(null);
-      this.circle = new this.google.maps.Circle({
-        center: this.drawingCircle.getCenter(),
-        radius: this.drawingCircle.getRadius(),
-        draggable: false,
-        editable: false,
-        strokeColor: "#ccc",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: "#ccc",
-        fillOpacity: 0.35
-      });
-      this.circle.setMap(this.Map);
-      this.resetForm();
-      this.mapType = "circle";
-      this.onGetItems();
-    },
-    registerDrawEvents() {
-      this.DrawMap.addListener("click", e => {
-        this.drawCircle(e);
-      });
-    },
-    drawCircle(e) {
-      if (this.drawingCircle) this.drawingCircle.setMap(null);
-      this.drawingCircle = new this.google.maps.Circle({
-        center: e.latLng,
-        radius: 2e4,
-        draggable: true,
-        editable: true
-      });
-      this.drawingCircle.setMap(this.DrawMap);
-    },
-
-    resetForm() {
-      this.formCompany = null;
-      this.formVehicle = null;
-      this.startDate = null;
-      this.endDate = null;
-      this.mapType = "route";
     }
   },
+  beforeMount() {},
   mounted() {
     this.fetchOptions();
     this.$refs.mapRef.$mapPromise.then(map => {
       this.Map = map;
       this.directionsService = new this.google.maps.DirectionsService();
       this.directionsRenderer = new this.google.maps.DirectionsRenderer();
-    });
-    this.$refs.drawMapRef.$mapPromise.then(map => {
-      this.DrawMap = map;
-      this.registerDrawEvents();
     });
   }
 };

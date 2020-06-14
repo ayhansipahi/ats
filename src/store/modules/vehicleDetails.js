@@ -30,7 +30,10 @@ const actions = {
       VehicleId,
       type = "detail",
       pageNumber,
-      pageSize
+      pageSize,
+      Longitude,
+      Latitude,
+      Radius
     }
   ) {
     let base = "VehicleDetails/";
@@ -74,7 +77,8 @@ const actions = {
         pageNumber,
         pageSize,
         CompanyId,
-        companyId: CompanyId
+
+        companyId: CompanyId,Longitude,Latitude,Radius
       }
     })
       .then(({ data }) => {

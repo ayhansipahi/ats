@@ -45,8 +45,9 @@
                 :required="field.formRequired"
                 :placeholder="field.label"
                 :disabled="field.formDisable || !editable"
-                locale="tr-TR"
-              ></b-form-datepicker>
+                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                locale="tr"
+              > </b-form-datepicker>
             </template>
             <template v-if="['file'].includes(field.formType)">
               <b-form-file
