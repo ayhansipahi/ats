@@ -34,7 +34,11 @@
 
             <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
               <b-form-datepicker
-                  :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
                 locale="tr"
                 v-model="startDate"
                 :max="endDate || new Date().toISOString().split('T')[0]"
@@ -45,7 +49,11 @@
             <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
               <b-form-datepicker
                 locale="tr"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
                 v-model="endDate"
                 :min="startDate"
                 :max="new Date().toISOString().split('T')[0]"

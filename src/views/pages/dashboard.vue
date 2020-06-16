@@ -303,7 +303,7 @@ import widget4 from "@/common/mock/widget-4.json";
 import widget5 from "@/common/mock/widget-5.json";
 
 export default {
-  name: "",
+  name: "dashboard",
   components: {
     KTPortlet,
     ContextMenu1,
@@ -327,7 +327,7 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch(SET_BREADCRUMB, [{ title: "Rapor" }]);
+    this.$store.dispatch(SET_BREADCRUMB, [{ title: "Dashboard" }]);
   },
   methods: {
     setActiveTab1(event) {

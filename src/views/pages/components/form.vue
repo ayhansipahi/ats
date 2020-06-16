@@ -45,9 +45,14 @@
                 :required="field.formRequired"
                 :placeholder="field.label"
                 :disabled="field.formDisable || !editable"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
                 locale="tr"
-              > </b-form-datepicker>
+              >
+              </b-form-datepicker>
             </template>
             <template v-if="['file'].includes(field.formType)">
               <b-form-file
@@ -63,17 +68,30 @@
       </b-row>
       <b-row align-h="end">
         <template v-if="!isCreate">
-          <b-btn variant="ghost" @click="onDelete">
+          <b-btn
+            v-if="isVehicle"
+            variant="success"
+            @click="
+              $router.push({
+                name: 'map',
+                params: { vehicleId: 18, companyId: 2, maptype: 'location' }
+              })
+            "
+          >
+            <b-icon-eye-fill />
+            Canlı İzle
+          </b-btn>
+          <b-btn v-if="canDelete"  variant="ghost" @click="onDelete">
             <b-icon-trash variant="danger"></b-icon-trash>
           </b-btn>
           <b-btn variant="ghost" v-if="editable" @click="editable = !editable">
             <b-icon-info-circle variant="info"></b-icon-info-circle>
           </b-btn>
-          <b-btn variant="ghost" v-if="!editable" @click="editable = !editable">
+          <b-btn variant="ghost" v-if="!editable && canEdit" @click="editable = !editable">
             <b-icon-pencil-square variant="primary"></b-icon-pencil-square>
           </b-btn>
         </template>
-        <template v-if="editable">
+        <template v-if="editable && canEdit">
           <b-btn variant="danger" @click="onReset">İptal</b-btn>
           <b-btn variant="primary" type="submit" class="ml-1">Kaydet</b-btn>
         </template>
@@ -97,6 +115,13 @@ export default {
     },
     isCreate: {
       default: false
+    },
+    isVehicle: { default: false },
+    canDelete: {
+      default: true
+    },
+    canEdit: {
+      default: true
     }
   },
   data() {

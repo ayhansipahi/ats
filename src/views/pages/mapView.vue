@@ -54,7 +54,11 @@
           <b-col>
             <b-form-datepicker
               locale="tr"
-              :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+              :date-format-options="{
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+              }"
               v-model="startDate"
               :max="endDate || new Date().toISOString().split('T')[0]"
               :required="mapType === 'route'"
@@ -64,8 +68,12 @@
 
           <b-col>
             <b-form-datepicker
-                locale="tr"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+              locale="tr"
+              :date-format-options="{
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+              }"
               v-model="endDate"
               :min="startDate"
               :max="new Date().toISOString().split('T')[0]"
@@ -157,8 +165,14 @@ import { FETCH_VEHICLEDETAILS } from "../../store/modules/vehicleDetails";
 export default {
   name: "mapView",
   components: {},
+  props: {
+    companyId: { default: null },
+    vehicleId: { default: null },
+    maptype: { default: "route" }
+  },
   data() {
     return {
+      title: "Harita",
       mapZoom: 6,
       mapCenter: { lat: 38.5603058, lng: 35.0688108 },
       mapOptions: {
@@ -182,11 +196,11 @@ export default {
         }
       ],
       selectedItem: null,
-      startDate: "2020-06-01",
-      endDate: "2020-06-11",
-      formCompany: 2,
-      formVehicle: 18,
-      mapType: "route",
+      startDate: null,
+      endDate: null,
+      formCompany: this.companyId,
+      formVehicle: this.vehicleId,
+      mapType: this.maptype,
       Map: null,
       Markers: [],
       drawingCircle: null,
@@ -420,7 +434,6 @@ export default {
       });
       this.drawingCircle.setMap(this.DrawMap);
     },
-
     resetForm() {
       this.formCompany = null;
       this.formVehicle = null;
@@ -430,6 +443,12 @@ export default {
     }
   },
   mounted() {
+    this.setBreadCrumb([
+      {
+        title: this.title,
+        route: this.$router.route
+      }
+    ]);
     this.fetchOptions();
     this.$refs.mapRef.$mapPromise.then(map => {
       this.Map = map;

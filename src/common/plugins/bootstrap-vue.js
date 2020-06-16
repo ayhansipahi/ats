@@ -1,10 +1,10 @@
 import Vue from "vue";
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 // Include bootstrap vue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
+Vue.use(IconsPlugin);
 
 export default BootstrapVue;

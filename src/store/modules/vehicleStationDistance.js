@@ -30,7 +30,7 @@ const actions = {
         if (data.IsSuccess) {
           context.commit(SET_VEHICLESTATIONDISTANCE, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message );
+          context.commit(SET_ERROR, data.Message);
         }
         return data;
       })
@@ -46,7 +46,7 @@ const actions = {
           //context.commit(UPDATE_VEHICLE_TYPE, data.Data);
           context.dispatch(FETCH_VEHICLESTATIONDISTANCE);
         } else {
-          context.commit(SET_ERROR, data.Message );
+          context.commit(SET_ERROR, data.Message);
         }
         return data;
       })
@@ -61,7 +61,7 @@ const actions = {
           context.dispatch(FETCH_VEHICLESTATIONDISTANCE);
           //context.commit(UPDATE_VEHICLE_TYPE, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message );
+          context.commit(SET_ERROR, data.Message);
         }
         return data;
       })
@@ -78,7 +78,7 @@ const actions = {
           //context.commit(REMOVE_VEHICLE_TYPE, data.Data);
           context.dispatch(FETCH_VEHICLESTATIONDISTANCE);
         } else {
-          context.commit(SET_ERROR, data.Message );
+          context.commit(SET_ERROR, data.Message);
         }
         return data;
       })

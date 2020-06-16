@@ -25,8 +25,8 @@ export const locale = {
       CONTACT: "Contact"
     },
     LOGIN: {
-      TITLE: "Giriş",
-      BUTTON: "Kayıt ol"
+      TITLE: "Kullanıcı Giriş",
+      BUTTON: "Giriş Yap"
     },
     FORGOT: {
       TITLE: "Forgot Password?",

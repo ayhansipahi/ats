@@ -78,7 +78,10 @@ const actions = {
         pageSize,
         CompanyId,
 
-        companyId: CompanyId,Longitude,Latitude,Radius
+        companyId: CompanyId,
+        Longitude,
+        Latitude,
+        Radius
       }
     })
       .then(({ data }) => {

@@ -36,13 +36,13 @@
       </template>
       <template v-slot:cell(actions)="row">
         <b-btn-group>
-          <b-btn variant="ghost" @click="onDelete(row.item)">
+          <b-btn v-if="canDelete" variant="ghost" @click="onDelete(row.item)">
             <b-icon-trash variant="danger"></b-icon-trash>
           </b-btn>
           <b-btn variant="ghost" @click="onSelect(row.item)">
             <b-icon-info-circle variant="info"></b-icon-info-circle>
           </b-btn>
-          <b-btn variant="ghost" @click="onEdit(row.item)">
+          <b-btn v-if="canEdit" variant="ghost" @click="onEdit(row.item)">
             <b-icon-pencil-square variant="primary"></b-icon-pencil-square>
           </b-btn>
         </b-btn-group>
@@ -95,6 +95,12 @@ export default {
       default() {
         return {};
       }
+    },
+    canDelete: {
+      default: true
+    },
+    canEdit: {
+      default: true
     }
   },
   computed: {
@@ -132,10 +138,10 @@ export default {
       this.onFilter();
     },
     onDelete(data) {
-      this.$emit("onDelete", data);
+      this.canDelete && this.$emit("onDelete", data);
     },
     onEdit(data) {
-      this.$emit("onEdit", data);
+      this.canEdit && this.$emit("onEdit", data);
     },
     onSelect(data) {
       this.$emit("onSelect", data);

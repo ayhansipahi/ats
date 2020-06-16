@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--begin: Head -->
-    <div
+    <div  v-if="false"
       class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
       :style="{ backgroundImage: `url(${backgroundImage})` }"
     >
@@ -27,7 +27,7 @@
     <!--end: Head -->
     <!--begin: Navigation -->
     <div class="kt-notification">
-      <a href="#" class="kt-notification__item">
+      <a v-if="false" href="#" class="kt-notification__item">
         <div class="kt-notification__item-icon">
           <i class="flaticon2-calendar-3 kt-font-success"></i>
         </div>
@@ -38,7 +38,7 @@
           </div>
         </div>
       </a>
-      <a href="#" class="kt-notification__item">
+      <a v-if="false" href="#" class="kt-notification__item">
         <div class="kt-notification__item-icon">
           <i class="flaticon2-mail kt-font-warning"></i>
         </div>
@@ -49,7 +49,7 @@
           <div class="kt-notification__item-time">Inbox and tasks</div>
         </div>
       </a>
-      <a href="#" class="kt-notification__item">
+      <a v-if="false" href="#" class="kt-notification__item">
         <div class="kt-notification__item-icon">
           <i class="flaticon2-rocket-1 kt-font-danger"></i>
         </div>
@@ -60,7 +60,7 @@
           <div class="kt-notification__item-time">Logs and notifications</div>
         </div>
       </a>
-      <a href="#" class="kt-notification__item">
+      <a v-if="false" href="#" class="kt-notification__item">
         <div class="kt-notification__item-icon">
           <i class="flaticon2-hourglass kt-font-brand"></i>
         </div>
@@ -71,7 +71,7 @@
           </div>
         </div>
       </a>
-      <a href="#" class="kt-notification__item">
+      <a v-if="false" href="#" class="kt-notification__item">
         <div class="kt-notification__item-icon">
           <i class="flaticon2-cardiogram kt-font-warning"></i>
         </div>
@@ -90,10 +90,10 @@
         <a
           href="#"
           v-on:click="onLogout()"
-          class="btn btn-label btn-label-brand btn-sm btn-bold"
+          class="btn btn-label btn-label-brand btn-sm btn-bold flex-grow-1"
           >Sign Out</a
         >
-        <a
+        <a v-if="false"
           href="#"
           v-on:click="onLogout()"
           class="btn btn-clean btn-sm btn-bold"

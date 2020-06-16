@@ -1,5 +1,5 @@
 <template>
-  <layoutbase></layoutbase>
+  <router-view></router-view>
 </template>
 
 <style lang="scss">
@@ -23,11 +23,9 @@
 
 <script>
 import { OVERRIDE_LAYOUT_CONFIG } from "@/store/config.module";
-import layoutbase from "@/views/theme/Base.vue";
 
 export default {
   name: "Tupras",
-  components: { layoutbase },
   mounted() {
     /**
      * this is to override the layout config using saved data from localStorage

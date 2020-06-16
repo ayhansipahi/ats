@@ -3,6 +3,9 @@ import App from "./App.vue";
 import router from "./router";
 import axios from "axios";
 import store from "./store";
+
+// import VueSignalR from "@latelier/vue-signalr";
+
 import VueToastr2 from "vue-toastr-2";
 import "vue-toastr-2/dist/vue-toastr-2.min.css";
 import * as VueGoogleMaps from "vue2-google-maps";
@@ -30,6 +33,7 @@ Vue.prototype.$axios = axios.create({
   baseURL: "https://tupras-test.azurewebsites.net/"
 });
 
+//Vue.use(VueSignalR, "https://tupras-test.azurewebsites.net/realtimedatahub");
 Vue.use(require("vue-moment"));
 
 var VueScrollTo = require("vue-scrollto");
@@ -84,5 +88,10 @@ new Vue({
   store,
   i18n,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    /*this.$socket.start({
+      log: true // Active only in development for debugging.
+    });*/
+  }
 }).$mount("#app");

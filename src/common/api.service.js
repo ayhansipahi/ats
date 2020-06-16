@@ -23,6 +23,7 @@ const ApiService = {
   },
 
   query(resource, params) {
+    this.setHeader()
     return Vue.axios.get(resource, params);
     /*.catch(error => {
       console.log(error);
@@ -37,6 +38,7 @@ const ApiService = {
    * @returns {*}
    */
   get(resource, slug = "") {
+    this.setHeader()
     return Vue.axios.get(`${resource}/${slug}`);
     /*.catch(error => {
       console.log(error);
@@ -50,13 +52,14 @@ const ApiService = {
    * @param params
    * @returns {*}
    */
-  post(resource, params) {
+  post(resource, params, config) {
+    this.setHeader()
     /*let formData = new FormData();
     Object.keys(params).forEach(key =>{
       formData.set(key,params[key])
     })
     return Vue.axios.post(`${resource}`, formData);*/
-    return Vue.axios.post(`${resource}`, params);
+    return Vue.axios.post(`${resource}`, params, config);
   },
 
   /**
@@ -67,6 +70,7 @@ const ApiService = {
    * @returns {IDBRequest<IDBValidKey> | Promise<void>}
    */
   update(resource, slug, params) {
+    this.setHeader()
     /*let formData = new FormData();
     Object.keys(params).forEach(key =>{
       formData.set(key,params[key])
@@ -82,6 +86,7 @@ const ApiService = {
    * @returns {IDBRequest<IDBValidKey> | Promise<void>}
    */
   put(resource, params) {
+    this.setHeader()
     return Vue.axios.put(`${resource}`, params);
   },
 
@@ -91,6 +96,7 @@ const ApiService = {
    * @returns {*}
    */
   delete(resource) {
+    this.setHeader()
     return Vue.axios.delete(resource);
     /*.catch(error => {
       console.log(error);

@@ -6,7 +6,6 @@ import htmlClass from "./htmlclass.module";
 import config from "./config.module";
 import breadcrumbs from "./breadcrumbs.module";
 
-
 import alarm from "./modules/alarm";
 import company from "./modules/company";
 import deviceSensor from "./modules/deviceSensor";
@@ -25,9 +24,8 @@ import vehicleDetails from "./modules/vehicleDetails";
 import vehicleDevice from "./modules/vehicleDevice";
 import vehicleType from "./modules/vehicleType";
 import vehicleProductGroup from "./modules/vehicleProductGroup";
-
-
-
+import user from "./modules/user";
+import role from "./modules/role";
 
 Vue.use(Vuex);
 
@@ -54,6 +52,6 @@ export default new Vuex.Store({
     vehicleDetails,
     vehicleDevice,
     vehicleType,
-    vehicleProductGroup
+    vehicleProductGroup,user,role
   }
 });

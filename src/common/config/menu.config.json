@@ -207,11 +207,11 @@
         "submenu": [
           {
             "title": "Kullanıcılar",
-            "page": "list/kullanici"
+            "page": "user"
           },
           {
             "title": "Yetkiler",
-            "page": "list/yetki"
+            "page": "role"
           }
         ]
       },

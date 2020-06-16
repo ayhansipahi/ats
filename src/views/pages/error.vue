@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "Error-1",
+  name: "Error",
   mounted() {},
   computed: {
     backgroundImage() {
