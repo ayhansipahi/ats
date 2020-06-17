@@ -1,8 +1,10 @@
 import ApiService from "../../common/api.service";
+// import { CREATE_USERPAGE} from "./role";
 
 // action types
 export const FETCH_USER = "FETCH_USER";
 export const FETCH_USERROLE = "FETCH_USERROLE";
+export const CREATE_USER = "CREATE_USER";
 
 // mutation types
 export const SET_USER = "SET_USER";
@@ -27,6 +29,9 @@ const actions = {
         if (data.IsSuccess) {
           context.commit(SET_USER, data.Data);
           context.dispatch(FETCH_USERROLE);
+          /*context.state.items.forEach(item => {
+            context.dispatch(CREATE_USERPAGE, item.Id);
+          })*/
         } else {
           context.commit(SET_ERROR, data.Message);
         }
@@ -53,7 +58,8 @@ const actions = {
           context.commit(SET_ERROR, err.response.data.errors);
         })
     );
-  }
+  },
+  [CREATE_USER]() {}
 };
 
 const mutations = {

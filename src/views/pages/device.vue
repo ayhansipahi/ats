@@ -17,6 +17,7 @@
     </transition>
     <tprsForm
       v-if="selectedItem !== null"
+      :key="selectedItem"
       :item="selectedItem"
       :fields="fields"
       :editable="selectedItemEditable"

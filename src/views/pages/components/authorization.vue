@@ -79,6 +79,7 @@
                   <b-form-checkbox
                     :disabled="!editable"
                     v-model="getPageData(page.Id).Read"
+                    @change="e => change(e, getPageData(page.Id), 'Read')"
                   >
                     Görüntüleme
                   </b-form-checkbox>
@@ -87,6 +88,7 @@
                   <b-form-checkbox
                     :disabled="!editable"
                     v-model="getPageData(page.Id).Write"
+                    @change="e => change(e, getPageData(page.Id), 'Write')"
                   >
                     Ekleme
                   </b-form-checkbox></b-td
@@ -95,6 +97,7 @@
                   <b-form-checkbox
                     :disabled="!editable"
                     v-model="getPageData(page.Id).Update"
+                    @change="e => change(e, getPageData(page.Id), 'Update')"
                   >
                     Güncelleme
                   </b-form-checkbox></b-td
@@ -103,6 +106,7 @@
                   <b-form-checkbox
                     :disabled="!editable"
                     v-model="getPageData(page.Id).Delete"
+                    @change="e => change(e, getPageData(page.Id), 'Delete')"
                   >
                     Silme
                   </b-form-checkbox>
@@ -170,7 +174,7 @@ export default {
         return [];
       }
     },
-    rolePages: {
+    xPages: {
       default() {
         return [];
       }
@@ -178,22 +182,24 @@ export default {
   },
   data() {
     return {
-      formItem: { ...this.item }
+      formItem: { ...this.item },
+      formXPages: [...this.xPages],
+      changeFields: []
     };
   },
   computed: {
-    currentRolePageData() {
-      return this.rolePages.filter(rp => {
-        return rp.RoleId === this.item.Id;
+    currentXPageData() {
+      return this.formXPages.filter(rp => {
+        return rp.RoleId === this.item.Id || rp.UserId === this.item.Id;
       });
     }
   },
   methods: {
     getPageData(PageId) {
-      return this.currentRolePageData.find(p => p.PageId === PageId);
+      return this.currentXPageData.find(p => p.PageId === PageId);
     },
     onSubmit() {
-      this.$emit("onSave", this.formItem);
+      this.$emit("onSave", this.formItem, this.changeFields);
     },
     onDelete() {
       this.$emit("onDelete", this.formItem);
@@ -201,6 +207,18 @@ export default {
     onReset() {
       this.formItem = { ...this.item };
       this.$emit("onCancel");
+    },
+    change(value, xPage, field) {
+      let isChange = false;
+      this.changeFields.map(cf => {
+        if(cf.Id === xPage.Id){
+          isChange = true;
+          cf[field] = value;
+        }
+      });
+      if(!isChange) {
+        this.changeFields.push(xPage);
+      }
     }
   }
 };

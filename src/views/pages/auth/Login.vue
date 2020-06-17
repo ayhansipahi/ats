@@ -110,7 +110,8 @@
 
 <script>
 import { mapState } from "vuex";
-import { LOGIN, LOGOUT } from "../../../store/auth.module";
+import { LOGOUT } from "../../../store/auth.module";
+// import { LOGIN, LOGOUT } from "../../../store/auth.module";
 
 import { validationMixin } from "vuelidate";
 import { minLength, required } from "vuelidate/lib/validators";
@@ -159,8 +160,8 @@ export default {
         return;
       }
 
-      const userName = this.$v.form.userName.$model;
-      const password = this.$v.form.password.$model;
+      //const userName = this.$v.form.userName.$model;
+      //const password = this.$v.form.password.$model;
 
       // clear existing errors
       this.$store.dispatch(LOGOUT);
@@ -173,8 +174,9 @@ export default {
         "kt-spinner--right"
       );
 
+      return this.$router.push({ name: "map" });
       // send login request
-      this.$store
+      /*this.$store
         .dispatch(LOGIN, { userName, password })
         // go to which page after successfully login
         .then(response => {
@@ -187,7 +189,9 @@ export default {
             "kt-spinner--light",
             "kt-spinner--right"
           );
-        });
+        });*,
+        7
+       */
     }
   },
   computed: {

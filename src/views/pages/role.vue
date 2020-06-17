@@ -32,7 +32,7 @@
       :key="'a_' + selectedItem.Id"
       v-if="selectedItem !== null && !isCreating"
       :pages="pages"
-      :rolePages="rolePages"
+      :xPages="rolePages"
       :item.sync="selectedItem"
       :editable="selectedItemEditable"
       :isCreate="isCreating"
@@ -117,9 +117,14 @@ export default {
         data.IsSuccess ? this.reset() : false
       );
     },
-    onSaveRolePage(item) {
-      this.saveRolePage(item).then(data =>
-        data.IsSuccess ? this.reset() : false
+    onSaveRolePage(role, rolePages) {
+      Promise.all([
+        this.saveRole(role),
+        ...rolePages.map(rolePage => this.saveRolePage(rolePage))
+      ]).then(responses =>
+        responses.map(response => response.IsSuccess).every(res => res === true)
+          ? this.reset()
+          : false
       );
     },
     onCancel() {
@@ -143,7 +148,7 @@ export default {
       this.isCreating = false;
     }
   },
-  mounted() {
+  async mounted() {
     this.setBreadCrumb([
       {
         title: this.title,
@@ -151,8 +156,9 @@ export default {
       }
     ]);
     this.fetching = true;
-    this.fetchRoles();
-    this.fetchPages();
+    await this.fetchPages();
+    await this.fetchRoles();
+    await this.fetchRolePages();
     this.fetching = false;
   }
 };

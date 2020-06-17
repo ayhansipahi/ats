@@ -12,6 +12,10 @@ export const FETCH_ROLEPAGE = "FETCH_ROLEPAGE";
 export const SAVE_ROLEPAGE = "SAVE_ROLEPAGE";
 export const CREATE_ROLEPAGE = "CREATE_ROLEPAGE";
 
+export const FETCH_USERPAGE = "FETCH_USERPAGE";
+export const SAVE_USERPAGE = "SAVE_USERPAGE";
+export const CREATE_USERPAGE = "CREATE_USERPAGE";
+
 // mutation types
 export const SET_ROLE = "SET_ROLE";
 export const UPDATE_ROLE = "UPDATE_ROLE";
@@ -21,12 +25,14 @@ export const SET_PAGE = "SET_PAGE";
 export const SET_ROLEPAGE = "SET_ROLEPAGE";
 export const SET_ROLEPAGEBYID = "SET_ROLEPAGEBYID";
 export const FETCH_ROLEPAGEBYROLE = "FETCH_ROLEPAGEBYROLE";
+export const SET_USERPAGE = "SET_USERPAGE";
 
 const state = {
   errors: null,
   roles: [],
   pages: [],
-  rolePages: []
+  rolePages: [],
+  userPages: []
 };
 
 const getters = {
@@ -34,7 +40,10 @@ const getters = {
     return state.roles;
   },
   getPages(state) {
-    state.pages;
+    return state.pages;
+  },
+  getUserPages(state){
+    return state.userPages;
   }
 };
 
@@ -91,9 +100,10 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
+  // eslint-disable-next-line no-unused-vars
   [SAVE_ROLE](context, payload) {
-    delete payload.CreatedDate;
-    return ApiService.post("User/update-role", payload)
+    return { IsSuccess: true };
+    /*ApiService.post("User/update-role", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
           //context.commit(UPDATE_ROLE, data.Data);
@@ -106,7 +116,7 @@ const actions = {
       .catch(err => {
         context.commit(SET_ERROR, err.response.data.errors);
         throw new Error(err);
-      });
+      });*/
   },
   [CREATE_ROLE](context, payload) {
     return ApiService.post("User/create-role", `"${payload.Name}"`, {
@@ -116,9 +126,8 @@ const actions = {
     })
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context
-            .dispatch(FETCH_ROLE)
-            .then(() => context.dispatch(CREATE_ROLEPAGE, payload.Name));
+          context.dispatch(FETCH_ROLE);
+          //.then(() => context.dispatch(CREATE_ROLEPAGE, payload.Name));
           //context.commit(UPDATE_ROLE, data.Data);
         } else {
           context.commit(SET_ERROR, data.Message);
@@ -130,29 +139,10 @@ const actions = {
         throw new Error(err);
       });
   },
-  [DELETE_ROLE](context, payload) {
-    return ApiService.query("User/delete-role", {
-      params: { id: payload.Id }
-    })
-      .then(({ data }) => {
-        if (data.IsSuccess) {
-          //context.commit(REMOVE_ROLE, data.Data);
-          context.dispatch(FETCH_ROLE);
-        } else {
-          context.commit(SET_ERROR, data.Message);
-        }
-        return data;
-      })
-      .catch(err => {
-        context.commit(SET_ERROR, err.response.data.errors);
-      });
-  },
   [SAVE_ROLEPAGE](context, payload) {
-    delete payload.CreatedDate;
     return ApiService.post("User/update-role-pages", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
-          //context.commit(UPDATE_ROLE, data.Data);
           context.dispatch(FETCH_ROLEPAGE);
         } else {
           context.commit(SET_ERROR, data.Message);
@@ -195,6 +185,74 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
         throw new Error(err);
       });
+  },
+  [FETCH_USERPAGE](context) {
+    Promise.all([
+      ...context.rootState.user.items.map(item =>
+        ApiService.query("User/get-user-pages", { params: { userId: item.Id } })
+      )
+    ])
+      .then(responses => {
+        if (responses.map(res => res.data).every(data => data.IsSuccess)) {
+          context.commit(SET_USERPAGE, responses.map(r=>r.data.Data));
+        } else {
+          context.commit(
+            SET_ERROR,
+            responses.map(res => res.data).map(data => data.Message)
+          );
+        }
+        return responses;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+        throw new Error(err);
+      });
+  },
+  [SAVE_USERPAGE](context, payload) {
+    return ApiService.post("User/set-user-pages", payload)
+      .then(({ data }) => {
+        if (data.IsSuccess) {
+          context.dispatch(FETCH_USERPAGE);
+        } else {
+          context.commit(SET_ERROR, data.Message);
+        }
+        return data;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+        throw new Error(err);
+      });
+  },
+  [CREATE_USERPAGE](context, payload) {
+    return Promise.all(
+      context.state.pages.map(page => {
+        const request = {
+          userId: payload,
+          read: false,
+          write: false,
+          update: false,
+          delete: false,
+          pageId: page.Id
+        };
+        return ApiService.post("User/set-user-page", request);
+      })
+    )
+      .then(responses => {
+        if (responses.map(res => res.data).every(data => data.IsSuccess)) {
+          //context.commit(UPDATE_ROLE, data.Data);
+          context.dispatch(FETCH_USERPAGE);
+        } else {
+          context.commit(
+            SET_ERROR,
+            responses.map(res => res.data).map(data => data.Message)
+          );
+        }
+        return responses;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+        throw new Error(err);
+      });
   }
 };
 
@@ -211,7 +269,9 @@ const mutations = {
   [SET_ROLEPAGEBYID](state, payload) {
     state.rolePages = payload;
   },
-
+  [SET_USERPAGE](state, payload) {
+    state.userPages = state.userPages = payload.flat();
+  },
   [SET_ERROR](state, payload) {
     state.errors = payload;
   },
