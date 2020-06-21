@@ -42,6 +42,30 @@
                 </b-form-select>
               </template>
 
+              <template v-if="['multiselect'].includes(field.formType)">
+                <b-form-select
+                  multiple
+                  :select-size="options[field.options].length+1"
+                  v-model="formItem[field.key]"
+                  :required="field.formRequired"
+                  :placeholder="field.label"
+                  :disabled="field.formDisable || !editable"
+                >
+                  <template v-slot:first>
+                    <b-form-select-option :value="null" disabled>
+                      Bir {{ field.label }} seçin
+                    </b-form-select-option>
+                  </template>
+                  <b-form-select-option
+                    :key="option.Id"
+                    v-for="option in options[field.options]"
+                    :value="option.Id"
+                  >
+                    {{ option[field.optionName] }}
+                  </b-form-select-option>
+                </b-form-select>
+              </template>
+
               <template v-if="['datetime'].includes(field.formType)">
                 <b-form-datepicker
                   v-model="formItem[field.key]"
@@ -184,7 +208,8 @@ export default {
     return {
       formItem: { ...this.item },
       formXPages: [...this.xPages],
-      changeFields: []
+      changeFields: [],
+      authRole: []
     };
   },
   computed: {
@@ -211,12 +236,12 @@ export default {
     change(value, xPage, field) {
       let isChange = false;
       this.changeFields.map(cf => {
-        if(cf.Id === xPage.Id){
+        if (cf.Id === xPage.Id) {
           isChange = true;
           cf[field] = value;
         }
       });
-      if(!isChange) {
+      if (!isChange) {
         this.changeFields.push(xPage);
       }
     }

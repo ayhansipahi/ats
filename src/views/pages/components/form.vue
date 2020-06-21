@@ -1,6 +1,11 @@
 <template>
   <div class="bg-white p-4">
-    <b-form @submit="onSubmit">
+    <b-form @submit.prevent="onSubmit">
+      <b-row>
+        <b-col>
+          <h3>{{ title }} {{ isCreate ? "Oluştur" : "Detayı" }}</h3>
+        </b-col>
+      </b-row>
       <b-row>
         <b-col v-for="(field, index) in fields" :key="index" md="4">
           <b-form-group v-if="field.formShow !== false || editable">
@@ -33,6 +38,30 @@
                   :key="option.Id"
                   v-for="option in options[field.options]"
                   :value="option.Id"
+                >
+                  {{ option[field.optionName] }}
+                </b-form-select-option>
+              </b-form-select>
+            </template>
+
+            <template v-if="['multiselect'].includes(field.formType)">
+              <b-form-select
+                  multiple
+                  :select-size="options[field.options].length+1"
+                  v-model="formItem[field.key]"
+                  :required="field.formRequired"
+                  :placeholder="field.label"
+                  :disabled="field.formDisable || !editable"
+              >
+                <template v-slot:first>
+                  <b-form-select-option :value="null" disabled>
+                    Bir {{ field.label }} seçin
+                  </b-form-select-option>
+                </template>
+                <b-form-select-option
+                    :key="option.Id"
+                    v-for="option in options[field.options]"
+                    :value="option.Id"
                 >
                   {{ option[field.optionName] }}
                 </b-form-select-option>
@@ -81,13 +110,17 @@
             <b-icon-eye-fill />
             Canlı İzle
           </b-btn>
-          <b-btn v-if="canDelete"  variant="ghost" @click="onDelete">
+          <b-btn v-if="canDelete" variant="ghost" @click="onDelete">
             <b-icon-trash variant="danger"></b-icon-trash>
           </b-btn>
           <b-btn variant="ghost" v-if="editable" @click="editable = !editable">
             <b-icon-info-circle variant="info"></b-icon-info-circle>
           </b-btn>
-          <b-btn variant="ghost" v-if="!editable && canEdit" @click="editable = !editable">
+          <b-btn
+            variant="ghost"
+            v-if="!editable && canEdit"
+            @click="editable = !editable"
+          >
             <b-icon-pencil-square variant="primary"></b-icon-pencil-square>
           </b-btn>
         </template>
@@ -107,6 +140,7 @@
 export default {
   name: "tprsForm",
   props: {
+    title: { default: "" },
     item: { required: true },
     fields: { required: true },
     options: {},

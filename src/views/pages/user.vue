@@ -1,36 +1,42 @@
 <template>
   <div>
     <tprsTable
+      :v-show="!isCreating"
       :items="items"
       :isBusy="fetching"
       :fields="fields"
       :options="options"
-      :editable="false"
-      :isCreateVisible="false"
+      :editable="true"
+      :isCreateVisible="true"
       @onSelect="item => onSelect(item, false)"
       @onFilter="onCancel"
-      :canDelete="false"
-      :canEdit="false"
+      @onNew="onNew"
+      @onDelete="onDelete"
+      @onEdit="item => onSelect(item, true)"
+      :canDelete="true"
+      :canEdit="true"
     ></tprsTable>
     <tprsForm
+      :title="title"
       v-if="isCreating"
       :key="selectedItem !== null"
       :item="selectedItem"
       :fields="fields"
-      :editable="false"
-      :isCreate="false"
+      :editable="true"
+      :isCreate="true"
       :options="options"
       @onCancel="onCancel"
+      @onSave="onSave"
       :canDelete="false"
-      :canEdit="false"
+      :canEdit="true"
     ></tprsForm>
     <tprsAuth
       v-if="selectedItem !== null && !isCreating"
       :pages="pages"
       :xPages="userPage"
-      :key="selectedItem"
+      :key="selectedItem.Id"
       :item.sync="selectedItem"
-      :editable="selectedItemEditable"
+      :editable.sync="selectedItemEditable"
       :isCreate="isCreating"
       :options="options"
       @onSave="onSaveUserPage"
@@ -47,19 +53,25 @@ import tprsTable from "./components/tablo";
 import tprsAuth from "./components/authorization";
 import tprsForm from "./components/form";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
-import { FETCH_USER } from "../../store/modules/user";
+import {
+  FETCH_USER,
+  CREATE_USER,
+  SAVE_USER,
+  DELETE_USER
+} from "../../store/modules/user";
 import {
   FETCH_ROLE,
   FETCH_PAGE,
   FETCH_USERPAGE,
-  SAVE_USERPAGE
+  SAVE_USERPAGE,
+  SAVE_USERROLE
 } from "../../store/modules/role";
 export default {
   name: "user",
   components: { tprsTable, tprsForm, tprsAuth },
   data() {
     return {
-      title: "Kullanıcılar",
+      title: "Kullanıcı",
       fetching: false,
       fields: [
         {
@@ -85,12 +97,12 @@ export default {
         },
         {
           key: "roles",
-          label: "Yetki Grubu",
+          label: "Rol",
           sortable: true,
-          type: "text",
+          type: "multiselect",
           options: "role",
           optionName: "Name",
-          formType: "select"
+          formType: "multiselect"
         }
       ],
       selectedItem: null,
@@ -108,7 +120,7 @@ export default {
       vehicle: "getVehicles",
       device: "getDevices",
       role: "getRoles",
-      userPage:"getUserPages"
+      userPage: "getUserPages"
     }),
     optionsList() {
       return this.fields
@@ -125,6 +137,10 @@ export default {
   methods: {
     ...mapActions({
       fetchItems: FETCH_USER,
+      createItem: CREATE_USER,
+      deleteItem: DELETE_USER,
+      saveUserRole: SAVE_USERROLE,
+      saveItem: SAVE_USER,
       fetchRoles: FETCH_ROLE,
       fetchPages: FETCH_PAGE,
       fetchUserPages: FETCH_USERPAGE,
@@ -159,14 +175,10 @@ export default {
       this.reset();
     },
     onNew() {
-      this.selectedItem = this.fields
-        .map(field => {
-          return field.key;
-        })
-        .reduce((p, n) => {
-          p[n] = null;
-          return p;
-        }, {});
+      this.selectedItem = this.fields.reduce((p, n) => {
+        p[n.key] = n.type === "multiselect" ? [] : null;
+        return p;
+      }, {});
       this.selectedItemEditable = true;
       this.isCreating = true;
     },
@@ -178,11 +190,15 @@ export default {
 
     onSaveUserPage(role, userPages) {
       Promise.all([
-        ...userPages.map(page => this.saveUserPage(page))
-      ]).then(responses =>
-        responses.map(response => response.IsSuccess).every(res => res === true)
+        ...userPages.map(page => this.saveUserPage(page)),
+        ...role.roles.map(roleId => {
+          this.saveUserRole(role, roleId);
+        })
+      ]).then(
+        () => this.reset()
+        /*responses.map(response => response.IsSuccess).every(res => res === true)
           ? this.reset()
-          : false
+          : false*/
       );
     }
   },
@@ -194,10 +210,10 @@ export default {
       }
     ]);
     this.fetching = true;
+    await this.fetchOptions();
     await this.fetchPages();
     await this.fetchItems();
     await this.fetchUserPages();
-    await this.fetchOptions();
     this.fetching = false;
   }
 };

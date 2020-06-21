@@ -5,6 +5,8 @@ import ApiService from "../../common/api.service";
 export const FETCH_USER = "FETCH_USER";
 export const FETCH_USERROLE = "FETCH_USERROLE";
 export const CREATE_USER = "CREATE_USER";
+export const SAVE_USER = "SAVE_USER";
+export const DELETE_USER = "DELETE_USER";
 
 // mutation types
 export const SET_USER = "SET_USER";
@@ -48,7 +50,11 @@ const actions = {
       })
         .then(({ data }) => {
           if (data.IsSuccess) {
-            context.commit(SET_USERROLE, { user: item, roles: data.Data });
+            context.commit(SET_USERROLE, {
+              user: item,
+              roles: data.Data,
+              roleList: context.rootState.role.roles
+            });
           } else {
             context.commit(SET_ERROR, data.Message);
           }
@@ -59,20 +65,72 @@ const actions = {
         })
     );
   },
-  [CREATE_USER]() {}
+  [SAVE_USER](context, payload) {
+    delete payload.CreatedDate;
+    return ApiService.post("User/update", payload)
+      .then(({ data }) => {
+        if (data.IsSuccess) {
+          //context.commit(UPDATE_USER, data.Data);
+          context.dispatch(FETCH_USER);
+        } else {
+          context.commit(SET_ERROR, data.Message);
+        }
+        return data;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+        throw new Error(err);
+      });
+  },
+  [CREATE_USER](context, payload) {
+    return ApiService.post("User/register", payload)
+      .then(({ data }) => {
+        if (data.IsSuccess) {
+          context.dispatch(FETCH_USER);
+          //context.commit(UPDATE_USER, data.Data);
+        } else {
+          context.commit(SET_ERROR, data.Message);
+        }
+        return data;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+        throw new Error(err);
+      });
+  },
+  [DELETE_USER](context, payload) {
+    return ApiService.query("User/delete", {
+      params: { id: payload.Id }
+    })
+      .then(({ data }) => {
+        if (data.IsSuccess) {
+          //context.commit(REMOVE_USER, data.Data);
+          context.dispatch(FETCH_USER);
+        } else {
+          context.commit(SET_ERROR, data.Message);
+        }
+        return data;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+      });
+  }
 };
 
 const mutations = {
   [SET_USER](state, payload) {
-    state.items = payload; /*.map(item => {
+    state.items = payload.map(item => {
       item.CreatedDate = new Date(item.CreatedDate);
+      item.roles = [];
       return item;
-    });*/
+    });
   },
-  [SET_USERROLE](state, { user, roles }) {
+  [SET_USERROLE](state, { user, roles, roleList }) {
     state.items = state.items.map(item => {
       if (item.Id === user.Id) {
-        item.roles = roles.join(", ");
+        item.roles = roles.map(
+          role => roleList.find(listItem => listItem.Name === role).Id
+        );
       }
       return item;
     });

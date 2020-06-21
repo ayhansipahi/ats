@@ -55,6 +55,17 @@
             )[field.optionName]
           }}
         </template>
+        <template v-if="row.field.type === 'multiselect'">
+          {{
+            options[field.options]
+              .filter(option => {
+                return row.item[field.key].includes(option.Id);
+              })
+              .map(option => option[field.optionName])
+              .join(", ")
+          }}
+        </template>
+
         <template v-else-if="row.field.type === 'datetime'">
           {{ $moment(row.item[field.key]).format("DD.MM.YYYY") }}
         </template>

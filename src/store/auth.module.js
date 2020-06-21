@@ -33,9 +33,9 @@ const actions = {
     return new Promise(resolve => {
       ApiService.post("User/login", credentials)
         .then(({ data }) => {
-          if(data.IsSuccess) {
+          if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
-          }else {
+          } else {
             context.commit(SET_ERROR, [data.Message]);
           }
           resolve(data);
@@ -51,12 +51,12 @@ const actions = {
   [REGISTER](context, credentials) {
     return new Promise((resolve, reject) => {
       ApiService.post("User/register", { user: credentials })
-        .then(({ data }) =>{
-      if(data.IsSuccess) {
-        context.commit(SET_AUTH, data.Data);
-      }else {
-        context.commit(SET_ERROR, [data.Message]);
-      }
+        .then(({ data }) => {
+          if (data.IsSuccess) {
+            context.commit(SET_AUTH, data.Data);
+          } else {
+            context.commit(SET_ERROR, [data.Message]);
+          }
           resolve(data);
         })
         .catch(({ response }) => {
@@ -68,12 +68,13 @@ const actions = {
   [VERIFY_AUTH](context) {
     if (JwtService.getToken()) {
       ApiService.setHeader();
-      ApiService.query("User/verify",{params: {token:
-          JwtService.getToken() }})
+      ApiService.query("User/verify", {
+        params: { token: JwtService.getToken() }
+      })
         .then(({ data }) => {
-          if(data.IsSuccess) {
+          if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
-          }else {
+          } else {
             context.commit(SET_ERROR, [data.Message]);
           }
         })

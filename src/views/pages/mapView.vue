@@ -22,7 +22,7 @@
     <b-row>
       <b-col class="col-12 bg-white p-4">
         <b-form class="row">
-          <b-col>
+          <b-col md="2" cols="12">
             <b-form-select
               v-model="formCompany"
               @change="onCompanySelect"
@@ -36,8 +36,7 @@
               </template>
             </b-form-select>
           </b-col>
-
-          <b-col>
+          <b-col md="2" cols="12">
             <b-form-select
               v-model="formVehicle"
               :options="formVehicleOptions"
@@ -50,8 +49,7 @@
               </template>
             </b-form-select>
           </b-col>
-
-          <b-col>
+          <b-col md="2" cols="12">
             <b-form-datepicker
               locale="tr"
               :date-format-options="{
@@ -65,8 +63,7 @@
             >
             </b-form-datepicker>
           </b-col>
-
-          <b-col>
+          <b-col md="2" cols="12">
             <b-form-datepicker
               locale="tr"
               :date-format-options="{
@@ -81,7 +78,7 @@
             >
             </b-form-datepicker>
           </b-col>
-          <b-col>
+          <b-col md="1" cols="12">
             <b-form-group>
               <b-form-radio-group v-model="mapType" name="mapType">
                 <b-form-radio value="location">
@@ -93,23 +90,26 @@
               </b-form-radio-group>
             </b-form-group>
           </b-col>
-
-          <b-col>
-            <b-button
-              :variant="!isSearchDisabled ? 'primary' : 'ghost'"
-              block
-              @click="onGetItems"
-              :disabled="isSearchDisabled"
-            >
-              Ara
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button block v-b-modal.modal-center>Sorgula</b-button>
+          <b-col md="3" cols="12">
+            <b-row>
+              <b-col>
+                <b-button
+                  :variant="!isSearchDisabled ? 'primary' : 'ghost'"
+                  block
+                  @click="onGetItems"
+                  :disabled="isSearchDisabled"
+                >
+                  Ara
+                </b-button>
+              </b-col>
+              <b-col>
+                <b-button block v-b-modal.modal-center> Sorgula </b-button>
+              </b-col>
+            </b-row>
           </b-col>
         </b-form>
         <div class="row">
-          <div class="col-12 col-md-8 col-xl-9 order-1 order-md-0">
+          <div class="col-12">
             <GmapMap
               :center="mapCenter"
               :zoom="mapZoom"
@@ -119,38 +119,41 @@
               ref="mapRef"
             />
           </div>
-          <div
-            class="col-12 col-md-4 col-xl-3 px-4 mb-4 order-0 order-md-1"
-            v-if="selectedItem"
-          >
-            <div class="row car-info">
-              <div class="col-12 px-3 py-2 car-info-title">
-                <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
-              </div>
-              <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                {{ selectedItemData.vehicle.Plaque }}
-              </div>
+        </div>
+      </b-col>
+      <b-col class="col-12 bg-white p-4">
+        <div class="row">
+          <b-row>
+            <b-card class="col-12" v-if="selectedItem">
+              <div class="row car-info">
+                <div class="col-12 px-3 py-2 car-info-title">
+                  <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
+                </div>
+                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                  {{ selectedItemData.vehicle.Plaque }}
+                </div>
 
-              <div class="col-12 px-3 py-2 car-info-title">
-                <strong>
-                  <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
-                >
-              </div>
-              <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                {{ selectedItemData.Speed }} km/s
-              </div>
+                <div class="col-12 px-3 py-2 car-info-title">
+                  <strong>
+                    <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
+                  >
+                </div>
+                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                  {{ selectedItemData.Speed }} km/s
+                </div>
 
-              <div class="col-12 px-3 py-2 car-info-title">
-                <strong>
-                  <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
-                </strong>
+                <div class="col-12 px-3 py-2 car-info-title">
+                  <strong>
+                    <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
+                  </strong>
+                </div>
+                <div class="col-12 pr-3 py-2 pl-5 car-info-val">
+                  {{ selectedItemData.Latitude }},
+                  {{ selectedItemData.Longitude }}
+                </div>
               </div>
-              <div class="col-12 pr-3 py-2 pl-5 car-info-val">
-                {{ selectedItemData.Latitude }},
-                {{ selectedItemData.Longitude }}
-              </div>
-            </div>
-          </div>
+            </b-card>
+          </b-row>
         </div>
       </b-col>
     </b-row>

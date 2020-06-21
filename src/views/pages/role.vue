@@ -131,14 +131,10 @@ export default {
       this.reset();
     },
     onNew() {
-      this.selectedItem = this.fields
-        .map(field => {
-          return field.key;
-        })
-        .reduce((p, n) => {
-          p[n] = null;
-          return p;
-        }, {});
+      this.selectedItem = this.fields.reduce((p, n) => {
+        p[n.key] = n.type === "multiselect" ? [] : null;
+        return p;
+      }, {});
       this.selectedItemEditable = true;
       this.isCreating = true;
     },

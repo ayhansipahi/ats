@@ -16,6 +16,8 @@ export const FETCH_USERPAGE = "FETCH_USERPAGE";
 export const SAVE_USERPAGE = "SAVE_USERPAGE";
 export const CREATE_USERPAGE = "CREATE_USERPAGE";
 
+export const SAVE_USERROLE = "SAVE_USERROLE";
+
 // mutation types
 export const SET_ROLE = "SET_ROLE";
 export const UPDATE_ROLE = "UPDATE_ROLE";
@@ -209,7 +211,7 @@ const actions = {
       });
   },
   [SAVE_USERPAGE](context, payload) {
-    return ApiService.post("User/set-user-pages", payload)
+    return ApiService.post("User/set-user-page", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.dispatch(FETCH_USERPAGE);
@@ -248,6 +250,19 @@ const actions = {
           );
         }
         return responses;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+        throw new Error(err);
+      });
+  },
+  [SAVE_USERROLE](context, payload) {
+    return ApiService.post("User/add-user-to-role", payload)
+      .then(({ data }) => {
+        if (!data.IsSuccess) {
+          context.commit(SET_ERROR, data.Message);
+        }
+        return data;
       })
       .catch(err => {
         context.commit(SET_ERROR, err.response.data.errors);

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!--begin::Head-->
+  <div style="height: 100%">
+    <!--begin::Head->
     <div class="kt-login__head">
       <span class="kt-login__signup-label">{{
         $t("AUTH.GENERAL.NO_ACCOUNT")
@@ -13,14 +13,14 @@
         {{ $t("AUTH.GENERAL.SIGNUP_BUTTON") }}
       </router-link>
     </div>
-    <!--end::Head-->
+    <!-end::Head-->
 
     <!--begin::Body-->
     <div class="kt-login__body">
       <!--begin::Signin-->
       <div class="kt-login__form">
         <div class="kt-login__title">
-          <h3>Giriş</h3>
+          <h3>Tüpraş Araç Takip Sistemi</h3>
         </div>
 
         <!--begin::Form-->
@@ -80,7 +80,7 @@
           </b-form-group>
 
           <!--begin::Action-->
-          <div class="kt-login__actions">
+          <div class="kt-login__actions justify-content-end">
             <a v-if="false" href="#" class="kt-link kt-login__link-forgot">
               {{ $t("AUTH.FORGOT.TITLE") }}
             </a>
@@ -103,6 +103,9 @@
 </template>
 
 <style lang="scss" scoped>
+.kt-login__body{
+  height: 100vh;
+}
 .kt-spinner.kt-spinner--right:before {
   right: 8px;
 }
@@ -110,8 +113,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { LOGOUT } from "../../../store/auth.module";
-// import { LOGIN, LOGOUT } from "../../../store/auth.module";
+import { LOGIN, LOGOUT } from "../../../store/auth.module";
 
 import { validationMixin } from "vuelidate";
 import { minLength, required } from "vuelidate/lib/validators";
@@ -160,8 +162,8 @@ export default {
         return;
       }
 
-      //const userName = this.$v.form.userName.$model;
-      //const password = this.$v.form.password.$model;
+      const userName = this.$v.form.userName.$model;
+      const password = this.$v.form.password.$model;
 
       // clear existing errors
       this.$store.dispatch(LOGOUT);
@@ -174,9 +176,8 @@ export default {
         "kt-spinner--right"
       );
 
-      return this.$router.push({ name: "map" });
       // send login request
-      /*this.$store
+      this.$store
         .dispatch(LOGIN, { userName, password })
         // go to which page after successfully login
         .then(response => {
@@ -189,9 +190,7 @@ export default {
             "kt-spinner--light",
             "kt-spinner--right"
           );
-        });*,
-        7
-       */
+        });
     }
   },
   computed: {
