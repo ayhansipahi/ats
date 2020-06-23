@@ -25,12 +25,11 @@ const getters = {
     return state.items;
   },
   getUserPermissionsForPage(state) {
-    return (pageName) =>{
+    return pageName => {
       const currentUser = JwtService.decodeToken();
-      console.log(currentUser,state);
-      return pageName
-
-    }
+      //console.log(currentUser,state);
+      return { pageName, currentUser, state };
+    };
   }
 };
 
