@@ -19,11 +19,11 @@ const ApiService = {
   setHeader() {
     Vue.axios.defaults.headers.common[
       "Authorization"
-    ] = `Token ${JwtService.getToken()}`;
+    ] = `Bearer ${JwtService.getToken()}`;
   },
 
   query(resource, params) {
-    this.setHeader()
+    this.setHeader();
     return Vue.axios.get(resource, params);
     /*.catch(error => {
       console.log(error);
@@ -38,7 +38,7 @@ const ApiService = {
    * @returns {*}
    */
   get(resource, slug = "") {
-    this.setHeader()
+    this.setHeader();
     return Vue.axios.get(`${resource}/${slug}`);
     /*.catch(error => {
       console.log(error);
@@ -53,7 +53,7 @@ const ApiService = {
    * @returns {*}
    */
   post(resource, params, config) {
-    this.setHeader()
+    this.setHeader();
     /*let formData = new FormData();
     Object.keys(params).forEach(key =>{
       formData.set(key,params[key])
@@ -70,7 +70,7 @@ const ApiService = {
    * @returns {IDBRequest<IDBValidKey> | Promise<void>}
    */
   update(resource, slug, params) {
-    this.setHeader()
+    this.setHeader();
     /*let formData = new FormData();
     Object.keys(params).forEach(key =>{
       formData.set(key,params[key])
@@ -86,7 +86,7 @@ const ApiService = {
    * @returns {IDBRequest<IDBValidKey> | Promise<void>}
    */
   put(resource, params) {
-    this.setHeader()
+    this.setHeader();
     return Vue.axios.put(`${resource}`, params);
   },
 
@@ -96,7 +96,7 @@ const ApiService = {
    * @returns {*}
    */
   delete(resource) {
-    this.setHeader()
+    this.setHeader();
     return Vue.axios.delete(resource);
     /*.catch(error => {
       console.log(error);
