@@ -1,4 +1,6 @@
 import ApiService from "../../common/api.service";
+import JwtService from "../../common/jwt.service";
+import { SAVE_USERROLE } from "./role";
 // import { CREATE_USERPAGE} from "./role";
 
 // action types
@@ -21,6 +23,14 @@ const state = {
 const getters = {
   getUsers(state) {
     return state.items;
+  },
+  getUserPermissionsForPage(state) {
+    return (pageName) =>{
+      const currentUser = JwtService.decodeToken();
+      console.log(currentUser,state);
+      return pageName
+
+    }
   }
 };
 
@@ -31,9 +41,6 @@ const actions = {
         if (data.IsSuccess) {
           context.commit(SET_USER, data.Data);
           context.dispatch(FETCH_USERROLE);
-          /*context.state.items.forEach(item => {
-            context.dispatch(CREATE_USERPAGE, item.Id);
-          })*/
         } else {
           context.commit(SET_ERROR, data.Message);
         }
@@ -86,8 +93,14 @@ const actions = {
     return ApiService.post("User/register", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
+          payload.roles.forEach(role => {
+            context.dispatch(SAVE_USERROLE, {
+              userId: payload.UserId,
+              roleId: role
+            });
+          });
+
           context.dispatch(FETCH_USER);
-          //context.commit(UPDATE_USER, data.Data);
         } else {
           context.commit(SET_ERROR, data.Message);
         }
@@ -99,8 +112,8 @@ const actions = {
       });
   },
   [DELETE_USER](context, payload) {
-    return ApiService.query("User/delete", {
-      params: { id: payload.Id }
+    return ApiService.query("User/remove-user", {
+      params: { userName: payload.UserName }
     })
       .then(({ data }) => {
         if (data.IsSuccess) {

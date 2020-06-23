@@ -268,6 +268,23 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
         throw new Error(err);
       });
+  },
+
+  [DELETE_ROLE](context, payload) {
+    return ApiService.query("User/remove-role", {
+      params: { roleName: payload.Name }
+    })
+      .then(({ data }) => {
+        if (data.IsSuccess) {
+          context.dispatch(FETCH_ROLE);
+        } else {
+          context.commit(SET_ERROR, data.Message);
+        }
+        return data;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+      });
   }
 };
 

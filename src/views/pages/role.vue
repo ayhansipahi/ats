@@ -9,11 +9,11 @@
         :editable="false"
         :isCreateVisible="true"
         @onSelect="item => onSelect(item, false)"
-        onDelete="onDelete"
+        @onDelete="onDelete"
         @onEdit="item => onSelect(item, true)"
         @onFilter="onCancel"
         @onNew="onNew"
-        :canDelete="false"
+        :canDelete="true"
         :canEdit="true"
       ></tprsTable>
     </transition>
@@ -53,7 +53,8 @@ import {
   FETCH_ROLEPAGEBYROLE,
   SAVE_ROLE,
   CREATE_ROLE,
-  SAVE_ROLEPAGE
+  SAVE_ROLEPAGE,
+  DELETE_ROLE
 } from "../../store/modules/role";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import tprsTable from "./components/tablo";
@@ -64,7 +65,7 @@ export default {
   components: { tprsTable, tprsAuth, tprsForm },
   data() {
     return {
-      title: "Yetkiler",
+      title: "Rol",
       fields: [
         {
           key: "Name",
@@ -96,7 +97,8 @@ export default {
       saveRole: SAVE_ROLE,
       createRole: CREATE_ROLE,
       saveRolePage: SAVE_ROLEPAGE,
-      setBreadCrumb: SET_BREADCRUMB
+      setBreadCrumb: SET_BREADCRUMB,
+      deleteItem: DELETE_ROLE,
     }),
     onSelect(item, editable) {
       this.selectedItem = item;

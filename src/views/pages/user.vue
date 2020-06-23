@@ -79,21 +79,24 @@ export default {
           label: "Kullanıcı Adı",
           sortable: true,
           type: "text",
-          formDisabled: true
         },
         {
           key: "Email",
           label: "Email",
           sortable: true,
           type: "text",
-          formDisabled: true
         },
         {
           key: "PhoneNumber",
           label: "Cep Telefonu",
           sortable: true,
           type: "text",
-          formDisabled: true
+        },
+        {
+          key: "Password",
+          label: "Şifre",
+          sortable: true,
+          type: "password",
         },
         {
           key: "roles",
