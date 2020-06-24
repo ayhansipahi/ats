@@ -3,7 +3,8 @@
     <transition name="fade">
       <div class="row">
         <div class="col-12 bg-white px-4 pt-4 pb-0 mb-4">
-          <b-form class="row">
+          <b-form class="row"
+                  @submit.prevent="onGetItems">
             <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
               <b-form-select
                 v-model="formCompany"
@@ -66,7 +67,6 @@
                 type="submit"
                 :variant="formCompany ? 'primary' : 'ghost'"
                 block
-                @click="onGetItems"
                 :disabled="!formCompany"
               >
                 Ara
@@ -83,9 +83,9 @@
       :options="options"
       :editable="false"
       :isCreateVisible="false"
-      @onNew="onNew"
+      onNew="onNew"
       @onSelect="item => onSelect(item, false)"
-      @onDelete="onDelete"
+      onDelete="onDelete"
       @onEdit="item => onSelect(item, true)"
       @onFilter="onCancel"
     ></tprsTable>
@@ -97,9 +97,9 @@
       :editable="selectedItemEditable"
       :isCreate="isCreate"
       :options="options"
-      @onSave="onSave"
+      onSave="onSave"
       @onCancel="onCancel"
-      @onDelete="onDelete"
+      onDelete="onDelete"
     ></tprsForm>
   </div>
 </template>
@@ -110,6 +110,7 @@ import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import { FETCH_VEHICLEDETAILS } from "../../store/modules/vehicleDetails";
+
 export default {
   name: "vehicleDevice",
   components: { tprsTable, tprsForm },

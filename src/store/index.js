@@ -26,6 +26,7 @@ import vehicleType from "./modules/vehicleType";
 import vehicleProductGroup from "./modules/vehicleProductGroup";
 import user from "./modules/user";
 import role from "./modules/role";
+import vehicleLocationDetail from "./modules/vehicleLocationDetail";
 
 Vue.use(Vuex);
 
@@ -52,6 +53,6 @@ export default new Vuex.Store({
     vehicleDetails,
     vehicleDevice,
     vehicleType,
-    vehicleProductGroup,user,role
+    vehicleProductGroup,user,role,vehicleLocationDetail,
   }
 });

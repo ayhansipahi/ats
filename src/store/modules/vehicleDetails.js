@@ -85,6 +85,7 @@ const actions = {
       }
     })
       .then(({ data }) => {
+        console.log(data)
         if (data.IsSuccess) {
           context.commit(SET_VEHICLEDETAILS, data.Data);
         }
@@ -98,10 +99,13 @@ const actions = {
 
 const mutations = {
   [SET_VEHICLEDETAILS](state, payload = []) {
+    console.log(payload)
+
     state.items = payload.map(item => {
       item.CreatedDate = new Date(item.CreatedDate);
       return item;
     });
+    console.log(state.items)
   },
   [SET_ERROR](state, payload) {
     state.errors = payload;
