@@ -10,27 +10,29 @@ const state = {
 };
 
 const getters = {
-    getVehicleLocationDetail(state) {
-        return state.items;
+    getVehicleLocationsDetails(state) {
+        return id => {
+            state.items.find(item=>item.vahicleId===id)
+        }
     }
 };
 
 const actions = {
-    [FETCH_VEHICLELOCATIONDETAIL]({commit, state}, payload) {
-        console.log('commit',commit);
-        console.log('state',state);
-        console.log(payload);
-        commit('SET_VEHICLELOCATIONDETAIL', payload);
-
+    [FETCH_VEHICLELOCATIONDETAIL](context, payload) {
+        context.commit('SET_VEHICLELOCATIONDETAIL', payload);
     },
 
 };
 
 const mutations = {
     [SET_VEHICLELOCATIONDETAIL](state, payload) {
-        state.items = payload
+        let isExisting = state.items.findIndex(x => x.vehicleId === payload.vehicleId);
+        if (isExisting !== -1) {
+            state.items[isExisting] = payload
+        } else {
+            state.items.push(payload)
+        }
         console.log(state)
-
     },
 
 };
