@@ -11,7 +11,7 @@ import "vue-toastr-2/dist/vue-toastr-2.min.css";
 import * as VueGoogleMaps from "vue2-google-maps";
 import ApiService from "./common/api.service";
 //import MockService from "./common/mock/mock.service";
-import {VERIFY_AUTH} from "./store/auth.module";
+import { VERIFY_AUTH } from "./store/auth.module";
 
 Vue.config.productionTip = false;
 
@@ -22,15 +22,15 @@ window.toastr = require("toastr");
 Vue.use(VueToastr2);
 
 Vue.use(VueGoogleMaps, {
-    load: {
-        key: "AIzaSyAhJg3hOUR4QqA_SsYyyen139UNZ4WSn8A",
-        libraries: "places,drawing,visualization",
-        language: "tr"
-    }
+  load: {
+    key: "AIzaSyAhJg3hOUR4QqA_SsYyyen139UNZ4WSn8A",
+    libraries: "places,drawing,visualization",
+    language: "tr"
+  }
 });
 
 Vue.prototype.$axios = axios.create({
-    baseURL: "https://tuprasatsapi.azurewebsites.net/"
+  baseURL: "https://tuprasatsapi.azurewebsites.net/"
 });
 
 Vue.use(VueSignalR, "https://tuprasatsapi.azurewebsites.net/realtimedatahub");
@@ -39,17 +39,17 @@ Vue.use(require("vue-moment"));
 var VueScrollTo = require("vue-scrollto");
 
 Vue.use(VueScrollTo, {
-    container: "body",
-    duration: 500,
-    easing: "ease",
-    offset: window.innerWidth < 1025 ? -38 : -115,
-    force: true,
-    cancelable: true,
-    onStart: false,
-    onDone: false,
-    onCancel: false,
-    x: false,
-    y: true
+  container: "body",
+  duration: 500,
+  easing: "ease",
+  offset: window.innerWidth < 1025 ? -38 : -115,
+  force: true,
+  cancelable: true,
+  onStart: false,
+  onDone: false,
+  onCancel: false,
+  x: false,
+  y: true
 });
 
 // Global 3rd party plugins
@@ -75,30 +75,18 @@ ApiService.init();
 
 // Ensure we checked auth before each page load.
 router.beforeEach((to, from, next) => {
-    Promise.all([store.dispatch(VERIFY_AUTH)]).then(next);
+  Promise.all([store.dispatch(VERIFY_AUTH)]).then(next);
 
-    // Scroll page to top on every route change
-    setTimeout(() => {
-        window.scrollTo(0, 0);
-    }, 100);
+  // Scroll page to top on every route change
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+  }, 100);
 });
 
 new Vue({
-    router,
-    store,
-    i18n,
-    vuetify,
-    render: h => h(App),
-    created() {
-        this.$socket.start();
-        this.$socket.listen('GetVehicleLocationDetail')
-        this.$socket.on('GetVehicleLocationDetail', (data) => {
-            this.$store.dispatch('FETCH_VEHICLELOCATIONDETAIL', data)
-        })
-
-        this.$socket.invoke("GetRealTimeData", 18).then((data) => {
-            console.log(data)
-        }).catch(err => console.error(err));
-
-    }
+  router,
+  store,
+  i18n,
+  vuetify,
+  render: h => h(App)
 }).$mount("#app");

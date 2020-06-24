@@ -27,11 +27,13 @@ import vehicleProductGroup from "./modules/vehicleProductGroup";
 import user from "./modules/user";
 import role from "./modules/role";
 import vehicleLocationDetail from "./modules/vehicleLocationDetail";
+import socket from "./socket";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
+    socket,
     auth,
     htmlClass,
     config,

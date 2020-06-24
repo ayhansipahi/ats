@@ -1,5 +1,6 @@
 import ApiService from "../common/api.service";
 import JwtService from "../common/jwt.service";
+import {CONNECT} from "./socket";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -74,6 +75,7 @@ const actions = {
         .then(({ data }) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
+            context.dispatch(CONNECT);
           } else {
             context.commit(SET_ERROR, [data.Message]);
           }
