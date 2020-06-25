@@ -48,6 +48,10 @@ export default new Router({
           component: () => import("./views/pages/maintenance.vue")
         },
         {
+          path: "/smtp",
+          component: () => import("./views/pages/smtp.vue")
+        },
+        {
           path: "/vehicle-track",
           component: () => import("./views/pages/vehicle-track.vue")
         },

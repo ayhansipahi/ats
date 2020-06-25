@@ -223,7 +223,7 @@
         "submenu": [
           {
             "title": "SMTP Ayarı",
-            "page": "list/smtp"
+            "page": "smtp"
           }
         ]
       }

@@ -28,6 +28,7 @@ import user from "./modules/user";
 import role from "./modules/role";
 import vehicleLocationDetail from "./modules/vehicleLocationDetail";
 import socket from "./socket";
+import smtp from "./modules/smtp";
 
 Vue.use(Vuex);
 
@@ -55,6 +56,6 @@ export default new Vuex.Store({
     vehicleDetails,
     vehicleDevice,
     vehicleType,
-    vehicleProductGroup,user,role,vehicleLocationDetail,
+    vehicleProductGroup,user,role,vehicleLocationDetail,smtp
   }
 });
