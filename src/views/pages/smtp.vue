@@ -123,7 +123,6 @@ export default {
       saveItem: SAVE_SMTP
     }),
     onSave(item) {
-      debugger;
       this.saveItem(item).then(data => {
         if (data.IsSuccess) this.$toastr.success("başarılı");
       });

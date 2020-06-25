@@ -1,6 +1,6 @@
 import ApiService from "../common/api.service";
 import JwtService from "../common/jwt.service";
-import { CONNECT } from "./socket";
+import {CONNECT} from "./socket";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -33,7 +33,7 @@ const actions = {
   [LOGIN](context, credentials) {
     return new Promise(resolve => {
       ApiService.post("User/login", credentials)
-        .then(({ data }) => {
+        .then(({data}) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
           } else {
@@ -41,7 +41,7 @@ const actions = {
           }
           resolve(data);
         })
-        .catch(({ response }) => {
+        .catch(({response}) => {
           context.commit(SET_ERROR, response.data.errors);
         });
     });
@@ -51,8 +51,8 @@ const actions = {
   },
   [REGISTER](context, credentials) {
     return new Promise((resolve, reject) => {
-      ApiService.post("User/register", { user: credentials })
-        .then(({ data }) => {
+      ApiService.post("User/register", {user: credentials})
+        .then(({data}) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
           } else {
@@ -60,41 +60,44 @@ const actions = {
           }
           resolve(data);
         })
-        .catch(({ response }) => {
+        .catch(({response}) => {
           context.commit(SET_ERROR, response.data.errors);
           reject(response);
         });
     });
   },
   [VERIFY_AUTH](context) {
-    if (JwtService.getToken()) {
-      ApiService.setHeader();
-      ApiService.query("User/verify", {
-        params: { token: JwtService.getToken() }
-      })
-        .then(({ data }) => {
-          if (data.IsSuccess) {
-            context.commit(SET_AUTH, data.Data);
-            context.dispatch(CONNECT);
-          } else {
-            context.commit(SET_ERROR, [data.Message]);
-          }
+      if (JwtService.getToken()) {
+        ApiService.setHeader();
+        return ApiService.query("User/verify", {
+          params: {token: JwtService.getToken()}
         })
-        .catch(({ message }) => {
-          context.commit(SET_ERROR, [message]);
-        });
-    } else {
-      context.commit(PURGE_AUTH);
-    }
+          .then(({data}) => {
+            if (data.IsSuccess) {
+              context.commit(SET_AUTH, data.Data);
+              context.dispatch(CONNECT);
+            } else {
+              context.commit(SET_ERROR, [data.Message]);
+            }
+            return data.IsSuccess
+          })
+          .catch(({message}) => {
+            context.commit(SET_ERROR, [message]);
+          });
+      } else {
+        context.commit(PURGE_AUTH);
+         return false
+      }
+
   },
   [UPDATE_USER](context, payload) {
-    const { email, username, password, image, bio } = payload;
-    const user = { email, username, bio, image };
+    const {email, username, password, image, bio} = payload;
+    const user = {email, username, bio, image};
     if (password) {
       user.password = password;
     }
 
-    return ApiService.put("user", user).then(({ data }) => {
+    return ApiService.put("user", user).then(({data}) => {
       context.commit(SET_AUTH, data);
       return data;
     });

@@ -146,7 +146,7 @@
       >
         <div class="kt-header__topbar-user">
           <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
-          <span class="kt-header__topbar-username kt-hidden-mobile">Sean</span>
+          <span class="kt-header__topbar-username kt-hidden-mobile">{{$store.state.auth.user.UserName}}</span>
           <img
             class="kt-hidden"
             alt="Pic"
@@ -155,7 +155,7 @@
           <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
           <span
             class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold"
-            >S</span
+            >{{$store.state.auth.user.UserName.slice(0,1).toUpperCase()}}</span
           >
         </div>
       </div>

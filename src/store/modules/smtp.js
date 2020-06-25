@@ -28,7 +28,6 @@ const actions = {
     return ApiService.get("SMTPSetting", "get")
       .then(({ data }) => {
         if (data.IsSuccess) {
-            debugger;
           context.commit(SET_SMTP, data.Data);
 
         }
@@ -39,7 +38,6 @@ const actions = {
       });
   },
   [SAVE_SMTP]({ commit, dispatch }, payload) {
-      debugger;
     return ApiService.post("SMTPSetting/update", payload)
       .then(({ data }) => {
         if (data.IsSuccess) {
@@ -58,7 +56,6 @@ const actions = {
   [CREATE_SMTP](context, payload) {
     return ApiService.post("SMTPSetting/create", payload)
       .then(({ data }) => {
-        console.log(data);
         if (data.IsSuccess) {
           context.dispatch(FETCH_SMTP);
           //context.commit(UPDATE_SMTP, data.Data);

@@ -75,7 +75,15 @@ ApiService.init();
 
 // Ensure we checked auth before each page load.
 router.beforeEach((to, from, next) => {
-  Promise.all([store.dispatch(VERIFY_AUTH)]).then(next);
+  if(to.name==="login")
+    next();
+  else
+    store.dispatch(VERIFY_AUTH).then((res)=>{
+      if (res)
+        next()
+      else
+        next("login")
+    });
 
   // Scroll page to top on every route change
   setTimeout(() => {
