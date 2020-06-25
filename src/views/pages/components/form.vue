@@ -11,7 +11,9 @@
           <b-form-group v-if="field.formShow !== false || editable">
             <template
               v-if="
-                ['text', 'email', 'number', undefined].includes(field.formType)
+                ['text', 'email', 'number', 'password', undefined].includes(
+                  field.formType
+                )
               "
             >
               <b-form-input
@@ -46,12 +48,12 @@
 
             <template v-if="['multiselect'].includes(field.formType)">
               <b-form-select
-                  multiple
-                  :select-size="options[field.options].length+1"
-                  v-model="formItem[field.key]"
-                  :required="field.formRequired"
-                  :placeholder="field.label"
-                  :disabled="field.formDisable || !editable"
+                multiple
+                :select-size="options[field.options].length + 1"
+                v-model="formItem[field.key]"
+                :required="field.formRequired"
+                :placeholder="field.label"
+                :disabled="field.formDisable || !editable"
               >
                 <template v-slot:first>
                   <b-form-select-option :value="null" disabled>
@@ -59,9 +61,9 @@
                   </b-form-select-option>
                 </template>
                 <b-form-select-option
-                    :key="option.Id"
-                    v-for="option in options[field.options]"
-                    :value="option.Id"
+                  :key="option.Id"
+                  v-for="option in options[field.options]"
+                  :value="option.Id"
                 >
                   {{ option[field.optionName] }}
                 </b-form-select-option>
@@ -91,6 +93,14 @@
                 :placeholder="field.label"
                 :disabled="field.formDisable || !editable"
               ></b-form-file>
+            </template>
+
+            <template v-if="['checkbox'].includes(field.formType)">
+              <b-form-checkbox
+                v-model="formItem[field.key]"
+                :disabled="field.formDisable || !editable"
+                >{{ field.label }}
+              </b-form-checkbox>
             </template>
           </b-form-group>
         </b-col>
@@ -125,12 +135,21 @@
           </b-btn>
         </template>
         <template v-if="editable && canEdit">
-          <b-btn variant="danger" @click="onReset">İptal</b-btn>
+          <b-btn variant="danger" v-if="canBeHidden" @click="onReset"
+            >İptal</b-btn
+          >
           <b-btn variant="primary" type="submit" class="ml-1">Kaydet</b-btn>
         </template>
-        <b-btn v-else variant="primary" @click="onReset" class="ml-1">
-          Kapat
-        </b-btn>
+        <template v-else>
+          <b-btn
+            v-if="canBeHidden"
+            variant="primary"
+            @click="onReset"
+            class="ml-1"
+          >
+            Kapat
+          </b-btn>
+        </template>
       </b-row>
     </b-form>
   </div>
@@ -145,7 +164,7 @@ export default {
     fields: { required: true },
     options: {},
     editable: {
-      default: true
+      default: false
     },
     isCreate: {
       default: false
@@ -155,6 +174,9 @@ export default {
       default: true
     },
     canEdit: {
+      default: true
+    },
+    canBeHidden: {
       default: true
     }
   },

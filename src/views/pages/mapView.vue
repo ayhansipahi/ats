@@ -311,7 +311,6 @@ export default {
 
         this.Map.setCenter(position);
 
-
         marker && marker.setMap(this.Map);
       } else {
         this.fetchItems({

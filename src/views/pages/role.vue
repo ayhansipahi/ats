@@ -98,7 +98,7 @@ export default {
       createRole: CREATE_ROLE,
       saveRolePage: SAVE_ROLEPAGE,
       setBreadCrumb: SET_BREADCRUMB,
-      deleteItem: DELETE_ROLE,
+      deleteItem: DELETE_ROLE
     }),
     onSelect(item, editable) {
       this.selectedItem = item;

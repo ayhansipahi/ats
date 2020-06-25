@@ -189,11 +189,11 @@ export default {
     };
   },
   components: {
-   // KTSearchDefault,
+    // KTSearchDefault,
     KTDropdownNotification,
-   // KTDropdownQuickAction,
-   // KTDropdownMyCart,
-   // KTDropdownLanguage,
+    // KTDropdownQuickAction,
+    // KTDropdownMyCart,
+    // KTDropdownLanguage,
     KTDropdownUser
   },
   methods: {

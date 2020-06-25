@@ -45,7 +45,7 @@
               <template v-if="['multiselect'].includes(field.formType)">
                 <b-form-select
                   multiple
-                  :select-size="options[field.options].length+1"
+                  :select-size="options[field.options].length + 1"
                   v-model="formItem[field.key]"
                   :required="field.formRequired"
                   :placeholder="field.label"

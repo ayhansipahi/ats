@@ -56,6 +56,10 @@ export default new Vuex.Store({
     vehicleDetails,
     vehicleDevice,
     vehicleType,
-    vehicleProductGroup,user,role,vehicleLocationDetail,smtp
+    vehicleProductGroup,
+    user,
+    role,
+    vehicleLocationDetail,
+    smtp
   }
 });

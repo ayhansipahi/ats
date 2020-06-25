@@ -1,6 +1,6 @@
 import ApiService from "../common/api.service";
 import JwtService from "../common/jwt.service";
-import {CONNECT} from "./socket";
+import { CONNECT } from "./socket";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";

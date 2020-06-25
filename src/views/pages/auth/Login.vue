@@ -103,7 +103,7 @@
 </template>
 
 <style lang="scss" scoped>
-.kt-login__body{
+.kt-login__body {
   height: 100vh;
 }
 .kt-spinner.kt-spinner--right:before {
@@ -181,7 +181,7 @@ export default {
         .dispatch(LOGIN, { userName, password })
         // go to which page after successfully login
         .then(response => {
-          if( response.IsSuccess) this.$router.push({ name: "map" });
+          if (response.IsSuccess) this.$router.push({ name: "map" });
         })
         .catch(() => {})
         .finally(() => {

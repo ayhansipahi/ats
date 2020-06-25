@@ -78,25 +78,25 @@ export default {
           key: "UserName",
           label: "Kullanıcı Adı",
           sortable: true,
-          type: "text",
+          type: "text"
         },
         {
           key: "Email",
           label: "Email",
           sortable: true,
-          type: "text",
+          type: "text"
         },
         {
           key: "PhoneNumber",
           label: "Cep Telefonu",
           sortable: true,
-          type: "text",
+          type: "text"
         },
         {
           key: "Password",
           label: "Şifre",
           sortable: true,
-          type: "password",
+          type: "password"
         },
         {
           key: "roles",

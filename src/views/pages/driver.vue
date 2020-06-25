@@ -16,6 +16,7 @@
       ></tprsTable>
     </transition>
     <tprsForm
+      :title="title"
       :key="selectedItem.Id"
       v-if="selectedItem !== null"
       :item="selectedItem"

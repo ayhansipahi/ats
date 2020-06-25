@@ -44,7 +44,7 @@ const getters = {
   getPages(state) {
     return state.pages;
   },
-  getUserPages(state){
+  getUserPages(state) {
     return state.userPages;
   }
 };
@@ -196,7 +196,10 @@ const actions = {
     ])
       .then(responses => {
         if (responses.map(res => res.data).every(data => data.IsSuccess)) {
-          context.commit(SET_USERPAGE, responses.map(r=>r.data.Data));
+          context.commit(
+            SET_USERPAGE,
+            responses.map(r => r.data.Data)
+          );
         } else {
           context.commit(
             SET_ERROR,

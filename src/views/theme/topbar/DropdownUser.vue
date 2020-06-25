@@ -1,7 +1,8 @@
 <template>
   <div>
     <!--begin: Head -->
-    <div  v-if="false"
+    <div
+      v-if="false"
       class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
       :style="{ backgroundImage: `url(${backgroundImage})` }"
     >
@@ -93,7 +94,8 @@
           class="btn btn-label btn-label-brand btn-sm btn-bold flex-grow-1"
           >Sign Out</a
         >
-        <a v-if="false"
+        <a
+          v-if="false"
           href="#"
           v-on:click="onLogout()"
           class="btn btn-clean btn-sm btn-bold"

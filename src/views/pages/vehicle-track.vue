@@ -3,8 +3,7 @@
     <transition name="fade">
       <div class="row">
         <div class="col-12 bg-white px-4 pt-4 pb-0 mb-4">
-          <b-form class="row"
-                  @submit.prevent="onGetItems">
+          <b-form class="row" @submit.prevent="onGetItems">
             <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
               <b-form-select
                 v-model="formCompany"

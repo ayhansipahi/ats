@@ -96,8 +96,8 @@ export default new Router({
         {
           path: "/harita/:type",
           component: () => import("./views/pages/harita.vue")
-        },
-        ]
+        }
+      ]
     },
     {
       path: "/",
