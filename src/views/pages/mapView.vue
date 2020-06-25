@@ -220,7 +220,8 @@ export default {
       vehicle: "getVehicles",
       company: "getCompanies",
       driver: "getDrivers",
-      getVehicleByCompanyId: "getVehicleByCompanyId"
+      getVehicleByCompanyId: "getVehicleByCompanyId",
+      getVehicleLocationsDetailsById: "getVehicleLocationsDetailsById"
     }),
     formVehicleOptions() {
       return (this.formCompany !== null
@@ -279,91 +280,120 @@ export default {
     onCompanySelect() {
       this.mapType = "location";
       this.formVehicle = null;
-      this.circle.setMap(null);
+      this.circle && this.circle.setMap(null);
     },
     onVehicleSelect(e) {
       this.mapType = e ? "route" : "location";
     },
     onGetItems() {
-      this.fetchItems({
-        StartDate: this.startDate,
-        EndDate: this.endDate,
-        CompanyId: this.formCompany,
-        VehicleId: this.formVehicle,
-        type: this.mapType,
-        Longitude: this.circle ? this.circle.getCenter().lng() : null,
-        Latitude: this.circle ? this.circle.getCenter().lat() : null,
-        Radius: this.circle ? this.circle.getRadius() / (110 * 1000) : null
-      })
-        .then(() => {
-          this.setCurrentItem(null);
-          let s = null,
-            w = null,
-            n = null,
-            e = null;
-          this.items.forEach(item => {
-            if (!s) s = item.Latitude;
-            else if (s > item.Latitude) s = item.Latitude;
-            if (!n) n = item.Latitude;
-            else if (n < item.Latitude) n = item.Latitude;
-            if (!w) w = item.Longitude;
-            else if (w > item.Longitude) w = item.Longitude;
-            if (!e) e = item.Longitude;
-            else if (e > item.Longitude) e = item.Longitude;
-          });
-          if (this.items.length === 0) {
-            s = 38.9637451;
-            w = 35.2433205;
-            n = 38.9637451;
-            e = 35.2433205;
-            this.Map.setZoom(6);
-          } else {
-            this.Map.setZoom(12);
-          }
-          this.Map.setCenter(
-            new this.google.maps.LatLng((n + s) / 2, (e + w) / 2)
-          );
-          this.Map.panToBounds(
-            new this.google.maps.LatLngBounds(
-              new this.google.maps.LatLng(s, w),
-              new this.google.maps.LatLng(n, e)
-            )
-          );
-          this.directionsRenderer.setMap(null);
-          this.Markers.forEach(marker => marker.setMap(null));
-          if (this.mapType === "route" && this.formVehicle) this.setRoute();
-          if (["location", "circle"].includes(this.mapType)) {
-            this.items.forEach(item => {
-              let marker = new this.google.maps.Marker({
-                position: new this.google.maps.LatLng(
-                  item.Latitude,
-                  item.Longitude
-                ),
+      if (
+        (this.vehicleId || this.formVehicle) &&
+        this.startDate === null &&
+        this.endDate === null &&
+        this.mapType === "location"
+      ) {
+        //live trackmode
+        this.setCurrentItem(null);
+        const vehicleDetail = this.getVehicleLocationsDetailsById(
+          this.vehicleId || this.formVehicle
+        );
+        this.Markers.forEach(marker => marker.setMap(null));
 
-                animation: this.google.maps.Animation.DROP
-              });
-              marker.setMap(this.Map);
-              marker.addListener("click", () => {
-                if (marker.getAnimation() !== null) {
-                  marker.setAnimation(null);
-                  this.setCurrentItem(null);
-                } else {
-                  this.setCurrentItem(item);
-                  this.Markers.forEach(marker => marker.setAnimation(null));
-                  marker.setAnimation(this.google.maps.Animation.BOUNCE);
-                }
-              });
+        const position = new this.google.maps.LatLng(
+          vehicleDetail.latitude,
+          vehicleDetail.longitude
+        );
 
-              this.Markers.push(marker);
-            });
-          }
-        })
-        .catch(() => {
-          Array.isArray(this.errors) &&
-            this.errors.forEach(err => {
-              this.$toastr.error(err);
-            });
+        let marker = new this.google.maps.Marker({
+          position,
+          animation: this.google.maps.Animation.DROP
         });
+
+        this.Map.setCenter(new position());
+
+
+        marker && marker.setMap(this.Map);
+      } else {
+        this.fetchItems({
+          StartDate: this.startDate,
+          EndDate: this.endDate,
+          CompanyId: this.formCompany,
+          VehicleId: this.formVehicle,
+          type: this.mapType,
+          Longitude: this.circle ? this.circle.getCenter().lng() : null,
+          Latitude: this.circle ? this.circle.getCenter().lat() : null,
+          Radius: this.circle ? this.circle.getRadius() / (110 * 1000) : null
+        })
+          .then(() => {
+            this.setCurrentItem(null);
+            let s = null,
+              w = null,
+              n = null,
+              e = null;
+            this.items.forEach(item => {
+              if (!s) s = item.Latitude;
+              else if (s > item.Latitude) s = item.Latitude;
+              if (!n) n = item.Latitude;
+              else if (n < item.Latitude) n = item.Latitude;
+              if (!w) w = item.Longitude;
+              else if (w > item.Longitude) w = item.Longitude;
+              if (!e) e = item.Longitude;
+              else if (e > item.Longitude) e = item.Longitude;
+            });
+            if (this.items.length === 0) {
+              s = 38.9637451;
+              w = 35.2433205;
+              n = 38.9637451;
+              e = 35.2433205;
+              this.Map.setZoom(6);
+            } else {
+              this.Map.setZoom(12);
+            }
+            this.Map.setCenter(
+              new this.google.maps.LatLng((n + s) / 2, (e + w) / 2)
+            );
+            this.Map.panToBounds(
+              new this.google.maps.LatLngBounds(
+                new this.google.maps.LatLng(s, w),
+                new this.google.maps.LatLng(n, e)
+              )
+            );
+            this.directionsRenderer.setMap(null);
+            this.Markers.forEach(marker => marker.setMap(null));
+            if (this.mapType === "route" && this.formVehicle) this.setRoute();
+            if (["location", "circle"].includes(this.mapType)) {
+              this.items.forEach(item => {
+                let marker = new this.google.maps.Marker({
+                  position: new this.google.maps.LatLng(
+                    item.Latitude,
+                    item.Longitude
+                  ),
+
+                  animation: this.google.maps.Animation.DROP
+                });
+                marker.setMap(this.Map);
+                marker.addListener("click", () => {
+                  if (marker.getAnimation() !== null) {
+                    marker.setAnimation(null);
+                    this.setCurrentItem(null);
+                  } else {
+                    this.setCurrentItem(item);
+                    this.Markers.forEach(marker => marker.setAnimation(null));
+                    marker.setAnimation(this.google.maps.Animation.BOUNCE);
+                  }
+                });
+
+                this.Markers.push(marker);
+              });
+            }
+          })
+          .catch(() => {
+            Array.isArray(this.errors) &&
+              this.errors.forEach(err => {
+                this.$toastr.error(err);
+              });
+          });
+      }
     },
     setCurrentItem(v) {
       this.selectedItem = v;
