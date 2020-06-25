@@ -309,7 +309,7 @@ export default {
           animation: this.google.maps.Animation.DROP
         });
 
-        this.Map.setCenter(new position());
+        this.Map.setCenter(position);
 
 
         marker && marker.setMap(this.Map);

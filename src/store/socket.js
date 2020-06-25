@@ -22,7 +22,6 @@ const actions = {
       context.dispatch(FETCH_VEHICLELOCATIONDETAIL, data);
     });
     context.dispatch(FETCH_VEHICLE).then(data => {
-      console.log(data)
       if (data.IsSuccess) {
         data.Data.forEach(vehicle => {
           this._vm.$socket.send("GetRealTimeData", vehicle.Id);
