@@ -1,7 +1,6 @@
 import ApiService from "../common/api.service";
 import JwtService from "../common/jwt.service";
 import { CONNECT } from "./socket";
-import { FETCH_VEHICLE_ALL} from "./modules/vehicle";
 import {FETCH_COMPANY} from "./modules/company";
 
 // action types
@@ -79,7 +78,6 @@ const actions = {
             context.commit(SET_AUTH, data.Data);
             context.dispatch(CONNECT);
             context.dispatch(FETCH_COMPANY);
-            context.dispatch(FETCH_VEHICLE_ALL);
           } else {
             context.commit(SET_ERROR, [data.Message]);
           }
