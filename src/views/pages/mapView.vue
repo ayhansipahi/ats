@@ -124,13 +124,13 @@
       <b-col class="col-12 bg-white p-4">
         <div class="row">
           <b-row>
-            <b-card class="col-12" v-if="selectedItem">
+            <b-card class="col-12" v-if="itemSelected">
               <div class="row car-info">
                 <div class="col-12 px-3 py-2 car-info-title">
                   <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
                 </div>
                 <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                  {{ selectedItemData.vehicle.Plaque }}
+                  {{ selectedItemData.vehicle && selectedItemData.vehicle.Plaque }}
                 </div>
 
                 <div class="col-12 px-3 py-2 car-info-title">
@@ -153,6 +153,37 @@
                 </div>
               </div>
             </b-card>
+
+            <b-card class="col-12" v-if="trackingItemSelected">
+              <div class="row car-info">
+                <div class="col-12 px-3 py-2 car-info-title">
+                  <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
+                </div>
+                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                  {{ selectedItem.vehiclePlaque }}
+                </div>
+
+                <div class="col-12 px-3 py-2 car-info-title">
+                  <strong>
+                    <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
+                  >
+                </div>
+                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                  {{ selectedItem.speed }} km/s
+                </div>
+
+                <div class="col-12 px-3 py-2 car-info-title">
+                  <strong>
+                    <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
+                  </strong>
+                </div>
+                <div class="col-12 pr-3 py-2 pl-5 car-info-val">
+                  {{ selectedItem.latitude }},
+                  {{ selectedItem.longitude }}
+                </div>
+                {{JSON.stringify(selectedItem)}}
+              </div>
+            </b-card>
           </b-row>
         </div>
       </b-col>
@@ -161,6 +192,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { gmapApi } from "vue2-google-maps";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
@@ -198,7 +230,7 @@ export default {
           optionName: "DriverName"
         }
       ],
-      selectedItem: null,
+      selectedItem: {},
       startDate: null,
       endDate: null,
       formCompany: this.companyId,
@@ -207,13 +239,20 @@ export default {
       Map: null,
       Markers: [],
       drawingCircle: null,
-      circle: null
+      circle: null,
+      isTracking: false,
+      trackingMarker: null,
+      trackingVehicleId: null,
+      trackingInterval: null,
+      itemSelected:false,
+      trackingItemSelected:false
     };
   },
   computed: {
     google: gmapApi,
     ...mapState({
       items: state => state.vehicleDetails.items,
+      trackingLocations: state => state.vehicleLocationDetail.items,
       errors: state => state.vehicleDetails.errors
     }),
     ...mapGetters({
@@ -264,7 +303,8 @@ export default {
           this.mapType === "route" &&
           !(this.startDate && this.endDate))
       );
-    }
+    },
+
   },
   methods: {
     ...mapActions({
@@ -294,25 +334,11 @@ export default {
       ) {
         //live trackmode
         this.setCurrentItem(null);
-        const vehicleDetail = this.getVehicleLocationsDetailsById(
-          this.vehicleId || this.formVehicle
-        );
+        this.trackingVehicleId = this.vehicleId || this.formVehicle;
         this.Markers.forEach(marker => marker.setMap(null));
-
-        const position = new this.google.maps.LatLng(
-          vehicleDetail.latitude,
-          vehicleDetail.longitude
-        );
-
-        let marker = new this.google.maps.Marker({
-          position,
-          animation: this.google.maps.Animation.DROP
-        });
-
-        this.Map.setCenter(position);
-
-        marker && marker.setMap(this.Map);
+        this.startTracking();
       } else {
+        this.stopTracking()
         this.fetchItems({
           StartDate: this.startDate,
           EndDate: this.endDate,
@@ -395,7 +421,14 @@ export default {
       }
     },
     setCurrentItem(v) {
-      this.selectedItem = v;
+      this.itemSelected = !!v;
+      this.trackingItemSelected =null;
+      Vue.set(this,"selectedItem", v);
+    },
+    setCurrentTrackingItem(v) {
+      this.itemSelected = null;
+      this.trackingItemSelected = !!v;
+      Vue.set(this,"selectedItem", v);
     },
     setRoute() {
       if (!this.items.length > 0) return;
@@ -472,25 +505,71 @@ export default {
       this.startDate = null;
       this.endDate = null;
       this.mapType = "route";
+    },
+    updateTrackingData() {
+      const data = this.getTrackingData();
+      this.setCurrentItem(data);
+      const position = new this.google.maps.LatLng(
+        data.latitude,
+        data.longitude
+      );
+      this.trackingMarker.setPosition(position);
+    },
+    startTracking(){
+      this.stopTracking();
+
+      const data = this.getTrackingData();
+      if (!data) return;
+      const position = new this.google.maps.LatLng(
+        data.latitude,
+        data.longitude
+      );
+      this.trackingMarker.setPosition(position);
+      this.trackingMarker.setMap(this.Map);
+      this.Map.setCenter(position);
+      this.trackingInterval = setInterval(()=>{
+        this.updateTrackingData();
+      },500)
+    },
+    stopTracking(){
+      this.trackingMarker.setMap(null);
+      clearInterval(this.trackingInterval);
+
+    },
+    getTrackingData() {
+      return this.trackingLocations.find(
+        item => item.vehicleId === this.trackingVehicleId
+      );
     }
   },
-  mounted() {
+  async mounted() {
     this.setBreadCrumb([
       {
         title: this.title,
         route: this.$router.route
       }
     ]);
-    this.fetchOptions();
+    await this.fetchOptions();
     this.$refs.mapRef.$mapPromise.then(map => {
       this.Map = map;
       this.directionsService = new this.google.maps.DirectionsService();
       this.directionsRenderer = new this.google.maps.DirectionsRenderer();
+      this.trackingMarker = new this.google.maps.Marker();
     });
     this.$refs.drawMapRef.$mapPromise.then(map => {
       this.DrawMap = map;
       this.registerDrawEvents();
     });
+  },
+  watch: {
+    // whenever trackingData changes, this function will run
+    trackingData: {
+      immediate: false,
+      deep: true,
+      handler() {
+        this.updateTrackingData();
+      }
+    }
   }
 };
 </script>

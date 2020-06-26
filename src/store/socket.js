@@ -18,7 +18,11 @@ const actions = {
       context.commit(SET_CONNECT, true);
     });
     this._vm.$socket.listen("GetVehicleLocationDetail");
+    this._vm.$socket.listen("GetLastCreatedData");
     this._vm.$socket.on("GetVehicleLocationDetail", data => {
+      context.dispatch(FETCH_VEHICLELOCATIONDETAIL, data);
+    });
+    this._vm.$socket.on("GetLastCreatedData", data => {
       context.dispatch(FETCH_VEHICLELOCATIONDETAIL, data);
     });
     context.dispatch(FETCH_VEHICLE).then(data => {

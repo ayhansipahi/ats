@@ -11,7 +11,6 @@ const state = {
 
 const getters = {
   getVehicleLocationsDetailsById(state) {
-
     return id => state.items.find(item => item.vehicleId === id);
   }
 };
@@ -33,7 +32,6 @@ const mutations = {
     } else {
       state.items.push(payload);
     }
-
   }
 };
 
