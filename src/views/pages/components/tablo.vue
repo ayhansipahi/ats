@@ -66,7 +66,6 @@
               .join(", ")
           }}
         </template>
-
         <template v-else-if="row.field.type === 'datetime'">
           {{ $moment(row.item[field.key]).format("DD.MM.YYYY") }}
         </template>

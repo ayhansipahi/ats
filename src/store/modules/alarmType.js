@@ -28,7 +28,11 @@ const actions = {
     return ApiService.get("AlarmType", "get-all")
       .then(({ data }) => {
         if (data.IsSuccess) {
+          console.log('asd', JSON.stringify(data));
           context.commit(SET_ALARMTYPE, data.Data);
+        } else {
+          console.log('asd', JSON.stringify(data));
+          context.commit(SET_ERROR, data.Message);
         }
         return data;
       })
@@ -50,7 +54,6 @@ const actions = {
       })
       .catch(err => {
         context.commit(SET_ERROR, err.response.data.errors);
-        throw new Error(err);
       });
   },
   [CREATE_ALARMTYPE](context, payload) {
@@ -66,7 +69,6 @@ const actions = {
       })
       .catch(err => {
         context.commit(SET_ERROR, err.response.data.errors);
-        throw new Error(err);
       });
   },
   [DELETE_ALARMTYPE](context, payload) {
