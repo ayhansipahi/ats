@@ -121,6 +121,18 @@ const state = {
           page: "role"
         }
       ]
+    },
+    {
+      title: "Ayarlar",
+      root: true,
+      icon: "",
+      bullet: "dot",
+      submenu: [
+        {
+          title: "SMTP Ayarı",
+          page: "smtp"
+        }
+      ]
     }
   ]
 };
@@ -158,7 +170,7 @@ const getters = {
         ...company.vehicles.map(v => {
           return {
             title: v.Plaque,
-            page: "map/?vehicleId="+v.Id,
+            page: "map/?vehicleId=" + v.Id
           };
         }),
 

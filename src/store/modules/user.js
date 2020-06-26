@@ -1,6 +1,6 @@
 import ApiService from "../../common/api.service";
 import JwtService from "../../common/jwt.service";
-import { SAVE_USERROLE } from "./role";
+import { FETCH_ROLE, SAVE_USERROLE } from "./role";
 // import { CREATE_USERPAGE} from "./role";
 
 // action types
@@ -36,10 +36,11 @@ const getters = {
 const actions = {
   [FETCH_USER](context) {
     return ApiService.get("User", "get-users")
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_USER, data.Data);
-          context.dispatch(FETCH_USERROLE);
+          await context.dispatch(FETCH_ROLE);
+          await context.dispatch(FETCH_USERROLE);
         } else {
           context.commit(SET_ERROR, data.Message);
         }
@@ -49,27 +50,29 @@ const actions = {
         context.commit(SET_ERROR, err.response.data.errors);
       });
   },
-  [FETCH_USERROLE](context) {
-    context.state.items.map(item =>
-      ApiService.query("User/get-roles-from-user", {
-        params: { userId: item.Id }
-      })
-        .then(({ data }) => {
-          if (data.IsSuccess) {
-            context.commit(SET_USERROLE, {
-              user: item,
-              roles: data.Data,
-              roleList: context.rootState.role.roles
-            });
-          } else {
-            context.commit(SET_ERROR, data.Message);
-          }
-          return data;
+  async [FETCH_USERROLE](context) {
+    await Promise.all([
+      ...context.state.items.map(item =>
+        ApiService.query("User/get-roles-from-user", {
+          params: { userId: item.Id }
         })
-        .catch(err => {
-          context.commit(SET_ERROR, err.response.data.errors);
-        })
-    );
+          .then(({ data }) => {
+            if (data.IsSuccess) {
+              context.commit(SET_USERROLE, {
+                user: item,
+                roles: data.Data,
+                roleList: context.rootState.role.roles
+              });
+            } else {
+              context.commit(SET_ERROR, data.Message);
+            }
+            return data;
+          })
+          .catch(err => {
+            context.commit(SET_ERROR, err.response.data.errors);
+          })
+      )
+    ]);
   },
   [SAVE_USER](context, payload) {
     delete payload.CreatedDate;
@@ -138,6 +141,7 @@ const mutations = {
     });
   },
   [SET_USERROLE](state, { user, roles, roleList }) {
+    state.roles = roles;
     state.items = state.items.map(item => {
       if (item.Id === user.Id) {
         item.roles = roles.map(

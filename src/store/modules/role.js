@@ -11,11 +11,11 @@ export const FETCH_PAGE = "FETCH_PAGE";
 export const FETCH_ROLEPAGE = "FETCH_ROLEPAGE";
 export const SAVE_ROLEPAGE = "SAVE_ROLEPAGE";
 export const CREATE_ROLEPAGE = "CREATE_ROLEPAGE";
+export const FETCH_ROLEPAGEBYROLE = "FETCH_ROLEPAGEBYROLE";
 
 export const FETCH_USERPAGE = "FETCH_USERPAGE";
 export const SAVE_USERPAGE = "SAVE_USERPAGE";
 export const CREATE_USERPAGE = "CREATE_USERPAGE";
-
 export const SAVE_USERROLE = "SAVE_USERROLE";
 
 // mutation types
@@ -25,8 +25,7 @@ export const REMOVE_ROLE = "REMOVE_ROLE";
 export const SET_ERROR = "SET_ERROR";
 export const SET_PAGE = "SET_PAGE";
 export const SET_ROLEPAGE = "SET_ROLEPAGE";
-export const SET_ROLEPAGEBYID = "SET_ROLEPAGEBYID";
-export const FETCH_ROLEPAGEBYROLE = "FETCH_ROLEPAGEBYROLE";
+export const SET_ROLEPAGEBYUSER = "SET_ROLEPAGEBYUSER";
 export const SET_USERPAGE = "SET_USERPAGE";
 
 const state = {
@@ -34,7 +33,8 @@ const state = {
   roles: [],
   pages: [],
   rolePages: [],
-  userPages: []
+  userPages: [],
+  userRolePages: {}
 };
 
 const getters = {
@@ -87,14 +87,15 @@ const actions = {
       });
   },
   [FETCH_ROLEPAGEBYROLE](context, payload) {
-    return ApiService.query("User/get-role-pages", {
-      params: {
-        roleId: payload
-      }
-    })
+
+    return ApiService.query("User/get-role-pages-by-role",
+      { params: { roleId: payload } })
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context.commit(SET_ROLEPAGEBYID, data.Data);
+          context.commit(SET_ROLEPAGEBYUSER, {
+            data: data.Data,
+            roleId: payload
+          });
         }
         return data;
       })
@@ -301,8 +302,8 @@ const mutations = {
   [SET_ROLEPAGE](state, payload) {
     state.rolePages = payload;
   },
-  [SET_ROLEPAGEBYID](state, payload) {
-    state.rolePages = payload;
+  [SET_ROLEPAGEBYUSER](state, { data, roleId }) {
+    state.userRolePages[roleId] = data;
   },
   [SET_USERPAGE](state, payload) {
     state.userPages = state.userPages = payload.flat();
