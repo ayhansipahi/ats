@@ -82,7 +82,7 @@ router.beforeEach((to, from, next) => {
       if (res)
         next()
       else
-        next("login")
+        next("/login")
     });
 
   // Scroll page to top on every route change

@@ -181,7 +181,7 @@ export default {
         .dispatch(LOGIN, { userName, password })
         // go to which page after successfully login
         .then(response => {
-          if (response.IsSuccess) this.$router.push({ name: "map" });
+          if (response.IsSuccess) this.$router.push({ path: "/map" });
         })
         .catch(() => {})
         .finally(() => {
