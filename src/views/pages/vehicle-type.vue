@@ -5,7 +5,6 @@
         :items="items"
         :isBusy="fetching"
         :fields="fields"
-        :options="options"
         :editable="true"
         :isCreateVisible="true"
         @onNew="onNew"

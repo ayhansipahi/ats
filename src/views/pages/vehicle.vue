@@ -13,7 +13,7 @@
         @onDelete="onDelete"
         @onEdit="item => onSelect(item, true)"
         @onFilter="onCancel"
-      >
+        >
       </tprsTable>
     </transition>
     <tprsForm
