@@ -34,21 +34,21 @@ import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import {
-  FETCH_VEHICLETYPE,
-  SAVE_VEHICLETYPE,
-  CREATE_VEHICLETYPE,
-  DELETE_VEHICLETYPE
-} from "../../store/modules/vehicleType";
+  FETCH_ALARMTYPE,
+  SAVE_ALARMTYPE,
+  CREATE_ALARMTYPE,
+  DELETE_ALARMTYPE
+} from "../../store/modules/alarmType";
 export default {
-  name: "vehicleType",
+  name: "alarmType",
   components: { tprsTable, tprsForm },
   data() {
     return {
-      title: "Araç tipi",
+      title: "Alarm tipi",
       fetching: false,
       fields: [
         {
-          key: "TypeName",
+          key: "AlarmDescription",
           label: "Tip ismi",
           sortable: true,
           type: "text"
@@ -70,16 +70,16 @@ export default {
   },
   computed: {
     ...mapState({
-      items: state => state.vehicleType.items
+      items: state => state.alarmType.items
     })
   },
   methods: {
     ...mapActions({
-      fetchItems: FETCH_VEHICLETYPE,
+      fetchItems: FETCH_ALARMTYPE,
       setBreadCrumb: SET_BREADCRUMB,
-      saveItem: SAVE_VEHICLETYPE,
-      createItem: CREATE_VEHICLETYPE,
-      deleteItem: DELETE_VEHICLETYPE
+      saveItem: SAVE_ALARMTYPE,
+      createItem: CREATE_ALARMTYPE,
+      deleteItem: DELETE_ALARMTYPE
     }),
     onSelect(item, editable) {
       this.selectedItem = item;

@@ -10,7 +10,7 @@
         </b-btn>
       </b-col>
     </b-row>
-
+<div v-if="this.items.length > 0">
     <b-table
       :responsive="true"
       id="my-table"
@@ -22,6 +22,7 @@
       striped
       hover
     >
+  
       <template v-slot:top-row="data">
         <b-td :key="field.key" v-for="field in data.fields">
           <b-input
@@ -79,7 +80,9 @@
         <template v-else>{{ row.item[field.key] }}</template>
       </template>
     </b-table>
+      </div>
   </div>
+
 </template>
 
 <script>
@@ -127,7 +130,12 @@ export default {
       filterIncludedFields: []
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.items);
+  },
+  created() {
+    console.log(this.items);
+  },
   methods: {
     filterAll(e) {
       this.$refs.scopedFilterInput.forEach(_ => {
