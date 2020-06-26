@@ -29,6 +29,8 @@ const actions = {
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_ALARMTYPE, data.Data);
+        } else {
+          context.commit(SET_ERROR, data.Message);
         }
         return data;
       })
@@ -50,7 +52,6 @@ const actions = {
       })
       .catch(err => {
         context.commit(SET_ERROR, err.response.data.errors);
-        throw new Error(err);
       });
   },
   [CREATE_ALARMTYPE](context, payload) {
@@ -66,7 +67,6 @@ const actions = {
       })
       .catch(err => {
         context.commit(SET_ERROR, err.response.data.errors);
-        throw new Error(err);
       });
   },
   [DELETE_ALARMTYPE](context, payload) {

@@ -34,22 +34,29 @@ import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import {
-  FETCH_ALARMTYPE,
-  SAVE_ALARMTYPE,
-  CREATE_ALARMTYPE,
-  DELETE_ALARMTYPE
-} from "../../store/modules/alarmType";
+  FETCH_SENSORTYPE,
+  SAVE_SENSORTYPE,
+  CREATE_SENSORTYPE,
+  DELETE_SENSORTYPE
+} from "../../store/modules/sensorType";
 export default {
-  name: "alarmType",
+  name: "sensorType",
   components: { tprsTable, tprsForm },
   data() {
     return {
-      title: "Alarm tipi",
+      title: "Sensör tipi",
       fetching: false,
       fields: [
         {
-          key: "AlarmDescription",
-          label: "Tip ismi",
+          key: "SensorTypeCode",
+          label: "Sensör Kodu",
+          sortable: true,
+          type: "text",
+          formType: "number"
+        },
+        {
+          key: "SensorTypeName",
+          label: "Sensör Adı",
           sortable: true,
           type: "text"
         },
@@ -70,23 +77,17 @@ export default {
   },
   computed: {
     ...mapState({
-      items: state => state.alarmType.items
+      items: state => state.sensorType.items
     })
   },
   methods: {
     ...mapActions({
-      fetchItems: FETCH_ALARMTYPE,
+      fetchItems: FETCH_SENSORTYPE,
       setBreadCrumb: SET_BREADCRUMB,
-      saveItem: SAVE_ALARMTYPE,
-      createItem: CREATE_ALARMTYPE,
-      deleteItem: DELETE_ALARMTYPE
+      saveItem: SAVE_SENSORTYPE,
+      createItem: CREATE_SENSORTYPE,
+      deleteItem: DELETE_SENSORTYPE
     }),
-    fetchOptions() {
-      this.optionsList.forEach(option => {
-        const actionName = `FETCH_${option.toUpperCase()}`;
-        this.$store.dispatch(actionName);
-      });
-    },
     onSelect(item, editable) {
       this.selectedItem = item;
       this.selectedItemEditable = editable;
@@ -130,7 +131,6 @@ export default {
       }
     ]);
     this.fetching = true;
-    //await this.fetchOptions();
     await this.fetchItems();
     this.fetching = false;
   }

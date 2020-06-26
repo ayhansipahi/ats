@@ -18,14 +18,12 @@ const state = {
 };
 
 const getters = {
-  getAlarms(state) {
-    return state.items;
-  }
+  getAlarms: state => state.items,
 };
 
 const actions = {
   [FETCH_ALARM](context) {
-    return ApiService.get("Alarm", "get-all")
+    return ApiService.get("Alarm", "get-with-vehicle")
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_ALARM, data.Data);

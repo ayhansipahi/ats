@@ -38,6 +38,13 @@ const state = {
           bullet: "dot"
         },
         {
+          title: "Alarm Tipleri",
+          page: "alarm-type",
+          root: true,
+          icon: "",
+          bullet: "dot"
+        },
+        {
           title: "Şoförler",
           page: "driver",
           root: true,
@@ -61,6 +68,13 @@ const state = {
         {
           title: "Sensörler",
           page: "sensor",
+          root: true,
+          icon: "",
+          bullet: "dot"
+        },
+        {
+          title: "Sensör Tipleri",
+          page: "sensor-type",
           root: true,
           icon: "",
           bullet: "dot"
@@ -97,6 +111,10 @@ const state = {
         {
           title: "Araç Cihazları",
           page: "vehicle-devices"
+        },
+        {
+          title: "Araç Ürün Grupları",
+          page: "vehicle-product-group"
         },
         {
           title: "Harita",

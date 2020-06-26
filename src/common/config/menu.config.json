@@ -136,6 +136,10 @@
             "page": "vehicle-devices"
           },
           {
+            "title": "Araç Ürün Grupları",
+            "page": "vehicle-product-group"
+          },
+          {
             "title": "Harita",
             "page": "map"
           }
@@ -196,6 +200,13 @@
           {
             "title": "Sensörler",
             "page": "sensor", "root": true,
+            "icon": "",
+            "bullet": "dot"
+          },
+          {
+            "title": "Sensör Tipleri",
+            "page": "sensor-type",
+            "root": true,
             "icon": "",
             "bullet": "dot"
           },

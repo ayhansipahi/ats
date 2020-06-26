@@ -32,7 +32,6 @@
     </tprsForm>
   </div>
 </template>
-
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
 import tprsTable from "./components/tablo";

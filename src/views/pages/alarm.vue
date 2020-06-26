@@ -21,7 +21,7 @@
       v-if="selectedItem !== null"
       :item="selectedItem"
       :fields="fields"
-      :editable="false"
+      :editable="selectedItemEditable"
       :isCreate="isCreate"
       :options="options"
       @onSave="onSave"
@@ -30,7 +30,6 @@
     ></tprsForm>
   </div>
 </template>
-
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
 import tprsTable from "./components/tablo";
@@ -51,28 +50,31 @@ export default {
       fetching: false,
       fields: [
         {
-          key: "alarmStatus",
+          key: "AlarmStatus",
           label: "Durum",
           sortable: true,
           type: "text"
         },
         {
-          key: "alarmDetail",
+          key: "AlarmDetail",
           label: "Detay",
           sortable: true,
           type: "text"
         },
         {
-          key: "vehicleDetailId",
+          key: "Plaque",
           label: "Araç Detay",
           sortable: true,
           type: "text"
         },
         {
-          key: "alarmTypeId",
+          key: "AlarmTypeId",
           label: "Tip",
           sortable: true,
-          type: "text"
+          type: "select",
+          options: "alarmType",
+          optionName: "AlarmDescription",
+          formType: "select"
         },
         {
           key: "CreatedDate",
@@ -91,7 +93,9 @@ export default {
       items: state => state.alarm.items,
       errors: state => state.alarm.errors
     }),
-    ...mapGetters({}),
+     ...mapGetters({
+      alarmType: "getAlarmTypes"
+    }),
     optionsList() {
       return this.fields
         .filter(field => field.hasOwnProperty("options"))
@@ -173,8 +177,8 @@ export default {
       }
     ]);
     this.fetching = true;
-    await this.fetchItems();
     await this.fetchOptions();
+    await this.fetchItems();
     this.fetching = false;
   }
 };
