@@ -168,6 +168,13 @@
         "icon": "",
         "bullet": "dot"
       },
+      {
+        "title": "Alarm Tipleri",
+        "page": "alarm-type",
+        "root": true,
+        "icon": "",
+        "bullet": "dot"
+      },
           {
             "title": "Şoförler",
             "page": "driver", "root": true,

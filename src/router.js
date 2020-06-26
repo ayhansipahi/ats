@@ -94,6 +94,10 @@ export default new Router({
           component: () => import("./views/pages/alarm.vue")
         },
         {
+          path: "/alarm-type",
+          component: () => import("./views/pages/alarm-type.vue")
+        },
+        {
           path: "/harita/:type",
           component: () => import("./views/pages/harita.vue")
         }
