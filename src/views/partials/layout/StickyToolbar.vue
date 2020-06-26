@@ -9,14 +9,14 @@
       >
         <a href="#"><i class="flaticon2-drop"></i></a>
       </li>
-      <li
-        v-b-tooltip.hover.left="'Layout builder'"
-        class="kt-sticky-toolbar__item kt-sticky-toolbar__item--brand"
-      >
-        <router-link href="#" :to="{ name: 'builder' }">
-          <i class="flaticon2-gear"></i>
-        </router-link>
-      </li>
+      <!--      <li-->
+      <!--        v-b-tooltip.hover.left="'Layout builder'"-->
+      <!--        class="kt-sticky-toolbar__item kt-sticky-toolbar__item&#45;&#45;brand"-->
+      <!--      >-->
+      <!--        <router-link href="#" :to="{ name: 'builder' }">-->
+      <!--          <i class="flaticon2-gear"></i>-->
+      <!--        </router-link>-->
+      <!--      </li>-->
       <li
         v-b-tooltip.hover.left="'Documentation'"
         class="kt-sticky-toolbar__item kt-sticky-toolbar__item--warning"

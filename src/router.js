@@ -71,7 +71,7 @@ export default new Router({
           name: "map",
           path: "/map",
           component: () => import("./views/pages/mapView.vue"),
-          props: true
+          props: (route) => ({ vehicleId: route.query.vehicleId||null,  companyId: route.query.companyId||null, maptype: route.query.maptype||"location" })
         },
         {
           path: "/list/:page",
