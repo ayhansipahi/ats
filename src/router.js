@@ -102,6 +102,10 @@ export default new Router({
           component: () => import("./views/pages/sensor-type.vue")
         },
         {
+          path: "/vehicle-product-group",
+          component: () => import("./views/pages/vehicle-product-group.vue")
+        },
+        {
           path: "/harita/:type",
           component: () => import("./views/pages/harita.vue")
         }

@@ -28,10 +28,8 @@ const actions = {
     return ApiService.get("AlarmType", "get-all")
       .then(({ data }) => {
         if (data.IsSuccess) {
-          console.log('asd', JSON.stringify(data));
           context.commit(SET_ALARMTYPE, data.Data);
         } else {
-          console.log('asd', JSON.stringify(data));
           context.commit(SET_ERROR, data.Message);
         }
         return data;
