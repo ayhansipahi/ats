@@ -105,6 +105,15 @@ export default {
           formType: "select"
         },
         {
+          key: "DriverId",
+          label: "Şoför",
+          sortable: true,
+          type: "select",
+          options: "driver",
+          optionName: "DriverName",
+          formType: "select"
+        },
+        {
           key: "CreatedDate",
           label: "Oluşturma Tarihi",
           sortable: true,
@@ -127,7 +136,8 @@ export default {
     ...mapGetters({
       vehicleType: "getVehicleTypes",
       vehicleProductGroup: "getVehicleProductGroups",
-      company: "getCompanies"
+      company: "getCompanies",
+      driver: "getDrivers"
     }),
     optionsList() {
       return this.fields
