@@ -124,12 +124,6 @@ export default {
       filterIncludedFields: []
     };
   },
-  mounted() {
-    console.log(this.items);
-  },
-  created() {
-    console.log(this.items);
-  },
   methods: {
     filterAll(e) {
       this.$refs.scopedFilterInput.forEach(_ => {
