@@ -1,6 +1,5 @@
 import ApiService from "../common/api.service";
 import JwtService from "../common/jwt.service";
-import { CONNECT } from "./socket";
 import { FETCH_COMPANY } from "./modules/company";
 import { FETCH_USER } from "./modules/user";
 import {
@@ -8,6 +7,7 @@ import {
   FETCH_ROLEPAGEBYROLE,
   FETCH_USERPAGE
 } from "./modules/role";
+import {CONNECT} from "./socket";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -45,9 +45,11 @@ const actions = {
   [LOGIN](context, credentials) {
     return new Promise(resolve => {
       ApiService.post("User/login", credentials)
-        .then(({ data }) => {
+        .then(async ({ data }) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
+            await context.dispatch(FETCH_COMPANY);
+            await context.dispatch(FETCH_USERPERMISSIONS);
           } else {
             context.commit(SET_ERROR, [data.Message]);
           }
@@ -87,9 +89,7 @@ const actions = {
         .then(async ({ data }) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
-            context.dispatch(CONNECT);
-            context.dispatch(FETCH_COMPANY);
-            await context.dispatch(FETCH_USERPERMISSIONS);
+            await context.dispatch(CONNECT);
           } else {
             context.commit(SET_ERROR, [data.Message]);
           }

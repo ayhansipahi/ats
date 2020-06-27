@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+import SecureLS from "secure-ls";
 
 import auth from "./auth.module";
 import htmlClass from "./htmlclass.module";
@@ -34,6 +36,8 @@ import page from "./page";
 
 Vue.use(Vuex);
 
+const ls = new SecureLS({ encodingType: "aes" });
+
 export default new Vuex.Store({
   modules: {
     socket,
@@ -65,5 +69,14 @@ export default new Vuex.Store({
     smtp,
     menu,
     page
-  }
+  },
+  plugins: [
+    createPersistedState({
+      storage: {
+        getItem: key => ls.get(key),
+        setItem: (key, value) => ls.set(key, value),
+        removeItem: key => ls.remove(key)
+      }
+    })
+  ]
 });
