@@ -1,9 +1,15 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store";
+import { VERIFY_AUTH } from "./store/auth.module";
+import {
+  ADD_BODY_CLASSNAME,
+  REMOVE_BODY_CLASSNAME
+} from "./store/htmlclass.module";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: "/",
@@ -11,9 +17,9 @@ export default new Router({
       component: () => import("@/views/theme/Base"),
       children: [
         {
-          path: "/dashboard",
-          name: "dashboard",
-          component: () => import("./views/pages/dashboard.vue")
+          path: "/report",
+          name: "report",
+          component: () => import("./views/pages/report.vue")
         },
         {
           path: "/vehicle",
@@ -71,19 +77,11 @@ export default new Router({
           name: "map",
           path: "/map",
           component: () => import("./views/pages/mapView.vue"),
-          props: (route) => ({ vehicleId: route.query.vehicleId||null,  companyId: route.query.companyId||null, maptype: route.query.maptype||"location" })
-        },
-        {
-          path: "/list/:page",
-          component: () => import("./views/pages/list.vue")
-        },
-        {
-          path: "/list/:page/:detail",
-          component: () => import("./views/pages/list.vue")
-        },
-        {
-          path: "/arac-hareketleri",
-          component: () => import("./views/pages/hareketler.vue")
+          props: route => ({
+            vehicleId: route.query.vehicleId || null,
+            companyId: route.query.companyId || null,
+            maptype: route.query.maptype || "location"
+          })
         },
         {
           path: "/company",
@@ -104,10 +102,6 @@ export default new Router({
         {
           path: "/vehicle-product-group",
           component: () => import("./views/pages/vehicle-product-group.vue")
-        },
-        {
-          path: "/harita/:type",
-          component: () => import("./views/pages/harita.vue")
         }
       ]
     },
@@ -119,11 +113,6 @@ export default new Router({
           name: "login",
           path: "/login",
           component: () => import("@/views/pages/auth/Login")
-        },
-        {
-          name: "register",
-          path: "/register",
-          component: () => import("@/views/pages/auth/Register")
         }
       ]
     },
@@ -139,3 +128,24 @@ export default new Router({
     }
   ]
 });
+
+// Ensure we checked auth before each page load.
+router.beforeEach((to, from, next) => {
+  store.dispatch(ADD_BODY_CLASSNAME, "kt-page--loading");
+  if (to.name === "login") next();
+  else
+    store.dispatch(VERIFY_AUTH).then(res => {
+      if (res) next();
+      else next("/login");
+    });
+
+  // Scroll page to top on every route change
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+  }, 100);
+});
+
+router.afterEach(() => {
+  store.dispatch(REMOVE_BODY_CLASSNAME, "kt-page--loading");
+});
+export default router;

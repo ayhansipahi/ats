@@ -98,12 +98,10 @@ const actions = {
 
 const mutations = {
   [SET_VEHICLEDETAILS](state, payload = []) {
-
     state.items = payload.map(item => {
       item.CreatedDate = new Date(item.CreatedDate);
       return item;
     });
-
   },
   [SET_ERROR](state, payload) {
     state.errors = payload;

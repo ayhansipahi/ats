@@ -3,7 +3,11 @@ import JwtService from "../common/jwt.service";
 import { CONNECT } from "./socket";
 import { FETCH_COMPANY } from "./modules/company";
 import { FETCH_USER } from "./modules/user";
-import { FETCH_PAGE, FETCH_ROLEPAGEBYROLE } from "./modules/role";
+import {
+  FETCH_PAGE,
+  FETCH_ROLEPAGEBYROLE,
+  FETCH_USERPAGE
+} from "./modules/role";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -33,7 +37,8 @@ const getters = {
   },
   isAuthenticated(state) {
     return state.isAuthenticated;
-  }
+  },
+  getPermissionsByPage: state => page => state.permissions[page]
 };
 
 const actions = {
@@ -111,8 +116,11 @@ const actions = {
     });
   },
   async [FETCH_USERPERMISSIONS](context) {
-    const { Data: pages } = await context.dispatch(FETCH_PAGE);
-    const { Data: users } = await context.dispatch(FETCH_USER);
+    const [{ Data: pages }, { Data: users }] = await Promise.all([
+      context.dispatch(FETCH_PAGE),
+      context.dispatch(FETCH_USER)
+    ]);
+    await context.dispatch(FETCH_USERPAGE);
     const currentUser = users.find(
       user => user.UserName === context.state.user.UserName
     );
@@ -122,15 +130,30 @@ const actions = {
         context.dispatch(FETCH_ROLEPAGEBYROLE, role)
       )
     ]);
+    const currentUserRolesPages = currentUser.roles.map(role => {
+      return context.rootState.role.rolePagesByRole[role];
+    });
+    const userPage = context.rootState.role.userPagesByUser[currentUser.Id];
     const permissions = pages
       .map(page => {
-        return {
-          ...page,
-          read: false,
-          write: false,
-          update: false,
-          delete: false
+        const currentUserPage = userPage.find(u => u.PageId === page.Id);
+        const currentRolePages = currentUserRolesPages.map(c =>
+          c.find(u => u.PageId === page.Id)
+        );
+        const getPermfFor = rule => {
+          return [
+            currentUserPage[rule],
+            ...currentRolePages.map(c => c[rule])
+          ].some(el => el === true);
         };
+        const res = {
+          ...page,
+          read: getPermfFor("Read"),
+          write: getPermfFor("Write"),
+          update: getPermfFor("Update"),
+          delete: getPermfFor("Delete")
+        };
+        return res;
       })
       .reduce((p, n) => {
         p[n.Id] = n;
@@ -138,8 +161,6 @@ const actions = {
       }, {});
 
     context.commit(SET_PERMISSIONS, permissions);
-
-    debugger;
   }
 };
 

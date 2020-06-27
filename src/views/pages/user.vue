@@ -1,49 +1,58 @@
 <template>
   <div>
-    <tprsTable
-      :v-show="!isCreating"
-      :items="items"
-      :isBusy="fetching"
-      :fields="fields"
-      :options="options"
-      :editable="true"
-      :isCreateVisible="true"
-      @onSelect="item => onSelect(item, false)"
-      @onFilter="onCancel"
-      @onNew="onNew"
-      @onDelete="onDelete"
-      @onEdit="item => onSelect(item, true)"
-      :canDelete="true"
-      :canEdit="true"
-    ></tprsTable>
-    <tprsForm
-      :title="title"
-      v-if="isCreating"
-      :key="selectedItem !== null"
-      :item="selectedItem"
-      :fields="fields"
-      :editable="true"
-      :isCreate="true"
-      :options="options"
-      @onCancel="onCancel"
-      @onSave="onSave"
-      :canDelete="false"
-      :canEdit="true"
-    ></tprsForm>
-    <tprsAuth
-      v-if="selectedItem !== null && !isCreating"
-      :pages="pages"
-      :xPages="userPage"
-      :key="selectedItem.Id"
-      :item.sync="selectedItem"
-      :editable.sync="selectedItemEditable"
-      :isCreate="isCreating"
-      :options="options"
-      @onSave="onSaveUserPage"
-      @onCancel="onCancel"
-      :fields="fields"
-      :canDelete="false"
-    ></tprsAuth>
+    <template v-if="canRead">
+      <tprsTable
+        :v-show="!isCreating"
+        :items="items"
+        :isBusy="fetching"
+        :fields="fields"
+        :options="options"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onSelect="item => onSelect(item, false)"
+        @onFilter="onCancel"
+        @onNew="onNew"
+        @onDelete="onDelete"
+        @onEdit="item => onSelect(item, true)"
+      ></tprsTable>
+      <tprsForm
+        :title="title"
+        v-if="isCreating"
+        :key="selectedItem !== null"
+        :item="selectedItem"
+        :fields="fields"
+        :editable="selectedItemEditable"
+        :isCreate="true"
+        :options="options"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onCancel="onCancel"
+        @onSave="onSave"
+      ></tprsForm>
+      <tprsAuth
+        v-if="selectedItem !== null && !isCreating"
+        :pages="pages"
+        :xPages="userPage"
+        :key="selectedItem.Id"
+        :item.sync="selectedItem"
+        :editable.sync="selectedItemEditable"
+        :isCreate="isCreating"
+        :options="options"
+        @onSave="onSaveUserPage"
+        @onCancel="onCancel"
+        :fields="fields"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+      ></tprsAuth>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -66,9 +75,11 @@ import {
   SAVE_USERPAGE,
   SAVE_USERROLE
 } from "../../store/modules/role";
+import permission from "./mixins/permission";
 export default {
   name: "user",
   components: { tprsTable, tprsForm, tprsAuth },
+  mixins: [permission],
   data() {
     return {
       title: "Kullanıcı",

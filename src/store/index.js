@@ -30,6 +30,7 @@ import vehicleLocationDetail from "./modules/vehicleLocationDetail";
 import smtp from "./modules/smtp";
 import socket from "./socket";
 import menu from "./menu";
+import page from "./page";
 
 Vue.use(Vuex);
 
@@ -62,6 +63,7 @@ export default new Vuex.Store({
     role,
     vehicleLocationDetail,
     smtp,
-    menu
+    menu,
+    page
   }
 });

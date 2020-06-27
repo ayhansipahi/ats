@@ -1,33 +1,42 @@
 <template>
   <div>
-    <transition name="fade">
-      <tprsTable
-        :items="items"
-        :isBusy="fetching"
+    <template v-if="canRead">
+      <transition name="fade">
+        <tprsTable
+          :items="items"
+          :isBusy="fetching"
+          :fields="fields"
+          :options="options"
+          :isCreateVisible="false"
+          :canDelete="false"
+          :canEdit="false"
+          @onNew="onNew"
+          @onSelect="item => onSelect(item, false)"
+          @onDelete="onDelete"
+          @onEdit="item => onSelect(item, true)"
+          @onFilter="onCancel"
+        ></tprsTable>
+      </transition>
+      <tprsForm
+        :key="selectedItem.Id"
+        v-if="selectedItem !== null"
+        :item="selectedItem"
         :fields="fields"
+        :editable="selectedItemEditable"
+        :isCreate="isCreate"
         :options="options"
-        :editable="true"
-        :isCreateVisible="false"
-        :isActionsVisible="false"
-        @onNew="onNew"
-        @onSelect="item => onSelect(item, false)"
+        :canDelete="false"
+        :canEdit="false"
+        @onSave="onSave"
+        @onCancel="onCancel"
         @onDelete="onDelete"
-        @onEdit="item => onSelect(item, true)"
-        @onFilter="onCancel"
-      ></tprsTable>
-    </transition>
-    <tprsForm
-      :key="selectedItem.Id"
-      v-if="selectedItem !== null"
-      :item="selectedItem"
-      :fields="fields"
-      :editable="selectedItemEditable"
-      :isCreate="isCreate"
-      :options="options"
-      @onSave="onSave"
-      @onCancel="onCancel"
-      @onDelete="onDelete"
-    ></tprsForm>
+      ></tprsForm>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 <script>
@@ -41,9 +50,11 @@ import {
   CREATE_ALARM,
   DELETE_ALARM
 } from "../../store/modules/alarm";
+import permission from "./mixins/permission";
 export default {
   name: "alarm",
   components: { tprsTable, tprsForm },
+  mixins: [permission],
   data() {
     return {
       title: "Alarm",
@@ -93,7 +104,7 @@ export default {
       items: state => state.alarm.items,
       errors: state => state.alarm.errors
     }),
-     ...mapGetters({
+    ...mapGetters({
       alarmType: "getAlarmTypes"
     }),
     optionsList() {

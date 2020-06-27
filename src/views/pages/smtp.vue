@@ -1,55 +1,23 @@
 <template>
   <div>
-    <transition name="fade">
-      <b-form v-if="false" @submit.prevent="onSubmit">
-        <b-row>
-          <b-col>
-            <h3>{{ title }}</h3>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col v-for="(field, index) in fields" :key="index" md="4">
-            <b-form-group>
-              <template>
-                <b-form-checkbox
-                  v-if="field.key === 'EnableSsl'"
-                  id="checkbox-1"
-                  name="checkbox-1"
-                  v-model="item[0][field.key]"
-                  :value="item.length > 0 ? item[0][field.key] : false"
-                >
-                  SMTP güvenli bağlantı ile mi çalışıyor (SSL)
-                </b-form-checkbox>
-                <b-form-input
-                  v-else
-                  :type="field.type"
-                  :required="field.required"
-                  :placeholder="field.label"
-                  :value="item.length > 0 ? item[0][field.key] : ''"
-                ></b-form-input>
-              </template>
-            </b-form-group>
-          </b-col>
-          <b-col> </b-col>
-        </b-row>
-        <template>
-          <b-btn variant="primary" type="submit" class="ml-1"
-            >{{ method === "CREATE_SMTP" ? "Kaydet" : "Güncelle" }}
-          </b-btn>
-        </template>
-      </b-form>
-    </transition>
-
-    <tprsForm
-            :key="item.Id"
-      :title="title"
-      :item="item"
-      :fields="fields"
-      :isCreate="false"
-      @onSave="onSave"
-      :canDelete="false"
-      :canBeHidden="false"
-    ></tprsForm>
+    <template v-if="canRead">
+      <tprsForm
+        :key="item.Id"
+        :title="title"
+        :item="item"
+        :fields="fields"
+        :isCreate="false"
+        @onSave="onSave"
+        :canDelete="false"
+        :canBeHidden="false"
+        :canEdit="canUpdate"
+      ></tprsForm>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -57,14 +25,13 @@
 import tprsForm from "./components/form";
 import { mapActions, mapState } from "vuex";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
-import {
-  FETCH_SMTP,
-  SAVE_SMTP
-} from "../../store/modules/smtp";
+import { FETCH_SMTP, SAVE_SMTP } from "../../store/modules/smtp";
+import permission from "./mixins/permission";
 
 export default {
   name: "smtp",
   components: { tprsForm },
+  mixins: [permission],
   data() {
     return {
       title: "Smtp",

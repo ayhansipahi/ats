@@ -1,105 +1,116 @@
 <template>
   <div>
-    <transition name="fade">
-      <div class="row">
-        <div class="col-12 bg-white px-4 pt-4 pb-0 mb-4">
-          <b-form class="row" @submit.prevent="onGetItems">
-            <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
-              <b-form-select
-                v-model="formCompany"
-                @change="onCompanySelect"
-                :options="formCompanyOptions"
-                required
-              >
-                <template v-slot:first>
-                  <b-form-select-option :value="null">
-                    Bir Firma seçin
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
-            </div>
+    <template v-if="canRead">
+      <transition name="fade">
+        <div class="row">
+          <div class="col-12 bg-white px-4 pt-4 pb-0 mb-4">
+            <b-form class="row" @submit.prevent="onGetItems">
+              <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
+                <b-form-select
+                  v-model="formCompany"
+                  @change="onCompanySelect"
+                  :options="formCompanyOptions"
+                  required
+                >
+                  <template v-slot:first>
+                    <b-form-select-option :value="null">
+                      Bir Firma seçin
+                    </b-form-select-option>
+                  </template>
+                </b-form-select>
+              </div>
 
-            <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
-              <b-form-select
-                v-model="formVehicle"
-                :options="formVehicleOptions"
-              >
-                <template v-slot:first>
-                  <b-form-select-option :value="null">
-                    Bir Araç seçin
-                  </b-form-select-option>
-                </template>
-              </b-form-select>
-            </div>
+              <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
+                <b-form-select
+                  v-model="formVehicle"
+                  :options="formVehicleOptions"
+                >
+                  <template v-slot:first>
+                    <b-form-select-option :value="null">
+                      Bir Araç seçin
+                    </b-form-select-option>
+                  </template>
+                </b-form-select>
+              </div>
 
-            <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
-              <b-form-datepicker
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric'
-                }"
-                locale="tr"
-                v-model="startDate"
-                :max="endDate || new Date().toISOString().split('T')[0]"
-              >
-              </b-form-datepicker>
-            </div>
+              <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
+                <b-form-datepicker
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                  }"
+                  locale="tr"
+                  v-model="startDate"
+                  :max="endDate || new Date().toISOString().split('T')[0]"
+                >
+                </b-form-datepicker>
+              </div>
 
-            <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
-              <b-form-datepicker
-                locale="tr"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric'
-                }"
-                v-model="endDate"
-                :min="startDate"
-                :max="new Date().toISOString().split('T')[0]"
-              >
-              </b-form-datepicker>
-            </div>
+              <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
+                <b-form-datepicker
+                  locale="tr"
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                  }"
+                  v-model="endDate"
+                  :min="startDate"
+                  :max="new Date().toISOString().split('T')[0]"
+                >
+                </b-form-datepicker>
+              </div>
 
-            <div class="form-group col-12 col-lg-2 mb-4">
-              <b-button
-                type="submit"
-                :variant="formCompany ? 'primary' : 'ghost'"
-                block
-                :disabled="!formCompany"
-              >
-                Ara
-              </b-button>
-            </div>
-          </b-form>
+              <div class="form-group col-12 col-lg-2 mb-4">
+                <b-button
+                  type="submit"
+                  :variant="formCompany ? 'primary' : 'ghost'"
+                  block
+                  :disabled="!formCompany"
+                >
+                  Ara
+                </b-button>
+              </div>
+            </b-form>
+          </div>
         </div>
-      </div>
-    </transition>
-    <tprsTable
-      :items="items"
-      :isBusy="fetching"
-      :fields="fields"
-      :options="options"
-      :editable="false"
-      :isCreateVisible="false"
-      onNew="onNew"
-      @onSelect="item => onSelect(item, false)"
-      onDelete="onDelete"
-      @onEdit="item => onSelect(item, true)"
-      @onFilter="onCancel"
-    ></tprsTable>
-    <tprsForm
-      v-if="selectedItem !== null"
-      :key="selectedItem"
-      :item="selectedItem"
-      :fields="fields"
-      :editable="selectedItemEditable"
-      :isCreate="isCreate"
-      :options="options"
-      onSave="onSave"
-      @onCancel="onCancel"
-      onDelete="onDelete"
-    ></tprsForm>
+      </transition>
+      <tprsTable
+        :items="items"
+        :isBusy="fetching"
+        :fields="fields"
+        :options="options"
+        :editable="false"
+        :isCreateVisible="false"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onSelect="item => onSelect(item, false)"
+        onDelete="onDelete"
+        @onEdit="item => onSelect(item, true)"
+        @onFilter="onCancel"
+      ></tprsTable>
+      <tprsForm
+        v-if="selectedItem !== null"
+        :key="selectedItem"
+        :item="selectedItem"
+        :fields="fields"
+        :editable="selectedItemEditable"
+        :isCreate="isCreate"
+        :options="options"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        onSave="onSave"
+        @onCancel="onCancel"
+        onDelete="onDelete"
+      ></tprsForm>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -109,13 +120,15 @@ import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import { FETCH_VEHICLEDETAILS } from "../../store/modules/vehicleDetails";
+import permission from "./mixins/permission";
 
 export default {
-  name: "vehicleDevice",
+  name: "vehicleTrack",
   components: { tprsTable, tprsForm },
+  mixins: [permission],
   data() {
     return {
-      title: "Araç Haraketleri",
+      title: "Araç Hareketleri",
       fetching: false,
       fields: [
         { options: "company", optionName: "CompanyName" },

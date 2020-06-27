@@ -6,6 +6,7 @@ export const SET_LAYOUT_CONFIG = "setLayoutConfig";
 export const OVERRIDE_LAYOUT_CONFIG = "overrideLayoutConfig";
 
 // mutation types
+export const INCREASE_KEY = "INCREASE_KEY";
 
 export default {
   state: {
@@ -40,6 +41,9 @@ export default {
         state.config,
         JSON.parse(localStorage.getItem("config"))
       );
+    },
+    [INCREASE_KEY](state) {
+      state.key += 1;
     }
   }
 };

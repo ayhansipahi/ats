@@ -1,193 +1,203 @@
 <template>
   <div>
-    <b-row>
-      <b-modal
-        id="modal-center"
-        size="xl"
-        centered
-        hide-header
-        static
-        @ok="onManuelSelect"
-      >
-        <GmapMap
-          :center="mapCenter"
-          :zoom="mapZoom"
-          map-type-id="terrain"
-          style="width: 100%; height: 500px"
-          :options="mapOptions"
-          ref="drawMapRef"
-        />
-      </b-modal>
-    </b-row>
-    <b-row>
-      <b-col class="col-12 bg-white p-4">
-        <b-form class="row">
-          <b-col md="2" cols="12">
-            <b-form-select
-              v-model="formCompany"
-              @change="onCompanySelect"
-              :options="formCompanyOptions"
-              required
-            >
-              <template v-slot:first>
-                <b-form-select-option :value="null">
-                  Bir Firma seçin
-                </b-form-select-option>
-              </template>
-            </b-form-select>
-          </b-col>
-          <b-col md="2" cols="12">
-            <b-form-select
-              v-model="formVehicle"
-              :options="formVehicleOptions"
-              @change="onVehicleSelect"
-            >
-              <template v-slot:first>
-                <b-form-select-option :value="null">
-                  Bir Araç seçin
-                </b-form-select-option>
-              </template>
-            </b-form-select>
-          </b-col>
-          <b-col md="2" cols="12">
-            <b-form-datepicker
-              locale="tr"
-              :date-format-options="{
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-              }"
-              v-model="startDate"
-              :max="endDate || new Date().toISOString().split('T')[0]"
-              :required="mapType === 'route'"
-            >
-            </b-form-datepicker>
-          </b-col>
-          <b-col md="2" cols="12">
-            <b-form-datepicker
-              locale="tr"
-              :date-format-options="{
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-              }"
-              v-model="endDate"
-              :min="startDate"
-              :max="new Date().toISOString().split('T')[0]"
-              :required="mapType === 'route'"
-            >
-            </b-form-datepicker>
-          </b-col>
-          <b-col md="1" cols="12">
-            <b-form-group>
-              <b-form-radio-group v-model="mapType" name="mapType">
-                <b-form-radio value="location">
-                  Konum
-                </b-form-radio>
-                <b-form-radio value="route" :disabled="!formVehicle">
-                  Rota
-                </b-form-radio>
-              </b-form-radio-group>
-            </b-form-group>
-          </b-col>
-          <b-col md="3" cols="12">
-            <b-row>
-              <b-col>
-                <b-button
-                  :variant="!isSearchDisabled ? 'primary' : 'ghost'"
-                  block
-                  @click="onGetItems"
-                  :disabled="isSearchDisabled"
-                >
-                  Ara
-                </b-button>
-              </b-col>
-              <b-col>
-                <b-button block v-b-modal.modal-center> Sorgula </b-button>
-              </b-col>
-            </b-row>
-          </b-col>
-        </b-form>
-        <div class="row">
-          <div class="col-12">
-            <GmapMap
-              :center="mapCenter"
-              :zoom="mapZoom"
-              map-type-id="terrain"
-              style="width: 100%; height: 500px"
-              :options="mapOptions"
-              ref="mapRef"
-            />
+    <template v-if="canRead">
+      <b-row>
+        <b-modal
+          id="modal-center"
+          size="xl"
+          centered
+          hide-header
+          static
+          @ok="onManuelSelect"
+        >
+          <GmapMap
+            :center="mapCenter"
+            :zoom="mapZoom"
+            map-type-id="terrain"
+            style="width: 100%; height: 500px"
+            :options="mapOptions"
+            ref="drawMapRef"
+          />
+        </b-modal>
+      </b-row>
+      <b-row>
+        <b-col class="col-12 bg-white p-4">
+          <b-form class="row">
+            <b-col md="2" cols="12">
+              <b-form-select
+                v-model="formCompany"
+                @change="onCompanySelect"
+                :options="formCompanyOptions"
+                required
+              >
+                <template v-slot:first>
+                  <b-form-select-option :value="null">
+                    Bir Firma seçin
+                  </b-form-select-option>
+                </template>
+              </b-form-select>
+            </b-col>
+            <b-col md="2" cols="12">
+              <b-form-select
+                v-model="formVehicle"
+                :options="formVehicleOptions"
+                @change="onVehicleSelect"
+              >
+                <template v-slot:first>
+                  <b-form-select-option :value="null">
+                    Bir Araç seçin
+                  </b-form-select-option>
+                </template>
+              </b-form-select>
+            </b-col>
+            <b-col md="2" cols="12">
+              <b-form-datepicker
+                locale="tr"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
+                v-model="startDate"
+                :max="endDate || new Date().toISOString().split('T')[0]"
+                :required="mapType === 'route'"
+              >
+              </b-form-datepicker>
+            </b-col>
+            <b-col md="2" cols="12">
+              <b-form-datepicker
+                locale="tr"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
+                v-model="endDate"
+                :min="startDate"
+                :max="new Date().toISOString().split('T')[0]"
+                :required="mapType === 'route'"
+              >
+              </b-form-datepicker>
+            </b-col>
+            <b-col md="1" cols="12">
+              <b-form-group>
+                <b-form-radio-group v-model="mapType" name="mapType">
+                  <b-form-radio value="location">
+                    Konum
+                  </b-form-radio>
+                  <b-form-radio value="route" :disabled="!formVehicle">
+                    Rota
+                  </b-form-radio>
+                </b-form-radio-group>
+              </b-form-group>
+            </b-col>
+            <b-col md="3" cols="12">
+              <b-row>
+                <b-col>
+                  <b-button
+                    :variant="!isSearchDisabled ? 'primary' : 'ghost'"
+                    block
+                    @click="onGetItems"
+                    :disabled="isSearchDisabled"
+                  >
+                    Ara
+                  </b-button>
+                </b-col>
+                <b-col>
+                  <b-button block v-b-modal.modal-center> Sorgula </b-button>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-form>
+          <div class="row">
+            <div class="col-12">
+              <GmapMap
+                :center="mapCenter"
+                :zoom="mapZoom"
+                map-type-id="terrain"
+                style="width: 100%; height: 500px"
+                :options="mapOptions"
+                ref="mapRef"
+              />
+            </div>
           </div>
-        </div>
-      </b-col>
-      <b-col class="col-12 bg-white p-4">
-        <div class="row">
-          <b-row>
-            <b-card class="col-12" v-if="itemSelected">
-              <div class="row car-info">
-                <div class="col-12 px-3 py-2 car-info-title">
-                  <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
-                </div>
-                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                  {{ selectedItemData.vehicle && selectedItemData.vehicle.Plaque }}
-                </div>
+        </b-col>
+        <b-col class="col-12 bg-white p-4">
+          <div class="row">
+            <b-row>
+              <b-card class="col-12" v-if="itemSelected">
+                <div class="row car-info">
+                  <div class="col-12 px-3 py-2 car-info-title">
+                    <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
+                  </div>
+                  <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                    {{
+                      selectedItemData.vehicle &&
+                        selectedItemData.vehicle.Plaque
+                    }}
+                  </div>
 
-                <div class="col-12 px-3 py-2 car-info-title">
-                  <strong>
-                    <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
-                  >
-                </div>
-                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                  {{ selectedItemData.Speed }} km/s
-                </div>
+                  <div class="col-12 px-3 py-2 car-info-title">
+                    <strong>
+                      <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
+                    >
+                  </div>
+                  <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                    {{ selectedItemData.Speed }} km/s
+                  </div>
 
-                <div class="col-12 px-3 py-2 car-info-title">
-                  <strong>
-                    <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
-                  </strong>
+                  <div class="col-12 px-3 py-2 car-info-title">
+                    <strong>
+                      <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
+                    </strong>
+                  </div>
+                  <div class="col-12 pr-3 py-2 pl-5 car-info-val">
+                    {{ selectedItemData.Latitude }},
+                    {{ selectedItemData.Longitude }}
+                  </div>
                 </div>
-                <div class="col-12 pr-3 py-2 pl-5 car-info-val">
-                  {{ selectedItemData.Latitude }},
-                  {{ selectedItemData.Longitude }}
-                </div>
-              </div>
-            </b-card>
+              </b-card>
 
-            <b-card class="col-12" v-if="trackingItemSelected">
-              <div class="row car-info">
-                <div class="col-12 px-3 py-2 car-info-title">
-                  <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
-                </div>
-                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                  {{ selectedItem.vehiclePlaque }}
-                </div>
+              <b-card class="col-12" v-if="trackingItemSelected">
+                <div class="row car-info">
+                  <div class="col-12 px-3 py-2 car-info-title">
+                    <strong><i class="fa fa-car-alt mr-2"></i> Plaka :</strong>
+                  </div>
+                  <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                    {{ selectedItem.vehiclePlaque }}
+                  </div>
 
-                <div class="col-12 px-3 py-2 car-info-title">
-                  <strong>
-                    <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
-                  >
-                </div>
-                <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
-                  {{ selectedItem.speed }} km/s
-                </div>
+                  <div class="col-12 px-3 py-2 car-info-title">
+                    <strong>
+                      <i class="fa fa-tachometer-alt mr-2"></i> Hız :</strong
+                    >
+                  </div>
+                  <div class="col-12 pr-3 py-2 pl-5 mb-3 car-info-val">
+                    {{ selectedItem.speed }} km/s
+                  </div>
 
-                <div class="col-12 px-3 py-2 car-info-title">
-                  <strong>
-                    <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
-                  </strong>
+                  <div class="col-12 px-3 py-2 car-info-title">
+                    <strong>
+                      <i class="fa fa-map-marker-alt mr-2"></i> Son Bekleme :
+                    </strong>
+                  </div>
+                  <div class="col-12 pr-3 py-2 pl-5 car-info-val">
+                    {{ selectedItem.latitude }},
+                    {{ selectedItem.longitude }}
+                  </div>
+                  {{ JSON.stringify(selectedItem) }}
                 </div>
-                <div class="col-12 pr-3 py-2 pl-5 car-info-val">
-                  {{ selectedItem.latitude }},
-                  {{ selectedItem.longitude }}
-                </div>
-                {{JSON.stringify(selectedItem)}}
-              </div>
-            </b-card>
-          </b-row>
-        </div>
-      </b-col>
-    </b-row>
+              </b-card>
+            </b-row>
+          </div>
+        </b-col>
+      </b-row>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -197,9 +207,11 @@ import { gmapApi } from "vue2-google-maps";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import { FETCH_VEHICLEDETAILS } from "../../store/modules/vehicleDetails";
+import permission from "./mixins/permission";
 export default {
   name: "mapView",
   components: {},
+  mixins: [permission],
   props: {
     companyId: { default: null },
     vehicleId: { default: null },
@@ -244,8 +256,8 @@ export default {
       trackingMarker: null,
       trackingVehicleId: null,
       trackingInterval: null,
-      itemSelected:false,
-      trackingItemSelected:false
+      itemSelected: false,
+      trackingItemSelected: false
     };
   },
   computed: {
@@ -303,8 +315,7 @@ export default {
           this.mapType === "route" &&
           !(this.startDate && this.endDate))
       );
-    },
-
+    }
   },
   methods: {
     ...mapActions({
@@ -338,7 +349,7 @@ export default {
         this.Markers.forEach(marker => marker.setMap(null));
         this.startTracking();
       } else {
-        this.stopTracking()
+        this.stopTracking();
         this.fetchItems({
           StartDate: this.startDate,
           EndDate: this.endDate,
@@ -422,13 +433,13 @@ export default {
     },
     setCurrentItem(v) {
       this.itemSelected = !!v;
-      this.trackingItemSelected =null;
-      Vue.set(this,"selectedItem", v);
+      this.trackingItemSelected = null;
+      Vue.set(this, "selectedItem", v);
     },
     setCurrentTrackingItem(v) {
       this.itemSelected = null;
       this.trackingItemSelected = !!v;
-      Vue.set(this,"selectedItem", v);
+      Vue.set(this, "selectedItem", v);
     },
     setRoute() {
       if (!this.items.length > 0) return;
@@ -515,7 +526,7 @@ export default {
       );
       this.trackingMarker.setPosition(position);
     },
-    startTracking(){
+    startTracking() {
       this.stopTracking();
 
       const data = this.getTrackingData();
@@ -527,14 +538,13 @@ export default {
       this.trackingMarker.setPosition(position);
       this.trackingMarker.setMap(this.Map);
       this.Map.setCenter(position);
-      this.trackingInterval = setInterval(()=>{
+      this.trackingInterval = setInterval(() => {
         this.updateTrackingData();
-      },500)
+      }, 500);
     },
-    stopTracking(){
+    stopTracking() {
       this.trackingMarker.setMap(null);
       clearInterval(this.trackingInterval);
-
     },
     getTrackingData() {
       return this.trackingLocations.find(

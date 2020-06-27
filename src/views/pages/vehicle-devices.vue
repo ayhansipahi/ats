@@ -1,32 +1,43 @@
 <template>
   <div>
-    <transition name="fade">
-      <tprsTable
-        :items="items"
-        :isBusy="fetching"
+    <template v-if="canRead">
+      <transition name="fade">
+        <tprsTable
+          :items="items"
+          :isBusy="fetching"
+          :fields="fields"
+          :options="options"
+          :isCreateVisible="canWrite"
+          :canDelete="canDelete"
+          :canEdit="canUpdate"
+          @onNew="onNew"
+          @onSelect="item => onSelect(item, false)"
+          @onDelete="onDelete"
+          @onEdit="item => onSelect(item, true)"
+          @onFilter="onCancel"
+        ></tprsTable>
+      </transition>
+      <tprsForm
+        v-if="selectedItem !== null"
+        :key="selectedItem"
+        :item="selectedItem"
         :fields="fields"
+        :editable="selectedItemEditable"
+        :isCreate="isCreate"
         :options="options"
-        :editable="true"
-        :isCreateVisible="true"
-        @onNew="onNew"
-        @onSelect="item => onSelect(item, false)"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onSave="onSave"
+        @onCancel="onCancel"
         @onDelete="onDelete"
-        @onEdit="item => onSelect(item, true)"
-        @onFilter="onCancel"
-      ></tprsTable>
-    </transition>
-    <tprsForm
-      v-if="selectedItem !== null"
-      :key="selectedItem"
-      :item="selectedItem"
-      :fields="fields"
-      :editable="selectedItemEditable"
-      :isCreate="isCreate"
-      :options="options"
-      @onSave="onSave"
-      @onCancel="onCancel"
-      @onDelete="onDelete"
-    ></tprsForm>
+      ></tprsForm>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -41,9 +52,11 @@ import {
   CREATE_VEHICLEDEVICE,
   DELETE_VEHICLEDEVICE
 } from "../../store/modules/vehicleDevice";
+import permission from "./mixins/permission";
 export default {
   name: "vehicleDevice",
   components: { tprsTable, tprsForm },
+  mixins: [permission],
   data() {
     return {
       title: "Araç Cihazı",

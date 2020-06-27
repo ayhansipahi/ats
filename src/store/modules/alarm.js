@@ -18,7 +18,7 @@ const state = {
 };
 
 const getters = {
-  getAlarms: state => state.items,
+  getAlarms: state => state.items
 };
 
 const actions = {

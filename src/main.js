@@ -11,7 +11,6 @@ import "vue-toastr-2/dist/vue-toastr-2.min.css";
 import * as VueGoogleMaps from "vue2-google-maps";
 import ApiService from "./common/api.service";
 //import MockService from "./common/mock/mock.service";
-import { VERIFY_AUTH } from "./store/auth.module";
 
 Vue.config.productionTip = false;
 
@@ -72,24 +71,6 @@ ApiService.init();
 
 // Remove this to disable mock API
 //MockService.init();
-
-// Ensure we checked auth before each page load.
-router.beforeEach((to, from, next) => {
-  if(to.name==="login")
-    next();
-  else
-    store.dispatch(VERIFY_AUTH).then((res)=>{
-      if (res)
-        next()
-      else
-        next("/login")
-    });
-
-  // Scroll page to top on every route change
-  setTimeout(() => {
-    window.scrollTo(0, 0);
-  }, 100);
-});
 
 new Vue({
   router,

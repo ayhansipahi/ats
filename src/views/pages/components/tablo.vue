@@ -10,78 +10,76 @@
         </b-btn>
       </b-col>
     </b-row>
-<div v-if="this.items.length > 0">
-    <b-table
-      :responsive="true"
-      id="my-table"
-      :filter="filter"
-      :filter-included-fields="filterIncludedFields"
-      :busy.sync="isBusy"
-      :items="items"
-      :fields="_fields"
-      striped
-      hover
-    >
-  
-      <template v-slot:top-row="data">
-        <b-td :key="field.key" v-for="field in data.fields">
-          <b-input
-            v-if="field.key !== 'actions'"
-            @input="e => filterScoped(e, field.key)"
-            :placeholder="`Filtrele (${field.label})`"
-            ref="scopedFilterInput"
-            :scope="field.key"
-          >
-          </b-input>
-        </b-td>
-      </template>
-      <template v-slot:cell(actions)="row">
-        <b-btn-group>
-          <b-btn v-if="canDelete" variant="ghost" @click="onDelete(row.item)">
-            <b-icon-trash variant="danger"></b-icon-trash>
-          </b-btn>
-          <b-btn variant="ghost" @click="onSelect(row.item)">
-            <b-icon-info-circle variant="info"></b-icon-info-circle>
-          </b-btn>
-          <b-btn v-if="canEdit" variant="ghost" @click="onEdit(row.item)">
-            <b-icon-pencil-square variant="primary"></b-icon-pencil-square>
-          </b-btn>
-        </b-btn-group>
-      </template>
-      <template v-for="field in fields" v-slot:[`cell(${field.key})`]="row">
-        <template v-if="row.field.type === 'select'">
-          {{
-            options[field.options].find(
-              option => option.Id === row.item[field.key]
-            )[field.optionName]
-          }}
+    <div v-if="this.items.length > 0">
+      <b-table
+        :responsive="true"
+        id="my-table"
+        :filter="filter"
+        :filter-included-fields="filterIncludedFields"
+        :busy.sync="isBusy"
+        :items="items"
+        :fields="_fields"
+        striped
+        hover
+      >
+        <template v-slot:top-row="data">
+          <b-td :key="field.key" v-for="field in data.fields">
+            <b-input
+              v-if="field.key !== 'actions'"
+              @input="e => filterScoped(e, field.key)"
+              :placeholder="`Filtrele (${field.label})`"
+              ref="scopedFilterInput"
+              :scope="field.key"
+            >
+            </b-input>
+          </b-td>
         </template>
-        <template v-if="row.field.type === 'multiselect'">
-          {{
-            options[field.options]
-              .filter(option => {
-                return row.item[field.key].includes(option.Id);
-              })
-              .map(option => option[field.optionName])
-              .join(", ")
-          }}
+        <template v-slot:cell(actions)="row">
+          <b-btn-group>
+            <b-btn v-if="canDelete" variant="ghost" @click="onDelete(row.item)">
+              <b-icon-trash variant="danger"></b-icon-trash>
+            </b-btn>
+            <b-btn variant="ghost" @click="onSelect(row.item)">
+              <b-icon-info-circle variant="info"></b-icon-info-circle>
+            </b-btn>
+            <b-btn v-if="canEdit" variant="ghost" @click="onEdit(row.item)">
+              <b-icon-pencil-square variant="primary"></b-icon-pencil-square>
+            </b-btn>
+          </b-btn-group>
         </template>
-        <template v-else-if="row.field.type === 'datetime'">
-          {{ $moment(row.item[field.key]).format("DD.MM.YYYY") }}
+        <template v-for="field in fields" v-slot:[`cell(${field.key})`]="row">
+          <template v-if="row.field.type === 'select'">
+            {{
+              options[field.options].find(
+                option => option.Id === row.item[field.key]
+              )[field.optionName]
+            }}
+          </template>
+          <template v-if="row.field.type === 'multiselect'">
+            {{
+              options[field.options]
+                .filter(option => {
+                  return row.item[field.key].includes(option.Id);
+                })
+                .map(option => option[field.optionName])
+                .join(", ")
+            }}
+          </template>
+          <template v-else-if="row.field.type === 'datetime'">
+            {{ $moment(row.item[field.key]).format("DD.MM.YYYY") }}
+          </template>
+          <template v-else-if="row.field.type === 'image'">
+            <b-img
+              :key="field.key"
+              :src="row.item[field.key]"
+              height="38"
+            ></b-img>
+          </template>
+          <template v-else>{{ row.item[field.key] }}</template>
         </template>
-        <template v-else-if="row.field.type === 'image'">
-          <b-img
-            :key="field.key"
-            :src="row.item[field.key]"
-            height="38"
-          ></b-img>
-        </template>
-        <template v-else>{{ row.item[field.key] }}</template>
-      </template>
-    </b-table>
-      </div>
+      </b-table>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -93,9 +91,6 @@ export default {
     },
     fields: { required: true },
     isBusy: {
-      default: false
-    },
-    editable: {
       default: false
     },
     isCreateVisible: {

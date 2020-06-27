@@ -1,4 +1,6 @@
 import ApiService from "../../common/api.service";
+import { INCREASE_KEY } from "../config.module";
+import { FETCH_USERPERMISSIONS } from "../auth.module";
 
 // action types
 export const FETCH_ROLE = "FETCH_ROLE";
@@ -25,7 +27,7 @@ export const REMOVE_ROLE = "REMOVE_ROLE";
 export const SET_ERROR = "SET_ERROR";
 export const SET_PAGE = "SET_PAGE";
 export const SET_ROLEPAGE = "SET_ROLEPAGE";
-export const SET_ROLEPAGEBYUSER = "SET_ROLEPAGEBYUSER";
+export const SET_ROLEPAGEBYROLE = "SET_ROLEPAGEBYROLE";
 export const SET_USERPAGE = "SET_USERPAGE";
 
 const state = {
@@ -33,8 +35,9 @@ const state = {
   roles: [],
   pages: [],
   rolePages: [],
+  rolePagesByRole: {},
   userPages: [],
-  userRolePages: {}
+  userPagesByUser: {}
 };
 
 const getters = {
@@ -79,6 +82,9 @@ const actions = {
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_ROLEPAGE, data.Data);
+          context.dispatch(FETCH_USERPERMISSIONS).then(() => {
+            context.commit(INCREASE_KEY);
+          });
         }
         return data;
       })
@@ -87,12 +93,12 @@ const actions = {
       });
   },
   [FETCH_ROLEPAGEBYROLE](context, payload) {
-
-    return ApiService.query("User/get-role-pages-by-role",
-      { params: { roleId: payload } })
+    return ApiService.query("User/get-role-pages-by-role", {
+      params: { roleId: payload }
+    })
       .then(({ data }) => {
         if (data.IsSuccess) {
-          context.commit(SET_ROLEPAGEBYUSER, {
+          context.commit(SET_ROLEPAGEBYROLE, {
             data: data.Data,
             roleId: payload
           });
@@ -190,7 +196,7 @@ const actions = {
       });
   },
   [FETCH_USERPAGE](context) {
-    Promise.all([
+    return Promise.all([
       ...context.rootState.user.items.map(item =>
         ApiService.query("User/get-user-pages", { params: { userId: item.Id } })
       )
@@ -219,6 +225,9 @@ const actions = {
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.dispatch(FETCH_USERPAGE);
+          context.dispatch(FETCH_USERPERMISSIONS).then(() => {
+            context.commit(INCREASE_KEY);
+          });
         } else {
           context.commit(SET_ERROR, data.Message);
         }
@@ -302,11 +311,19 @@ const mutations = {
   [SET_ROLEPAGE](state, payload) {
     state.rolePages = payload;
   },
-  [SET_ROLEPAGEBYUSER](state, { data, roleId }) {
-    state.userRolePages[roleId] = data;
+  [SET_ROLEPAGEBYROLE](state, { data, roleId }) {
+    state.rolePagesByRole[roleId] = data;
   },
   [SET_USERPAGE](state, payload) {
-    state.userPages = state.userPages = payload.flat();
+    state.userPages = payload.flat();
+    state.userPagesByUser = state.userPages.reduce((p, n) => {
+      if (p.hasOwnProperty(n.UserId)) {
+        p[n.UserId].push(n);
+      } else {
+        p[n.UserId] = [n];
+      }
+      return p;
+    }, {});
   },
   [SET_ERROR](state, payload) {
     state.errors = payload;

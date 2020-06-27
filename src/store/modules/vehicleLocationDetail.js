@@ -21,7 +21,6 @@ const actions = {
   }
 };
 
-
 const mutations = {
   [SET_VEHICLELOCATIONDETAIL](state, payload) {
     let isExisting = state.items.findIndex(

@@ -5,7 +5,7 @@ const state = {
       title: "Rapor",
       root: true,
       icon: "",
-      page: "dashboard",
+      page: "report",
       bullet: "dot"
     }
   ],
@@ -211,17 +211,38 @@ const getters = {
     ];
     return menu;
   },
-  getMenuReport(state) {
-    return state.menuReport;
+  getMenuReport(state, getters, rootState, rootGetters) {
+    return state.menuReport.filter(el => {
+      const page = rootGetters.getPageByPath(el.page);
+      return page ? rootGetters.getPermissionsByPage(page.Id).read : true;
+    });
   },
-  getMenuDefinitions(state) {
-    return state.menuDefinitions;
+  getMenuDefinitions(state, getters, rootState, rootGetters) {
+    return state.menuDefinitions.map(el => {
+      el.submenu = el.submenu.filter(s => {
+        const page = rootGetters.getPageByPath(s.page);
+        return page ? rootGetters.getPermissionsByPage(page.Id).read : true;
+      });
+      return el;
+    });
   },
-  getMenuVehicles(state) {
-    return state.menuVehicles;
+  getMenuVehicles(state, getters, rootState, rootGetters) {
+    return state.menuVehicles.map(el => {
+      el.submenu = el.submenu.filter(s => {
+        const page = rootGetters.getPageByPath(s.page);
+        return page ? rootGetters.getPermissionsByPage(page.Id).read : true;
+      });
+      return el;
+    });
   },
-  getMenuSettings(state) {
-    return state.menuSettings;
+  getMenuSettings(state, getters, rootState, rootGetters) {
+    return state.menuSettings.map(el => {
+      el.submenu = el.submenu.filter(s => {
+        const page = rootGetters.getPageByPath(s.page);
+        return page ? rootGetters.getPermissionsByPage(page.Id).read : true;
+      });
+      return el;
+    });
   }
 };
 

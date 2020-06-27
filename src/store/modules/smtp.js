@@ -29,7 +29,6 @@ const actions = {
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_SMTP, data.Data);
-
         }
         return data;
       })
@@ -90,7 +89,7 @@ const actions = {
 
 const mutations = {
   [SET_SMTP](state, payload) {
-    state.item = payload
+    state.item = payload;
   },
   [SET_ERROR](state, payload) {
     state.errors = payload;

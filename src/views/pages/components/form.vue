@@ -8,7 +8,7 @@
       </b-row>
       <b-row>
         <b-col v-for="(field, index) in fields" :key="index" md="4">
-          <b-form-group v-if="field.formShow !== false || editable">
+          <b-form-group v-if="field.formShow !== false || selfEditable">
             <template
               v-if="
                 ['text', 'email', 'number', 'password', undefined].includes(
@@ -21,7 +21,7 @@
                 :type="field.formType"
                 :required="field.formRequired"
                 :placeholder="field.label"
-                :disabled="field.formDisable || !editable"
+                :disabled="field.formDisable || !selfEditable"
               ></b-form-input>
             </template>
             <template v-if="['select'].includes(field.formType)">
@@ -29,7 +29,7 @@
                 v-model="formItem[field.key]"
                 :required="field.formRequired"
                 :placeholder="field.label"
-                :disabled="field.formDisable || !editable"
+                :disabled="field.formDisable || !selfEditable"
               >
                 <template v-slot:first>
                   <b-form-select-option :value="null" disabled>
@@ -53,7 +53,7 @@
                 v-model="formItem[field.key]"
                 :required="field.formRequired"
                 :placeholder="field.label"
-                :disabled="field.formDisable || !editable"
+                :disabled="field.formDisable || !selfEditable"
               >
                 <template v-slot:first>
                   <b-form-select-option :value="null" disabled>
@@ -75,7 +75,7 @@
                 v-model="formItem[field.key]"
                 :required="field.formRequired"
                 :placeholder="field.label"
-                :disabled="field.formDisable || !editable"
+                :disabled="field.formDisable || !selfEditable"
                 :date-format-options="{
                   year: 'numeric',
                   month: 'numeric',
@@ -91,14 +91,14 @@
                 :type="field.formType"
                 :required="field.formRequired"
                 :placeholder="field.label"
-                :disabled="field.formDisable || !editable"
+                :disabled="field.formDisable || !selfEditable"
               ></b-form-file>
             </template>
 
             <template v-if="['checkbox'].includes(field.formType)">
               <b-form-checkbox
                 v-model="formItem[field.key]"
-                :disabled="field.formDisable || !editable"
+                :disabled="field.formDisable || !selfEditable"
                 >{{ field.label }}
               </b-form-checkbox>
             </template>
@@ -123,18 +123,22 @@
           <b-btn v-if="canDelete" variant="ghost" @click="onDelete">
             <b-icon-trash variant="danger"></b-icon-trash>
           </b-btn>
-          <b-btn variant="ghost" v-if="editable" @click="editable = !editable">
+          <b-btn
+            variant="ghost"
+            v-if="selfEditable"
+            @click="selfEditable = !selfEditable"
+          >
             <b-icon-info-circle variant="info"></b-icon-info-circle>
           </b-btn>
           <b-btn
             variant="ghost"
-            v-if="!editable && canEdit"
-            @click="editable = !editable"
+            v-if="!selfEditable && canEdit"
+            @click="selfEditable = !selfEditable"
           >
             <b-icon-pencil-square variant="primary"></b-icon-pencil-square>
           </b-btn>
         </template>
-        <template v-if="editable && canEdit">
+        <template v-if="selfEditable && canEdit">
           <b-btn variant="danger" v-if="canBeHidden" @click="onReset"
             >İptal</b-btn
           >
@@ -182,7 +186,8 @@ export default {
   },
   data() {
     return {
-      formItem: { ...this.item }
+      formItem: { ...this.item },
+      selfEditable: this.editable
     };
   },
   methods: {

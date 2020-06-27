@@ -1,7 +1,5 @@
 import ApiService from "../../common/api.service";
-import JwtService from "../../common/jwt.service";
 import { FETCH_ROLE, SAVE_USERROLE } from "./role";
-// import { CREATE_USERPAGE} from "./role";
 
 // action types
 export const FETCH_USER = "FETCH_USER";
@@ -23,13 +21,6 @@ const state = {
 const getters = {
   getUsers(state) {
     return state.items;
-  },
-  getUserPermissionsForPage(state) {
-    return pageName => {
-      const currentUser = JwtService.decodeToken();
-      //console.log(currentUser,state);
-      return { pageName, currentUser, state };
-    };
   }
 };
 

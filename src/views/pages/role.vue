@@ -1,46 +1,57 @@
 <template>
   <div>
-    <transition name="fade">
-      <tprsTable
-        :items="roles"
-        :isBusy="fetching"
+    <template v-if="canRead">
+      <transition name="fade">
+        <tprsTable
+          :items="roles"
+          :isBusy="fetching"
+          :fields="fields"
+          options="options"
+          :isCreateVisible="canWrite"
+          :canDelete="canDelete"
+          :canEdit="canUpdate"
+          @onSelect="item => onSelect(item, false)"
+          @onDelete="onDelete"
+          @onEdit="item => onSelect(item, true)"
+          @onFilter="onCancel"
+          @onNew="onNew"
+        ></tprsTable>
+      </transition>
+      <tprsForm
+        :key="selectedItem.Id"
+        v-if="isCreating"
+        :item="selectedItem"
         :fields="fields"
-        options="options"
-        :editable="false"
-        :isCreateVisible="true"
-        @onSelect="item => onSelect(item, false)"
+        :editable="selectedItemEditable"
+        :isCreate="isCreating"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onSave="onCreateRole"
+        @onCancel="onCancel"
         @onDelete="onDelete"
-        @onEdit="item => onSelect(item, true)"
-        @onFilter="onCancel"
-        @onNew="onNew"
-        :canDelete="true"
-        :canEdit="true"
-      ></tprsTable>
-    </transition>
-    <tprsForm
-      :key="selectedItem.Id"
-      v-if="isCreating"
-      :item="selectedItem"
-      :fields="fields"
-      :editable="selectedItemEditable"
-      :isCreate="isCreating"
-      @onSave="onCreateRole"
-      @onCancel="onCancel"
-      @onDelete="onDelete"
-    ></tprsForm>
-    <tprsAuth
-      :key="'a_' + selectedItem.Id"
-      v-if="selectedItem !== null && !isCreating"
-      :pages="pages"
-      :xPages="rolePages"
-      :item.sync="selectedItem"
-      :editable="selectedItemEditable"
-      :isCreate="isCreating"
-      @onSave="onSaveRolePage"
-      @onCancel="onCancel"
-      :fields="fields"
-      :canDelete="false"
-    ></tprsAuth>
+      ></tprsForm>
+      <tprsAuth
+        :key="'a_' + selectedItem.Id"
+        v-if="selectedItem !== null && !isCreating"
+        :pages="pages"
+        :xPages="rolePages"
+        :item.sync="selectedItem"
+        :editable="selectedItemEditable"
+        :isCreate="isCreating"
+        @onSave="onSaveRolePage"
+        @onCancel="onCancel"
+        :fields="fields"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+      ></tprsAuth>
+    </template>
+    <div v-else>
+      <b-alert variant="danger" show>
+        You don't have permission to see this page
+      </b-alert>
+    </div>
   </div>
 </template>
 
@@ -60,9 +71,11 @@ import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
 import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
 import tprsAuth from "./components/authorization";
+import permission from "./mixins/permission";
 export default {
   name: "role",
   components: { tprsTable, tprsAuth, tprsForm },
+  mixins: [permission],
   data() {
     return {
       title: "Rol",
