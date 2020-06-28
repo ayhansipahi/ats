@@ -18,106 +18,101 @@
       </button>
     </template>
     <template v-slot:body>
-      <transition name="fade">
-        <div
-          class="kt-portlet__code"
-          v-bind:class="{ 'kt-portlet__code--show': isOpen }"
-          v-if="isOpen"
+      <div
+        class="kt-portlet__code"
+        v-bind:class="{ 'kt-portlet__code--show': isOpen }"
+        v-if="isOpen"
+      >
+        <button
+          href="#"
+          v-on:click="copyCode($event)"
+          v-b-tooltip.hover
+          title="Copy codes"
+          class="btn btn-clean btn-sm btn-icon btn-icon-md float-right"
         >
-          <button
-            href="#"
-            v-on:click="copyCode($event)"
-            v-b-tooltip.hover
-            title="Copy codes"
-            class="btn btn-clean btn-sm btn-icon btn-icon-md float-right"
-          >
-            <i class="la la-copy"></i>
-          </button>
+          <i class="la la-copy"></i>
+        </button>
 
-          <div v-if="hasGeneralCode">
-            <slot name="code"></slot>
-          </div>
-
-          <ul
-            class="nav nav-tabs nav-tabs-line"
-            role="tablist"
-            v-if="!hasGeneralCode && !hasSingleCodeType"
-          >
-            <li class="nav-item" v-if="hasHtmlCode">
-              <a
-                class="nav-link active"
-                v-on:click="setActiveTab"
-                data-tab="0"
-                data-toggle="tab"
-                href="#"
-                role="tab"
-                aria-selected="true"
-                >HTML</a
-              >
-            </li>
-            <li class="nav-item" v-if="hasJsCode">
-              <a
-                class="nav-link"
-                v-on:click="setActiveTab"
-                data-tab="1"
-                data-toggle="tab"
-                href="#"
-                role="tab"
-                aria-selected="false"
-                >&nbsp;JS&nbsp;</a
-              >
-            </li>
-            <li class="nav-item" v-if="hasScssCode">
-              <a
-                class="nav-link"
-                v-on:click="setActiveTab"
-                data-tab="2"
-                data-toggle="tab"
-                href="#"
-                role="tab"
-                aria-selected="false"
-                >SCSS</a
-              >
-            </li>
-          </ul>
-
-          <div v-if="!hasGeneralCode && !hasSingleCodeType">
-            <b-tabs
-              class="kt-hide-tabs"
-              content-class="mt-3"
-              v-model="tabIndex"
-            >
-              <b-tab active>
-                <highlight-code lang="html">
-                  <slot name="html"></slot>
-                </highlight-code>
-              </b-tab>
-              <b-tab>
-                <highlight-code lang="js">
-                  <slot name="js"></slot>
-                </highlight-code>
-              </b-tab>
-              <b-tab>
-                <highlight-code lang="scss">
-                  <slot name="scss"></slot>
-                </highlight-code>
-              </b-tab>
-            </b-tabs>
-          </div>
-
-          <div v-if="hasSingleCodeType">
-            <highlight-code lang="html" v-if="hasHtmlCode">
-              <slot name="html"></slot>
-            </highlight-code>
-            <highlight-code lang="js" v-if="hasJsCode">
-              <slot name="js"></slot>
-            </highlight-code>
-            <highlight-code lang="scss" v-if="hasScssCode">
-              <slot name="scss"></slot>
-            </highlight-code>
-          </div>
+        <div v-if="hasGeneralCode">
+          <slot name="code"></slot>
         </div>
-      </transition>
+
+        <ul
+          class="nav nav-tabs nav-tabs-line"
+          role="tablist"
+          v-if="!hasGeneralCode && !hasSingleCodeType"
+        >
+          <li class="nav-item" v-if="hasHtmlCode">
+            <a
+              class="nav-link active"
+              v-on:click="setActiveTab"
+              data-tab="0"
+              data-toggle="tab"
+              href="#"
+              role="tab"
+              aria-selected="true"
+              >HTML</a
+            >
+          </li>
+          <li class="nav-item" v-if="hasJsCode">
+            <a
+              class="nav-link"
+              v-on:click="setActiveTab"
+              data-tab="1"
+              data-toggle="tab"
+              href="#"
+              role="tab"
+              aria-selected="false"
+              >&nbsp;JS&nbsp;</a
+            >
+          </li>
+          <li class="nav-item" v-if="hasScssCode">
+            <a
+              class="nav-link"
+              v-on:click="setActiveTab"
+              data-tab="2"
+              data-toggle="tab"
+              href="#"
+              role="tab"
+              aria-selected="false"
+              >SCSS</a
+            >
+          </li>
+        </ul>
+
+        <div v-if="!hasGeneralCode && !hasSingleCodeType">
+          <b-tabs class="kt-hide-tabs" content-class="mt-3" v-model="tabIndex">
+            <b-tab active>
+              <highlight-code lang="html">
+                <slot name="html"></slot>
+              </highlight-code>
+            </b-tab>
+            <b-tab>
+              <highlight-code lang="js">
+                <slot name="js"></slot>
+              </highlight-code>
+            </b-tab>
+            <b-tab>
+              <highlight-code lang="scss">
+                <slot name="scss"></slot>
+              </highlight-code>
+            </b-tab>
+          </b-tabs>
+        </div>
+
+        <div v-if="hasSingleCodeType">
+          <highlight-code lang="html" v-if="hasHtmlCode">
+            <slot name="html"></slot>
+          </highlight-code>
+          <highlight-code lang="js" v-if="hasJsCode">
+            <slot name="js"></slot>
+          </highlight-code>
+          <highlight-code lang="scss" v-if="hasScssCode">
+            <slot name="scss"></slot>
+          </highlight-code>
+        </div>
+      </div>
+
       <slot name="preview"></slot>
     </template>
   </KTPortlet>

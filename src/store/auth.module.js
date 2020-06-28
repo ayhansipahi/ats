@@ -7,7 +7,7 @@ import {
   FETCH_ROLEPAGEBYROLE,
   FETCH_USERPAGE
 } from "./modules/role";
-import {CONNECT} from "./socket";
+import { CONNECT } from "./socket";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -90,6 +90,7 @@ const actions = {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
             await context.dispatch(CONNECT);
+            await context.dispatch(FETCH_USERPERMISSIONS);
           } else {
             context.commit(SET_ERROR, [data.Message]);
           }
@@ -116,10 +117,8 @@ const actions = {
     });
   },
   async [FETCH_USERPERMISSIONS](context) {
-    const [{ Data: pages }, { Data: users }] = await Promise.all([
-      context.dispatch(FETCH_PAGE),
-      context.dispatch(FETCH_USER)
-    ]);
+    const { Data: pages } = await context.dispatch(FETCH_PAGE);
+    const { Data: users } = await context.dispatch(FETCH_USER);
     await context.dispatch(FETCH_USERPAGE);
     const currentUser = users.find(
       user => user.UserName === context.state.user.UserName

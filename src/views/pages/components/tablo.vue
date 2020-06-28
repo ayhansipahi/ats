@@ -10,7 +10,7 @@
         </b-btn>
       </b-col>
     </b-row>
-    <div v-if="this.items.length > 0">
+    <div v-if="showTable">
       <b-table
         :responsive="true"
         id="my-table"
@@ -49,21 +49,10 @@
         </template>
         <template v-for="field in fields" v-slot:[`cell(${field.key})`]="row">
           <template v-if="row.field.type === 'select'">
-            {{
-              options[field.options].find(
-                option => option.Id === row.item[field.key]
-              )[field.optionName]
-            }}
+            {{ getSelectFieldText(field, row) }}
           </template>
           <template v-if="row.field.type === 'multiselect'">
-            {{
-              options[field.options]
-                .filter(option => {
-                  return row.item[field.key].includes(option.Id);
-                })
-                .map(option => option[field.optionName])
-                .join(", ")
-            }}
+            {{ getMultiSelectFieldText(field, row) }}
           </template>
           <template v-else-if="row.field.type === 'datetime'">
             {{ $moment(row.item[field.key]).format("DD.MM.YYYY") }}
@@ -116,6 +105,12 @@ export default {
       return this.isActionsVisible
         ? [...this.fields, "actions"]
         : [...this.fields];
+    },
+    showTable() {
+      return (
+        this.items.length > 0 ||
+        (this.fields.map(f => f.hasOwnProperty("option")) && this.options)
+      );
     }
   },
   data() {
@@ -155,6 +150,26 @@ export default {
     },
     onFilter() {
       this.$emit("onFilter");
+    },
+    getSelectFieldText(field, row) {
+      const options = this.options[field.options];
+      if (!options) return "";
+      const itemOption = options.find(
+        option => option.Id === row.item[field.key]
+      );
+
+      return itemOption ? itemOption[field.optionName] : "";
+    },
+    getMultiSelectFieldText(field, row) {
+      const options = this.options[field.options];
+      if (!options) return "";
+
+      const itemOption = options.filter(option => {
+        return row.item[field.key] && row.item[field.key].includes(option.Id);
+      });
+      return itemOption.length > 0
+        ? itemOption.map(option => option[field.optionName]).join(", ")
+        : "";
     }
   }
 };

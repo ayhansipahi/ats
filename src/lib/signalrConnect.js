@@ -19,27 +19,19 @@ class SocketConnection extends EventEmitter {
     this.offline = false;
   }
 
-  async _initialize(
-    connection = "",
-    transportType = SignalR.HttpTransportType.WebSockets
-  ) {
+  async _initialize(connection = "") {
     const con = connection || this.connection;
-    console.log(transportType);
     try {
       const socket = new SignalR.HubConnectionBuilder()
-        .configureLogging(SignalR.LogLevel.Debug)
+        .configureLogging(SignalR.LogLevel.Error)
         .withUrl(con, {
           skipNegotiation: true,
           transport: SignalR.HttpTransportType.WebSockets
         })
         .build();
 
-      socket.connection.onclose = async error => {
-        console.log(error);
-        if (this.options.log) console.log("Reconnecting...");
-
+      socket.connection.onclose = async () => {
         this.socket = false;
-        /* eslint-disable no-underscore-dangle */
         await this._initialize(con, SignalR.HttpTransportType.LongPolling);
         this.emit("reconnect");
       };
@@ -48,9 +40,7 @@ class SocketConnection extends EventEmitter {
 
       this.socket = socket;
       this.emit("init");
-    } catch (error) {
-      if (this.options.log) console.log("Error, reconnecting...");
-
+    } catch (err) {
       setTimeout(() => {
         this._initialize(con, SignalR.HttpTransportType.LongPolling);
       }, 1000);
@@ -66,7 +56,6 @@ class SocketConnection extends EventEmitter {
   async authenticate(accessToken, options = {}) {
     this.connection = `${this.connection}?authorization=${accessToken}`;
 
-    /* eslint-disable no-underscore-dangle */
     await this.start(options);
   }
 
@@ -78,15 +67,12 @@ class SocketConnection extends EventEmitter {
 
     this.on("init", () => {
       this.socket.on(method, data => {
-        if (this.options.log) console.log({ type: "receive", method, data });
-
         this.emit(method, data);
       });
     });
   }
 
   send(methodName, ...args) {
-    if (this.options.log) console.log({ type: "send", methodName, args });
     if (this.offline) return;
 
     if (this.socket) {
@@ -98,7 +84,6 @@ class SocketConnection extends EventEmitter {
   }
 
   async invoke(methodName, ...args) {
-    if (this.options.log) console.log({ type: "invoke", methodName, args });
     if (this.offline) return false;
 
     if (this.socket) {

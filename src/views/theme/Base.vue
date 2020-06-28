@@ -5,7 +5,7 @@
     <div
       class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page"
     >
-      <KTAside v-if="asideEnabled" ></KTAside>
+      <KTAside v-if="asideEnabled"></KTAside>
       <div
         class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper"
         id="kt_wrapper"
@@ -24,9 +24,7 @@
             class="kt-container kt-grid__item kt-grid__item--fluid"
             v-bind:class="{ 'kt-container--fluid': contentFluid }"
           >
-            <transition name="fade-in-up">
-              <router-view></router-view>
-            </transition>
+            <router-view></router-view>
           </div>
         </div>
         <KTFooter></KTFooter>

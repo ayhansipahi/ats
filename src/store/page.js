@@ -1,115 +1,112 @@
-const state = {
+const state = () => ({
   pages: [
     {
       Id: 1,
       Page: "Araç Listesi",
-      path: "vehicle",
-      siteName: "vehicle"
+      path: "vehicle"
     },
     {
       Id: 2,
       Page: "Araç Hareketleri Listesi",
-      path: "vehicle-track",
-      siteName: "vehicleTrack"
+      path: "vehicle-track"
     },
     {
       Id: 3,
       Page: "Araç Tipleri",
-      path: "vehicle-type",
-      siteName: "vehicleType"
+      path: "vehicle-type"
     },
     {
       Id: 4,
       Page: "Araç Cihazlari",
-      path: "vehicle-devices",
-      siteName: "vehicleDevice"
+      path: "vehicle-devices"
     },
     {
       Id: 5,
       Page: "Harita",
-      path: "map",
-      siteName: "mapView"
+      path: "map"
     },
     {
       Id: 6,
       Page: "Firmalar",
-      path: "company",
-      siteName: "company"
+      path: "company"
     },
     {
       Id: 7,
       Page: "Bakim",
-      path: "maintenance",
-      siteName: "maintenance"
+      path: "maintenance"
     },
     {
       Id: 8,
       Page: "Alarm Listesi",
-      path: "alarm",
-      siteName: "alarm"
+      path: "alarm"
     },
     {
       Id: 9,
       Page: "Soförler",
-      path: "driver",
-      siteName: "driver"
+      path: "driver"
     },
     {
       Id: 10,
       Page: "Istasyonlar",
-      path: "station",
-      siteName: "station"
+      path: "station"
     },
     {
       Id: 11,
       Page: "Cihazlar",
-      path: "devices",
-      siteName: "devices"
+      path: "device"
     },
     {
       Id: 12,
       Page: "Sensörler",
-      path: "sensor",
-      siteName: "sensor"
+      path: "sensor"
     },
     {
       Id: 13,
       Page: "Ürün Gruplar",
-      path: "vehicle-product-group",
-      siteName: "vehicleProductGroup"
+      path: "vehicle-product-group"
     },
     {
       Id: 14,
       Page: "Kullanicilar",
-      path: "user",
-      siteName: "user"
+      path: "user"
     },
     {
       Id: 15,
       Page: "Yetkiler",
-      path: "role",
-      siteName: "role"
+      path: "role"
     },
     {
       Id: 16,
       Page: "SMTP Ayari",
-      path: "smtp",
-      siteName: "smtp"
+      path: "smtp"
     },
     {
       Id: 17,
       Page: "RisePage",
-      path: "",
-      siteName: ""
+      path: ""
     },
     {
       Id: 18,
       Page: "Rapor",
-      path: "report",
-      siteName: "report"
+      path: "report"
+    },
+    {
+      Id: 19,
+      Page: "Alarm Tipleri",
+      path: "alarm-type"
+    },
+    {
+      Id: 20,
+      Page: "Sensör Tipleri",
+      path: "sensor-type"
+    },
+    {
+      Id: 21,
+      Page: "Ürün Grupları",
+      path: "product"
     }
   ]
-};
+});
 const getters = {
   getPageByPath(state) {
     return path => {

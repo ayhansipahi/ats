@@ -1,81 +1,80 @@
 <template>
   <div>
     <template v-if="canRead">
-      <transition name="fade">
-        <div class="row">
-          <div class="col-12 bg-white px-4 pt-4 pb-0 mb-4">
-            <b-form class="row" @submit.prevent="onGetItems">
-              <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
-                <b-form-select
-                  v-model="formCompany"
-                  @change="onCompanySelect"
-                  :options="formCompanyOptions"
-                  required
-                >
-                  <template v-slot:first>
-                    <b-form-select-option :value="null">
-                      Bir Firma seçin
-                    </b-form-select-option>
-                  </template>
-                </b-form-select>
-              </div>
+      <div class="row">
+        <div class="col-12 bg-white px-4 pt-4 pb-0 mb-4">
+          <b-form class="row" @submit.prevent="onGetItems">
+            <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
+              <b-form-select
+                v-model="formCompany"
+                @change="onCompanySelect"
+                :options="formCompanyOptions"
+                required
+              >
+                <template v-slot:first>
+                  <b-form-select-option :value="null">
+                    Bir Firma seçin
+                  </b-form-select-option>
+                </template>
+              </b-form-select>
+            </div>
 
-              <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
-                <b-form-select
-                  v-model="formVehicle"
-                  :options="formVehicleOptions"
-                >
-                  <template v-slot:first>
-                    <b-form-select-option :value="null">
-                      Bir Araç seçin
-                    </b-form-select-option>
-                  </template>
-                </b-form-select>
-              </div>
+            <div class="form-group col-12 col-sm-6 col-md-3 mb-4">
+              <b-form-select
+                v-model="formVehicle"
+                :options="formVehicleOptions"
+              >
+                <template v-slot:first>
+                  <b-form-select-option :value="null">
+                    Bir Araç seçin
+                  </b-form-select-option>
+                </template>
+              </b-form-select>
+            </div>
 
-              <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
-                <b-form-datepicker
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric'
-                  }"
-                  locale="tr"
-                  v-model="startDate"
-                  :max="endDate || new Date().toISOString().split('T')[0]"
-                >
-                </b-form-datepicker>
-              </div>
+            <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
+              <b-form-datepicker
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
+                locale="tr"
+                v-model="startDate"
+                :max="endDate || new Date().toISOString().split('T')[0]"
+              >
+              </b-form-datepicker>
+            </div>
 
-              <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
-                <b-form-datepicker
-                  locale="tr"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric'
-                  }"
-                  v-model="endDate"
-                  :min="startDate"
-                  :max="new Date().toISOString().split('T')[0]"
-                >
-                </b-form-datepicker>
-              </div>
+            <div class="form-group col-12 col-sm-6 col-md-3 col-lg-2 mb-4">
+              <b-form-datepicker
+                locale="tr"
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                }"
+                v-model="endDate"
+                :min="startDate"
+                :max="new Date().toISOString().split('T')[0]"
+              >
+              </b-form-datepicker>
+            </div>
 
-              <div class="form-group col-12 col-lg-2 mb-4">
-                <b-button
-                  type="submit"
-                  :variant="formCompany ? 'primary' : 'ghost'"
-                  block
-                  :disabled="!formCompany"
-                >
-                  Ara
-                </b-button>
-              </div>
-            </b-form>
-          </div>
+            <div class="form-group col-12 col-lg-2 mb-4">
+              <b-button
+                type="submit"
+                :variant="formCompany ? 'primary' : 'ghost'"
+                block
+                :disabled="!formCompany"
+              >
+                Ara
+              </b-button>
+            </div>
+          </b-form>
         </div>
-      </transition>
+      </div>
+
       <tprsTable
         :items="items"
         :isBusy="fetching"

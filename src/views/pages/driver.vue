@@ -1,22 +1,21 @@
 <template>
   <div>
     <template v-if="canRead">
-      <transition name="fade">
-        <tprsTable
-          :items="items"
-          :isBusy="fetching"
-          :fields="fields"
-          :options="options"
-          :isCreateVisible="canWrite"
-          :canDelete="canDelete"
-          :canEdit="canUpdate"
-          @onNew="onNew"
-          @onSelect="item => onSelect(item, false)"
-          @onDelete="onDelete"
-          @onEdit="item => onSelect(item, true)"
-          @onFilter="onCancel"
-        ></tprsTable>
-      </transition>
+      <tprsTable
+        :items="items"
+        :isBusy="fetching"
+        :fields="fields"
+        :options="options"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onNew="onNew"
+        @onSelect="item => onSelect(item, false)"
+        @onDelete="onDelete"
+        @onEdit="item => onSelect(item, true)"
+        @onFilter="onCancel"
+      ></tprsTable>
+
       <tprsForm
         :title="title"
         :key="selectedItem.Id"

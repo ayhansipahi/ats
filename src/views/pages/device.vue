@@ -1,22 +1,21 @@
 <template>
   <div>
     <template v-if="canRead">
-      <transition name="fade">
-        <tprsTable
-          :items="items"
-          :isBusy="fetching"
-          :fields="fields"
-          :options="options"
-          :isCreateVisible="canWrite"
-          :canDelete="canDelete"
-          :canEdit="canUpdate"
-          @onNew="onNew"
-          @onSelect="item => onSelect(item, false)"
-          @onDelete="onDelete"
-          @onEdit="item => onSelect(item, true)"
-          @onFilter="onCancel"
-        ></tprsTable>
-      </transition>
+      <tprsTable
+        :items="items"
+        :isBusy="fetching"
+        :fields="fields"
+        :options="options"
+        :isCreateVisible="canWrite"
+        :canDelete="canDelete"
+        :canEdit="canUpdate"
+        @onNew="onNew"
+        @onSelect="item => onSelect(item, false)"
+        @onDelete="onDelete"
+        @onEdit="item => onSelect(item, true)"
+        @onFilter="onCancel"
+      ></tprsTable>
+
       <tprsForm
         v-if="selectedItem !== null"
         :key="selectedItem"
@@ -81,6 +80,15 @@ export default {
           type: "text"
         },
         {
+          key: "SensorId",
+          label: "Sensör",
+          sortable: true,
+          type: "multiselect",
+          options: "sensor",
+          optionName: "Name",
+          formType: "multiselect"
+        },
+        {
           key: "CreatedDate",
           label: "Oluşturma Tarihi",
           sortable: true,
@@ -101,7 +109,8 @@ export default {
     }),
     ...mapGetters({
       vehicle: "getVehicles",
-      device: "getDevices"
+      device: "getDevices",
+      sensor: "getSensors"
     }),
     optionsList() {
       return this.fields
@@ -172,8 +181,8 @@ export default {
       }
     ]);
     this.fetching = true;
-    await this.fetchItems();
     await this.fetchOptions();
+    await this.fetchItems();
     this.fetching = false;
   }
 };

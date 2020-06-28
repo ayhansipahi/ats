@@ -13,7 +13,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/dashboard",
+      redirect: "/map",
       component: () => import("@/views/theme/Base"),
       children: [
         {
