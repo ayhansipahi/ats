@@ -8,6 +8,9 @@ import {
   FETCH_USERPAGE
 } from "./modules/role";
 import { CONNECT } from "./socket";
+import {FETCH_VEHICLE} from "./modules/vehicle";
+import {FETCH_VEHICLESTATUS} from "./modules/vehicleStatus";
+import {FETCH_VEHICLESTATUSTYPE} from "./modules/vehicleStatusType";
 
 // action types
 export const VERIFY_AUTH = "verifyAuth";
@@ -48,7 +51,10 @@ const actions = {
         .then(async ({ data }) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
+            await context.dispatch(FETCH_VEHICLESTATUS);
+            await context.dispatch(FETCH_VEHICLESTATUSTYPE);
             await context.dispatch(FETCH_COMPANY);
+            await context.dispatch(FETCH_VEHICLE);
             await context.dispatch(FETCH_USERPERMISSIONS);
           } else {
             context.commit(SET_ERROR, [data.Message]);

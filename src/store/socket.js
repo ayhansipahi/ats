@@ -14,7 +14,7 @@ const getters = {};
 
 const actions = {
   [CONNECT](context) {
-    if (context.state.isConnected) return;
+    if (this._vm.$socket.socket !== false) return;
     this._vm.$socket.start().then(() => {
       context.commit(SET_CONNECT, true);
     });
