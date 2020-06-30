@@ -212,11 +212,6 @@ export default {
   name: "mapView",
   components: {},
   mixins: [permission],
-  props: {
-    companyId: { default: null },
-    vehicleId: { default: null },
-    maptype: { default: "route" }
-  },
   data() {
     return {
       title: "Harita",
@@ -245,9 +240,10 @@ export default {
       selectedItem: {},
       startDate: null,
       endDate: null,
-      formCompany: this.companyId,
-      formVehicle: this.vehicleId,
-      mapType: this.maptype,
+      formCompany: null,
+      formVehicle: null,
+      formVehicleOptions: [],
+      mapType: "route",
       Map: null,
       Markers: [],
       drawingCircle: null,
@@ -274,15 +270,6 @@ export default {
       getVehicleByCompanyId: "getVehicleByCompanyId",
       getVehicleLocationsDetailsById: "getVehicleLocationsDetailsById"
     }),
-    formVehicleOptions() {
-      return (this.formCompany !== null
-        ? this.getVehicleByCompanyId(this.formCompany)
-        : []
-      ).map(v => ({
-        value: v.Id,
-        text: v.Plaque
-      }));
-    },
     formCompanyOptions() {
       return this.options.company.map(v => ({
         value: v.Id,
@@ -331,6 +318,7 @@ export default {
     onCompanySelect() {
       this.mapType = "location";
       this.formVehicle = null;
+      this.updateVehicleSelectOptions();
       this.circle && this.circle.setMap(null);
     },
     onVehicleSelect(e) {
@@ -550,6 +538,23 @@ export default {
       return this.trackingLocations.find(
         item => item.vehicleId === this.trackingVehicleId
       );
+    },
+    updateVehicleSelectOptions() {
+      const vehicleList =
+        this.formCompany !== null
+          ? this.getVehicleByCompanyId(this.formCompany)
+          : [];
+      this.formVehicleOptions = vehicleList.map(v => ({
+        value: v.Id,
+        text: v.Plaque
+      }));
+    },
+    setParams() {
+      const { companyId, vehicleId, maptype } = this.$route.params;
+      this.formCompany = parseInt(companyId);
+      this.updateVehicleSelectOptions();
+      this.formVehicle = parseInt(vehicleId);
+      this.mapType = maptype;
     }
   },
   async mounted() {
@@ -570,6 +575,7 @@ export default {
       this.DrawMap = map;
       this.registerDrawEvents();
     });
+    this.setParams();
   },
   watch: {
     // whenever trackingData changes, this function will run

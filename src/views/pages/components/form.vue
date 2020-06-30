@@ -112,8 +112,7 @@
             variant="success"
             @click="
               $router.push({
-                name: 'map',
-                params: { vehicleId: 18, companyId: 2, maptype: 'location' }
+                path: `/map/${item.CompanyId}/${item.Id}/location`
               })
             "
           >

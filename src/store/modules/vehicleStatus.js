@@ -2,19 +2,22 @@ import ApiService from "../../common/api.service";
 
 // action types
 export const FETCH_VEHICLESTATUS = "FETCH_VEHICLESTATUS";
+export const FETCH_VEHICLESTATUSBYVEHICLE = "FETCH_VEHICLESTATUSBYVEHICLE";
 export const SAVE_VEHICLESTATUS = "SAVE_VEHICLESTATUS";
 export const CREATE_VEHICLESTATUS = "CREATE_VEHICLESTATUS";
 export const DELETE_VEHICLESTATUS = "DELETE_VEHICLESTATUS";
 
 // mutation types
 export const SET_VEHICLESTATUS = "SET_VEHICLESTATUS";
+export const SET_VEHICLESTATUSBYVEHICLE = "SET_VEHICLESTATUSBYVEHICLE";
 export const UPDATE_VEHICLESTATUS = "UPDATE_VEHICLESTATUS";
 export const REMOVE_VEHICLESTATUS = "REMOVE_VEHICLESTATUS";
 export const SET_ERROR = "SET_ERROR";
 
 const state = {
   errors: null,
-  items: []
+  items: [],
+  statusByVehicle: []
 };
 
 const getters = {
@@ -30,7 +33,23 @@ const actions = {
         if (data.IsSuccess) {
           context.commit(SET_VEHICLESTATUS, data.Data);
         } else {
-          context.commit(SET_ERROR, data.Message);
+          context.commit(SET_ERROR, data.message);
+        }
+        return data;
+      })
+      .catch(err => {
+        context.commit(SET_ERROR, err.response.data.errors);
+      });
+  },
+  [FETCH_VEHICLESTATUSBYVEHICLE](context, payload) {
+    return ApiService.query("VehicleStatus/get", {
+      params: { id: payload }
+    })
+      .then(({ data }) => {
+        if (data.IsSuccess) {
+          context.commit(SET_VEHICLESTATUSBYVEHICLE, data.Data);
+        } else {
+          context.commit(SET_ERROR, data.message);
         }
         return data;
       })
@@ -94,6 +113,16 @@ const mutations = {
       item.CreatedDate = new Date(item.CreatedDate);
       return item;
     });
+  },
+  [SET_VEHICLESTATUSBYVEHICLE](state, payload) {
+    const index = state.statusByVehicle.findIndex(
+      status => status.VehicleId === payload.VehicleId
+    );
+    if (index < 0) {
+      state.statusByVehicle = [...state.statusByVehicle, payload];
+    } else {
+      state.statusByVehicle[index] = payload;
+    }
   },
   [SET_ERROR](state, payload) {
     state.errors = payload;

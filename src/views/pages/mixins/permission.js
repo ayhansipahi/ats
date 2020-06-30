@@ -13,7 +13,7 @@ export default {
     ...mapGetters(["getPageByPath", "getPermissionsByPage"])
   },
   created() {
-    const page = this.getPageByPath(this.$route.path.replace(/\//g, ""));
+    const page = this.getPageByPath(this.$route.path.split("/")[1]);
     if (typeof page.Id === "undefined") return;
     const permissions = this.getPermissionsByPage(page.Id);
     this.canWrite = permissions.write;

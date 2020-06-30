@@ -2,6 +2,7 @@
   <div>
     <template v-if="canRead">
       <tprsTable
+        v-if="selectedItem === null"
         :items="items"
         :isBusy="fetching"
         :fields="fields"
@@ -18,6 +19,7 @@
       </tprsTable>
 
       <tprsForm
+        :title="title"
         :key="selectedItem.Id"
         v-if="selectedItem !== null"
         :item="selectedItem"
@@ -209,6 +211,11 @@ export default {
       this.selectedItem = null;
       this.selectedItemEditable = false;
       this.isCreating = false;
+    },
+    setParams() {
+      this.selectedItem = this.items.find(
+        item => item.Id === parseInt(this.$route.params.vehicleId)
+      );
     }
   },
   async mounted() {
@@ -222,6 +229,7 @@ export default {
     await this.fetchOptions();
     await this.fetchItems();
     this.fetching = false;
+    this.$nextTick(this.setParams);
   }
 };
 </script>

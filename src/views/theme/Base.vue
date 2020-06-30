@@ -24,7 +24,7 @@
             class="kt-container kt-grid__item kt-grid__item--fluid"
             v-bind:class="{ 'kt-container--fluid': contentFluid }"
           >
-            <router-view></router-view>
+            <router-view :key="$route.fullPath"></router-view>
           </div>
         </div>
         <KTFooter></KTFooter>

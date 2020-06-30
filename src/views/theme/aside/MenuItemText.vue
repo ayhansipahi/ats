@@ -3,6 +3,7 @@
     :to="link()"
     :class="{ 'kt-menu__toggle': menu.submenu }"
     class="kt-menu__link"
+    replace
   >
     <i v-if="menu.icon" class="kt-menu__link-icon" :class="menu.icon"></i>
     <i

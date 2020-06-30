@@ -33,6 +33,7 @@ import { SET_BREADCRUMB } from "@/store/breadcrumbs.module";
 import timelines from "@/common/mock/widget-timeline.json";
 import widget4 from "@/common/mock/widget-4.json";
 import widget5 from "@/common/mock/widget-5.json";
+import permission from "./mixins/permission";
 
 export default {
   name: "dashboard",
@@ -49,6 +50,7 @@ export default {
     // Widget20_2,
     // Timeline2
   },
+  mixins: [permission],
   data() {
     return {
       timelines: timelines,

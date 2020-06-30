@@ -10,6 +10,7 @@ import {
 Vue.use(Router);
 
 const router = new Router({
+  mode: "history",
   routes: [
     {
       path: "/",
@@ -23,6 +24,10 @@ const router = new Router({
         },
         {
           path: "/vehicle",
+          component: () => import("./views/pages/vehicle.vue")
+        },
+        {
+          path: "/vehicle/:vehicleId",
           component: () => import("./views/pages/vehicle.vue")
         },
         {
@@ -82,6 +87,11 @@ const router = new Router({
             companyId: route.query.companyId || null,
             maptype: route.query.maptype || "location"
           })
+        },
+        {
+          name: "mapDetail",
+          path: "/map/:companyId/:vehicleId/:maptype",
+          component: () => import("./views/pages/mapView.vue")
         },
         {
           path: "/company",

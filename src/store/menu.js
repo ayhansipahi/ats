@@ -170,12 +170,24 @@ const getters = {
       item.vehicles = [];
       return item;
     });
-    const vehicles = [...rootState.vehicle.items];
+    const vehicles = rootState.vehicle.items;
+    const vehicleStatusByVehicle = rootState.vehicleStatus.statusByVehicle;
+    const vehicleStatusType = rootState.vehicleStatusType.items;
+    console.log(vehicleStatusByVehicle, vehicleStatusType);
+
     const masterCompany = companies.find(item => item.TopCompany === 0);
     vehicles.forEach(item => {
+      const status = vehicleStatusByVehicle.find(s => s.VehicleId === item.Id);
+      let IsMaintenance = false;
+      if (status) {
+        const statusType = vehicleStatusType.find(
+          t => t.Id === status.VehicleStatusId
+        );
+        IsMaintenance = statusType.IsMaintenance;
+      }
       companies
         .find(company => company.Id === item.CompanyId)
-        .vehicles.push(item);
+        .vehicles.push({ ...item, IsMaintenance: IsMaintenance });
     });
     companies = companies.map(company => {
       company.subCompanies = [
@@ -188,7 +200,9 @@ const getters = {
         ...company.vehicles.map(v => {
           return {
             title: v.Plaque,
-            page: "map/?vehicleId=" + v.Id
+            page: v.IsMaintenance
+              ? `vehicle/${v.Id}`
+              : `map/${company.Id}/${v.Id}/location`
           };
         }),
 
