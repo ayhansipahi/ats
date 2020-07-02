@@ -92,15 +92,14 @@ const actions = {
   },
   [VERIFY_AUTH](context) {
     if (JwtService.getToken()) {
-      ApiService.setHeader();
       return ApiService.query("User/verify", {
         params: { token: JwtService.getToken() }
       })
         .then(async ({ data }) => {
           if (data.IsSuccess) {
             context.commit(SET_AUTH, data.Data);
-            await context.dispatch(CONNECT);
-            await context.dispatch(FETCH_USERPERMISSIONS);
+            context.dispatch(CONNECT);
+            //await context.dispatch(FETCH_USERPERMISSIONS);
           } else {
             context.commit(SET_ERROR, [data.Message]);
           }

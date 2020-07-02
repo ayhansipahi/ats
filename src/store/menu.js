@@ -173,8 +173,6 @@ const getters = {
     const vehicles = rootState.vehicle.items;
     const vehicleStatusByVehicle = rootState.vehicleStatus.statusByVehicle;
     const vehicleStatusType = rootState.vehicleStatusType.items;
-    console.log(vehicleStatusByVehicle, vehicleStatusType);
-
     const masterCompany = companies.find(item => item.TopCompany === 0);
     vehicles.forEach(item => {
       const status = vehicleStatusByVehicle.find(s => s.VehicleId === item.Id);

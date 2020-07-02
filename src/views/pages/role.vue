@@ -17,7 +17,7 @@
       ></tprsTable>
 
       <tprsForm
-        :key="selectedItem.Id"
+        :key="selectedItem && selectedItem.Id"
         v-if="isCreating"
         :item="selectedItem"
         :fields="fields"

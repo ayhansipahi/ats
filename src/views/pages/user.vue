@@ -35,7 +35,7 @@
         v-if="selectedItem !== null && !isCreating"
         :pages="pages"
         :xPages="userPage"
-        :key="selectedItem.Id"
+        :key="selectedItem && selectedItem.Id"
         :item.sync="selectedItem"
         :editable.sync="selectedItemEditable"
         :isCreate="isCreating"

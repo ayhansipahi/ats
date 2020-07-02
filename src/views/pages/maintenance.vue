@@ -2,6 +2,7 @@
   <div>
     <template v-if="canRead">
       <tprsTable
+        v-if="selectedItem === null"
         :items="items"
         :isBusy="fetching"
         :fields="fields"
@@ -17,8 +18,9 @@
       ></tprsTable>
 
       <tprsForm
-        :key="selectedItem.Id"
+        :key="selectedItem && selectedItem.Id"
         v-if="selectedItem !== null"
+        :title="title"
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
@@ -68,7 +70,7 @@ export default {
           type: "text"
         },
         {
-          key: "km",
+          key: "KM",
           label: "Araç KM",
           sortable: true,
           type: "text",
@@ -107,10 +109,10 @@ export default {
           key: "MaintenanceStatusId",
           label: "Bakım Durumu",
           sortable: true,
-          type: "text",
-          options: "maintenanceStatus",
-          optionName: "MaintenanceStatusName",
-          formType: "text"
+          type: "select",
+          options: "vehicleStatusType",
+          optionName: "StatusName",
+          formType: "select"
         },
         {
           key: "CreatedDate",
@@ -119,7 +121,8 @@ export default {
           type: "datetime",
           editable: false,
           formType: "datetime",
-          formDisable: true
+          formDisable: true,
+          formHide: true
         }
       ],
       selectedItem: null,
@@ -134,6 +137,7 @@ export default {
     }),
     ...mapGetters({
       vehicle: "getVehicles",
+      vehicleStatusType: "getVehicleStatusTypes",
       vehicleProductGroup: "getVehicleProductGroups",
       company: "getCompanies"
     }),

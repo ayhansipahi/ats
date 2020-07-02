@@ -2,6 +2,7 @@
   <div>
     <template v-if="canRead">
       <tprsTable
+        v-if="selectedItem === null"
         :items="items"
         :isBusy="fetching"
         :fields="fields"
@@ -17,7 +18,8 @@
 
       <tprsForm
         v-if="selectedItem !== null"
-        :key="selectedItem"
+        :title="title"
+        :key="selectedItem && selectedItem.Id"
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
@@ -72,7 +74,8 @@ export default {
           type: "datetime",
           editable: false,
           formType: "datetime",
-          formDisable: true
+          formDisable: true,
+          formHide: true
         }
       ],
       selectedItem: null,

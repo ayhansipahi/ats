@@ -20,7 +20,7 @@
 
       <tprsForm
         :title="title"
-        :key="selectedItem.Id"
+        :key="selectedItem && selectedItem.Id"
         v-if="selectedItem !== null"
         :item="selectedItem"
         :fields="fields"
@@ -121,7 +121,8 @@ export default {
           type: "datetime",
           editable: false,
           formType: "datetime",
-          formDisable: true
+          formDisable: true,
+          formHide: true
         }
       ],
       selectedItem: null,
@@ -213,9 +214,14 @@ export default {
       this.isCreating = false;
     },
     setParams() {
-      this.selectedItem = this.items.find(
-        item => item.Id === parseInt(this.$route.params.vehicleId)
-      );
+      if (
+        this.items.length > 0 &&
+        this.$route.params.hasOwnProperty("vehicleId")
+      ) {
+        this.selectedItem = this.items.find(
+          i => i.Id === parseInt(this.$route.params.vehicleId)
+        );
+      }
     }
   },
   async mounted() {

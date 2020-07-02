@@ -76,22 +76,24 @@
       </div>
 
       <tprsTable
+        v-if="selectedItem === null"
         :items="items"
         :isBusy="fetching"
         :fields="fields"
         :options="options"
         :editable="false"
         :isCreateVisible="false"
-        :canDelete="canDelete"
-        :canEdit="canUpdate"
+        :canDelete="false"
+        :canEdit="false"
         @onSelect="item => onSelect(item, false)"
-        onDelete="onDelete"
+        @onDelete="onDelete"
         @onEdit="item => onSelect(item, true)"
         @onFilter="onCancel"
       ></tprsTable>
       <tprsForm
         v-if="selectedItem !== null"
-        :key="selectedItem"
+        :title="title"
+        :key="selectedItem && selectedItem.Id"
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
@@ -127,10 +129,10 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Araç Hareketleri",
+      title: "Araç Hareketi",
       fetching: false,
       fields: [
-        { options: "company", optionName: "CompanyName" },
+        { options: "company", optionName: "CompanyName", formHide: true },
         {
           key: "VehicleId",
           label: "Plaka",
@@ -167,15 +169,15 @@ export default {
           key: "Latitude",
           label: "Enlem",
           sortable: true,
-          type: "number",
-          formType: "number"
+          type: "string",
+          formType: "string"
         },
         {
           key: "Longitude",
           label: "Boylam",
           sortable: true,
-          type: "number",
-          formType: "number"
+          type: "string",
+          formType: "string"
         },
         {
           key: "Location",
@@ -190,7 +192,8 @@ export default {
           type: "datetime",
           editable: false,
           formType: "datetime",
-          formDisable: true
+          formDisable: true,
+          formHide: true
         }
       ],
       selectedItem: null,

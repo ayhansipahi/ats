@@ -28,7 +28,7 @@ const getters = {
 
 const actions = {
   [FETCH_VEHICLESTATUS](context) {
-    return ApiService.get("VehicleStatus", "get-all")
+    return ApiService.get("VehicleStatus", "all-vehicle-status-report")
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_VEHICLESTATUS, data.Data);

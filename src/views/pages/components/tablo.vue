@@ -51,7 +51,7 @@
           <template v-if="row.field.type === 'select'">
             {{ getSelectFieldText(field, row) }}
           </template>
-          <template v-if="row.field.type === 'multiselect'">
+          <template v-else-if="row.field.type === 'multiselect'">
             {{ getMultiSelectFieldText(field, row) }}
           </template>
           <template v-else-if="row.field.type === 'datetime'">
@@ -157,7 +157,6 @@ export default {
       const itemOption = options.find(
         option => option.Id === row.item[field.key]
       );
-
       return itemOption ? itemOption[field.optionName] : "";
     },
     getMultiSelectFieldText(field, row) {
