@@ -551,10 +551,10 @@ export default {
     },
     setParams() {
       const { companyId, vehicleId, maptype } = this.$route.params;
-      this.formCompany = parseInt(companyId);
+      if (companyId) this.formCompany = parseInt(companyId);
       this.updateVehicleSelectOptions();
-      this.formVehicle = parseInt(vehicleId);
-      this.mapType = maptype;
+      if (vehicleId) this.formVehicle = parseInt(vehicleId);
+      if (maptype) this.mapType = maptype;
     }
   },
   async mounted() {
