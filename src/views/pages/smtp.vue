@@ -44,6 +44,7 @@ export default {
           label: "Smtp E-posta",
           sortable: true,
           type: "email",
+          formType: "email",
           required: true
         },
         {

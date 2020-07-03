@@ -95,13 +95,15 @@ export default {
           key: "Email",
           label: "Email",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "email"
         },
         {
           key: "PhoneNumber",
           label: "Cep Telefonu",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "number"
         },
         {
           key: "Password",

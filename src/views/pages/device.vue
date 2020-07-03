@@ -59,7 +59,7 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "İstanyon",
+      title: "Cihaz",
       fetching: false,
       fields: [
         {

@@ -60,7 +60,7 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "İstanyon",
+      title: "İstasyon",
       fetching: false,
       fields: [
         {

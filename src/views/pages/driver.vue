@@ -65,7 +65,8 @@ export default {
           key: "TCKN",
           label: "TC",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "number"
         },
         {
           key: "DriverName",
@@ -78,7 +79,8 @@ export default {
           key: "Phone",
           label: "Telefon",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "number"
         },
         {
           key: "Email",

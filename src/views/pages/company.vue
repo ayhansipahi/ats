@@ -84,7 +84,8 @@ export default {
           key: "Phone",
           label: "Telefon",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "number"
         },
         {
           key: "AuthorizedPerson",
@@ -96,13 +97,15 @@ export default {
           key: "AuthorizedPhone",
           label: "Yetkili Telefon",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "number"
         },
         {
           key: "AuthorizedEmail",
           label: "Yetkili E-mail",
           sortable: true,
-          type: "text"
+          type: "text",
+          formType: "email"
         },
         {
           key: "LogoFilePath",
