@@ -8,8 +8,8 @@
       </b-row>
       <b-row>
         <template v-for="(field, index) in fields">
-          <b-col :key="index" md="4" v-if="!field.formHide">
-            <b-form-group v-if="field.formShow !== false || selfEditable">
+          <b-col :key="index" md="4" v-if="fieldVisible(field)">
+            <b-form-group>
               <template
                 v-if="
                   ['text', 'email', 'number', 'password', undefined].includes(
@@ -201,6 +201,11 @@ export default {
     onReset() {
       this.formItem = { ...this.item };
       this.$emit("onCancel");
+    },
+    fieldVisible(field) {
+      if (this.isCreate && field.formHide) return false;
+      if (this.selfEditable && field.formHide) return false;
+      return true;
     }
   }
 };
