@@ -25,7 +25,7 @@
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
-        :isCreate="isCreate"
+        :isCreate="isCreating"
         :options="options"
         :isVehicle="true"
         :isCreateVisible="canWrite"
@@ -85,7 +85,13 @@ export default {
           type: "select",
           options: "vehicleType",
           optionName: "TypeName",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["vehicleType"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "CompanyId",
@@ -94,7 +100,13 @@ export default {
           type: "select",
           options: "company",
           optionName: "CompanyName",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["company"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "VehicleProductGroupId",
@@ -103,7 +115,13 @@ export default {
           type: "select",
           options: "vehicleProductGroup",
           optionName: "VehicleProductName",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["vehicleProductGroup"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "DriverId",
@@ -112,7 +130,13 @@ export default {
           type: "select",
           options: "driver",
           optionName: "DriverName",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["driver"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "CreatedDate",
@@ -127,7 +151,7 @@ export default {
       ],
       selectedItem: null,
       selectedItemEditable: false,
-      isCreate: false
+      isCreating: false
     };
   },
   computed: {
@@ -182,13 +206,21 @@ export default {
     },
     onSave(item) {
       (this.isCreating ? this.createItem : this.saveItem)(item)
-        .then(data => (data.IsSuccess ? this.reset() && true : data))
+        .then(data => {
+          if (data.IsSuccess) {
+            this.reset();
+            return true;
+          } else {
+            return data;
+          }
+        })
         .then(data => {
           data === true
             ? this.$toastr.success("İşlem Başarılı")
             : this.$toastr.error(data.Message);
         })
-        .catch(() => {
+        .catch(err => {
+          console.log(err);
           Object.keys(this.errors).forEach(key => {
             const errorTitle = this.fields.find(field => field.key === key)
               .label;

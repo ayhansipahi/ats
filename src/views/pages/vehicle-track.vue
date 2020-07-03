@@ -140,7 +140,13 @@ export default {
           type: "select",
           options: "vehicle",
           optionName: "Plaque",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["vehicle"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "DriverId",
@@ -149,7 +155,13 @@ export default {
           type: "select",
           options: "driver",
           optionName: "DriverName",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["driver"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "Km",

@@ -116,7 +116,14 @@ export default {
           type: "multiselect",
           options: "role",
           optionName: "Name",
-          formType: "multiselect"
+          formType: "multiselect",
+          formatter: value => {
+            return this.options["role"]
+              .filter(option => value.includes(option.Id))
+              .map(option => option["Name"])
+              .join(", ");
+          },
+          filterByFormatted: true
         }
       ],
       selectedItem: null,

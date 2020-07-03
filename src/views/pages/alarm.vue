@@ -86,7 +86,13 @@ export default {
           type: "select",
           options: "alarmType",
           optionName: "AlarmDescription",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["alarmType"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "CreatedDate",

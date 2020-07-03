@@ -87,8 +87,15 @@ export default {
           sortable: true,
           type: "multiselect",
           options: "sensor",
-          optionName: "Name",
-          formType: "multiselect"
+          optionName: "SensorName",
+          formType: "multiselect",
+          formatter: value => {
+            return this.options["sensor"]
+              .filter(option => value.includes(option.Id))
+              .map(option => option["SensorName"])
+              .join(", ");
+          },
+          filterByFormatted: true
         },
         {
           key: "CreatedDate",

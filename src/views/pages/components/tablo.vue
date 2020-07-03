@@ -162,7 +162,6 @@ export default {
     getMultiSelectFieldText(field, row) {
       const options = this.options[field.options];
       if (!options) return "";
-
       const itemOption = options.filter(option => {
         return row.item[field.key] && row.item[field.key].includes(option.Id);
       });

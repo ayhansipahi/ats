@@ -70,7 +70,13 @@ export default {
           type: "select",
           options: "vehicle",
           optionName: "Plaque",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["vehicle"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "DeviceId",
@@ -79,7 +85,13 @@ export default {
           type: "select",
           options: "device",
           optionName: "DeviceName",
-          formType: "select"
+          formType: "select",
+          formatter: (value, key, item) => {
+            return this.options["device"].find(
+              option => option.Id === item[key]
+            );
+          },
+          filterByFormatted: true
         },
         {
           key: "CreatedDate",
