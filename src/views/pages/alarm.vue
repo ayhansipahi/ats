@@ -24,7 +24,7 @@
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
-        :isCreate="isCreate"
+        :isCreate="isCreating"
         :options="options"
         :canDelete="false"
         :canEdit="false"
@@ -103,7 +103,7 @@ export default {
       ],
       selectedItem: null,
       selectedItemEditable: false,
-      isCreate: false
+      isCreating: false
     };
   },
   computed: {

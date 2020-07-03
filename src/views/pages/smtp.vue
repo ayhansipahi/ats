@@ -80,7 +80,7 @@ export default {
       ],
       selectedItem: null,
       selectedItemEditable: false,
-      isCreate: false
+      isCreating: false
     };
   },
   methods: {

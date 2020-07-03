@@ -89,7 +89,6 @@ export default {
       fetching: false,
       selectedItem: null,
       selectedItemEditable: false,
-      isCreate: false,
       isCreating: false
     };
   },

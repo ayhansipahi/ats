@@ -97,7 +97,7 @@
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
-        :isCreate="isCreate"
+        :isCreate="isCreating"
         :options="options"
         :isCreateVisible="canWrite"
         :canDelete="canDelete"
@@ -210,7 +210,7 @@ export default {
       ],
       selectedItem: null,
       selectedItemEditable: false,
-      isCreate: false,
+      isCreating: false,
       startDate: null, // new Date(),
       endDate: null, // new Date(),
       formCompany: null,
