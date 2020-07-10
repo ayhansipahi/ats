@@ -23,7 +23,9 @@
                   :required="field.formRequired"
                   :placeholder="field.label"
                   :disabled="field.formDisable || !selfEditable"
-                ></b-form-input>
+                  v-mask="field.mask || 'X?XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'"
+                >
+                </b-form-input>
               </template>
               <template v-if="['select'].includes(field.formType)">
                 <b-form-select
@@ -206,6 +208,13 @@ export default {
       if (this.isCreate && field.formHide) return false;
       if (this.selfEditable && field.formHide) return false;
       return true;
+    },
+    getMask(mask = null) {
+      if (mask === null) {
+        return "X?";
+      } else {
+        return mask;
+      }
     }
   }
 };

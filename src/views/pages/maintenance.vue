@@ -86,15 +86,23 @@ export default {
           key: "MaintenanceStartDate",
           label: "Başlangiç Tarihi",
           sortable: true,
-          type: "date",
-          formType: "datetime"
+          type: "datetime",
+          formType: "datetime",
+          formatter: value => {
+            return this.$moment(value).format("DD.MM.YYYY");
+          },
+          filterByFormatted: true
         },
         {
           key: "MaintenanceEndDate",
           label: "Bitiş Tarihi",
           sortable: true,
-          type: "data",
-          formType: "datetime"
+          type: "datetime",
+          formType: "datetime",
+          formatter: value => {
+            return this.$moment(value).format("DD.MM.YYYY");
+          },
+              filterByFormatted: true
         },
         {
           key: "VehicleId",
@@ -134,7 +142,11 @@ export default {
           editable: false,
           formType: "datetime",
           formDisable: true,
-          formHide: true
+          formHide: true,
+          formatter: value => {
+            return this.$moment(value).format("DD.MM.YYYY");
+          },
+          filterByFormatted: true
         }
       ],
       selectedItem: null,
@@ -194,19 +206,30 @@ export default {
     },
     onSave(item) {
       (this.isCreating ? this.createItem : this.saveItem)(item)
-        .then(data => (data.IsSuccess ? this.reset() && true : data))
+        .then(data => {
+          if (data.IsSuccess) {
+            this.reset();
+            return true;
+          } else {
+            return data;
+          }
+        })
         .then(data => {
           data === true
             ? this.$toastr.success("İşlem Başarılı")
             : this.$toastr.error(data.Message);
         })
-        .catch(() => {
-          Object.keys(this.errors).forEach(key => {
-            const errorTitle = this.fields.find(field => field.key === key)
-              .label;
-            const errorText = this.errors[key];
-            this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
-          });
+        .catch(err => {
+          if (typeof this.errors === "object") {
+            Object.keys(this.errors).forEach(key => {
+              const errorTitle = this.fields.find(field => field.key === key)
+                .label;
+              const errorText = this.errors[key];
+              this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
+            });
+          } else {
+            this.$toastr.error(err.message);
+          }
         });
     },
     onCancel() {

@@ -91,9 +91,32 @@ export default {
       saveItem: SAVE_SMTP
     }),
     onSave(item) {
-      this.saveItem(item).then(data => {
-        if (data.IsSuccess) this.$toastr.success("başarılı");
-      });
+      (this.isCreating ? this.createItem : this.saveItem)(item)
+        .then(data => {
+          if (data.IsSuccess) {
+            this.reset();
+            return true;
+          } else {
+            return data;
+          }
+        })
+        .then(data => {
+          data === true
+            ? this.$toastr.success("İşlem Başarılı")
+            : this.$toastr.error(data.Message);
+        })
+        .catch(err => {
+          if (typeof this.errors === "object") {
+            Object.keys(this.errors).forEach(key => {
+              const errorTitle = this.fields.find(field => field.key === key)
+                .label;
+              const errorText = this.errors[key];
+              this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
+            });
+          } else {
+            this.$toastr.error(err.message);
+          }
+        });
     }
   },
   computed: {

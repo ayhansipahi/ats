@@ -45,17 +45,13 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
-import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
-import {
-  FETCH_VEHICLE,
-  SAVE_VEHICLE,
-  CREATE_VEHICLE,
-  DELETE_VEHICLE
-} from "../../store/modules/vehicle";
+import {SET_BREADCRUMB} from "../../store/breadcrumbs.module";
+import {CREATE_VEHICLE, DELETE_VEHICLE, FETCH_VEHICLE, SAVE_VEHICLE} from "../../store/modules/vehicle";
 import permission from "./mixins/permission";
+
 export default {
   name: "vehicle",
   components: { tprsTable, tprsForm },
@@ -69,7 +65,8 @@ export default {
           key: "Plaque",
           label: "Plaka",
           sortable: true,
-          type: "text"
+          type: "text",
+          mask: "##ANN#?##"
         },
         {
           key: "Capacity",
@@ -146,7 +143,11 @@ export default {
           editable: false,
           formType: "datetime",
           formDisable: true,
-          formHide: true
+          formHide: true,
+          formatter: value => {
+            return this.$moment(value).format("DD.MM.YYYY");
+          },
+          filterByFormatted: true
         }
       ],
       selectedItem: null,
@@ -205,6 +206,7 @@ export default {
         .then(() => (this.selectedItem = null));
     },
     onSave(item) {
+      item.Plaque = item.Plaque.toUpperCase();
       (this.isCreating ? this.createItem : this.saveItem)(item)
         .then(data => {
           if (data.IsSuccess) {
@@ -220,13 +222,16 @@ export default {
             : this.$toastr.error(data.Message);
         })
         .catch(err => {
-          console.log(err);
-          Object.keys(this.errors).forEach(key => {
-            const errorTitle = this.fields.find(field => field.key === key)
-              .label;
-            const errorText = this.errors[key];
-            this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
-          });
+          if (typeof this.errors === "object") {
+            Object.keys(this.errors).forEach(key => {
+              const errorTitle = this.fields.find(field => field.key === key)
+                .label;
+              const errorText = this.errors[key];
+              this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
+            });
+          } else {
+            this.$toastr.error(err.message);
+          }
         });
     },
     onCancel() {

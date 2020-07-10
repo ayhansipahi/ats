@@ -125,7 +125,10 @@ export default {
         _.localValue = "";
       });
       this.filter = e;
-      this.filterIncludedFields = [];
+      debugger;
+      this.filterIncludedFields = this.fields
+        .filter(field => field.key !== "CreatedDate")
+        .map(field => field.key);
       this.onFilter();
     },
     filterScoped(e, scope) {

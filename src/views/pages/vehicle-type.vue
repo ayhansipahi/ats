@@ -75,7 +75,11 @@ export default {
           editable: false,
           formType: "datetime",
           formDisable: true,
-          formHide: true
+          formHide: true,
+          formatter: value => {
+            return this.$moment(value).format("DD.MM.YYYY");
+          },
+          filterByFormatted: true
         }
       ],
       selectedItem: null,

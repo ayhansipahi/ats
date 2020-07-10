@@ -98,7 +98,11 @@ export default {
           key: "CreatedDate",
           label: "Oluşturma Tarihi",
           sortable: true,
-          type: "datetime"
+          type: "datetime",
+          formatter: value => {
+            return this.$moment(value).format("DD.MM.YYYY");
+          },
+          filterByFormatted: true
         }
       ],
       selectedItem: null,
@@ -155,19 +159,30 @@ export default {
     },
     onSave(item) {
       (this.isCreating ? this.createItem : this.saveItem)(item)
-        .then(data => (data.IsSuccess ? this.reset() && true : data))
+        .then(data => {
+          if (data.IsSuccess) {
+            this.reset();
+            return true;
+          } else {
+            return data;
+          }
+        })
         .then(data => {
           data === true
             ? this.$toastr.success("İşlem Başarılı")
             : this.$toastr.error(data.Message);
         })
-        .catch(() => {
-          Object.keys(this.errors).forEach(key => {
-            const errorTitle = this.fields.find(field => field.key === key)
-              .label;
-            const errorText = this.errors[key];
-            this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
-          });
+        .catch(err => {
+          if (typeof this.errors === "object") {
+            Object.keys(this.errors).forEach(key => {
+              const errorTitle = this.fields.find(field => field.key === key)
+                .label;
+              const errorText = this.errors[key];
+              this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
+            });
+          } else {
+            this.$toastr.error(err.message);
+          }
         });
     },
     onCancel() {
