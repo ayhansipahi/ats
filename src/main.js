@@ -35,8 +35,8 @@ Vue.prototype.$axios = axios.create({
 Vue.use(VueSignalR, "https://tuprasatsapi.azurewebsites.net/realtimedatahub");
 Vue.use(require("vue-moment"));
 
-import { VueMaskDirective } from 'v-mask'
-Vue.directive('mask', VueMaskDirective);
+import { VueMaskDirective } from "v-mask";
+Vue.directive("mask", VueMaskDirective);
 
 var VueScrollTo = require("vue-scrollto");
 

@@ -36,7 +36,7 @@
 
           <span class="mr-4 header-date"
             >{{ $moment(new Date()).format("DD/MM/YYYY") }}
-            <i class="fa fa-calendar-alt ml-2 mr-1" style="font-size: 20px"></i
+            <i class="fa fa-calendar-alt ml-2 mr-1" style="font-size: 20px;"></i
           ></span>
         </div>
       </div>

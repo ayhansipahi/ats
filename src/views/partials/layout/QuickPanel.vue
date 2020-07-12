@@ -7,7 +7,7 @@
 
     <div class="kt-quick-panel__nav">
       <ul
-        class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand  kt-notification-item-padding-x"
+        class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand kt-notification-item-padding-x"
         role="tablist"
       >
         <li class="nav-item active">

@@ -102,7 +102,7 @@ export default {
           formatter: value => {
             return this.$moment(value).format("DD.MM.YYYY");
           },
-              filterByFormatted: true
+          filterByFormatted: true
         },
         {
           key: "VehicleId",

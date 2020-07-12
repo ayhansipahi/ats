@@ -125,7 +125,6 @@ export default {
         _.localValue = "";
       });
       this.filter = e;
-      debugger;
       this.filterIncludedFields = this.fields
         .filter(field => field.key !== "CreatedDate")
         .map(field => field.key);

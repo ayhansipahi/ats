@@ -41,9 +41,13 @@
       <div
         class="dropdown-menu dropdown-menu-fit dropdown-menu-xl dropdown-menu-right"
         v-on:click.stop
+        ref="dropdownNotification"
       >
         <form>
-          <KTDropdownNotification></KTDropdownNotification>
+          <KTDropdownNotification
+            @onSelect="() => $refs.dropdownNotification.click()"
+          >
+          </KTDropdownNotification>
         </form>
       </div>
     </div>

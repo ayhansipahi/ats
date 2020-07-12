@@ -14,7 +14,7 @@
             :center="mapCenter"
             :zoom="mapZoom"
             map-type-id="terrain"
-            style="width: 100%; height: 500px"
+            style="width: 100%; height: 500px;"
             :options="mapOptions"
             ref="drawMapRef"
           />
@@ -115,7 +115,7 @@
                 :center="mapCenter"
                 :zoom="mapZoom"
                 map-type-id="terrain"
-                style="width: 100%; height: 500px"
+                style="width: 100%; height: 500px;"
                 :options="mapOptions"
                 ref="mapRef"
               />

@@ -23,7 +23,10 @@
                   :required="field.formRequired"
                   :placeholder="field.label"
                   :disabled="field.formDisable || !selfEditable"
-                  v-mask="field.mask || 'X?XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'"
+                  v-mask="
+                    field.mask ||
+                      'X?XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                  "
                 >
                 </b-form-input>
               </template>

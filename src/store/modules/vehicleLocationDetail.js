@@ -1,3 +1,5 @@
+import { SET_LIVEALARM } from "./alarm";
+
 // action types
 export const FETCH_VEHICLELOCATIONDETAIL = "FETCH_VEHICLELOCATIONDETAIL";
 
@@ -18,6 +20,7 @@ const getters = {
 const actions = {
   [FETCH_VEHICLELOCATIONDETAIL](context, payload) {
     context.commit(SET_VEHICLELOCATIONDETAIL, payload);
+    context.commit(SET_LIVEALARM, payload);
   }
 };
 

@@ -45,11 +45,16 @@
   </div>
 </template>
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
-import {SET_BREADCRUMB} from "../../store/breadcrumbs.module";
-import {CREATE_VEHICLE, DELETE_VEHICLE, FETCH_VEHICLE, SAVE_VEHICLE} from "../../store/modules/vehicle";
+import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
+import {
+  CREATE_VEHICLE,
+  DELETE_VEHICLE,
+  FETCH_VEHICLE,
+  SAVE_VEHICLE
+} from "../../store/modules/vehicle";
 import permission from "./mixins/permission";
 
 export default {

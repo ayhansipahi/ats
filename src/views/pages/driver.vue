@@ -67,7 +67,7 @@ export default {
           sortable: true,
           type: "text",
           formType: "text",
-          mask:"###########"
+          mask: "###########"
         },
         {
           key: "DriverName",
@@ -110,7 +110,6 @@ export default {
             return this.$moment(value).format("DD.MM.YYYY");
           },
           filterByFormatted: true
-
         }
       ],
       selectedItem: null,

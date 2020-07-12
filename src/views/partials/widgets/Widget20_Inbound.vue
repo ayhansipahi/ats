@@ -4,7 +4,7 @@
       <span class="kt-widget20__number kt-font-brand">{{ title }}</span>
       <span class="kt-widget20__desc">{{ desc }}</span>
     </div>
-    <div class="kt-widget20__chart" style="height:130px;">
+    <div class="kt-widget20__chart" style="height: 130px;">
       <Chart1 ref="chart" v-bind:options="chartOptions"></Chart1>
     </div>
   </div>

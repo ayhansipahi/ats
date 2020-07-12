@@ -11,10 +11,12 @@ export const SET_ALARM = "SET_ALARM";
 export const UPDATE_ALARM = "UPDATE_ALARM";
 export const REMOVE_ALARM = "REMOVE_ALARM";
 export const SET_ERROR = "SET_ERROR";
+export const SET_LIVEALARM = "SET_LIVEALARM";
 
 const state = {
   errors: null,
-  items: []
+  items: [],
+  live: []
 };
 
 const getters = {
@@ -23,7 +25,12 @@ const getters = {
 
 const actions = {
   [FETCH_ALARM](context) {
-    return ApiService.get("Alarm", "get-with-vehicle")
+    return ApiService.query("Alarm/get-with-vehicle", {
+      params: {
+        pageNumber: 1,
+        pageSize: 100
+      }
+    })
       .then(({ data }) => {
         if (data.IsSuccess) {
           context.commit(SET_ALARM, data.Data);
@@ -103,6 +110,12 @@ const mutations = {
   },
   [REMOVE_ALARM](state, payload) {
     state.items = state.items.filter(item => item.Id !== payload.Id);
+  },
+  [SET_LIVEALARM](state, payload) {
+    state.live = payload.alarms.map(v => ({
+      vehiclePlaque: payload.vehiclePlaque,
+      ...v
+    }));
   }
 };
 

@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div style="height: 100%;">
     <!--begin::Head->
     <div class="kt-login__head">
       <span class="kt-login__signup-label">{{
