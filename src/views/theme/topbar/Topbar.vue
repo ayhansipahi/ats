@@ -119,7 +119,7 @@
     </div>
     <!-end: Quick panel toggler -->
 
-    <!--begin: Language bar ->
+    <!--begin: Language bar -->
     <div class="kt-header__topbar-item kt-header__topbar-item--langs">
       <div
         class="kt-header__topbar-wrapper"
@@ -139,7 +139,7 @@
         ></KTDropdownLanguage>
       </div>
     </div>
-    <!-end: Language bar -->
+    <!--end: Language bar -->
 
     <!--begin: User Bar -->
     <div class="kt-header__topbar-item kt-header__topbar-item--user">
@@ -149,10 +149,12 @@
         data-toggle="dropdown"
       >
         <div class="kt-header__topbar-user">
-          <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
-          <span class="kt-header__topbar-username kt-hidden-mobile">{{
-            $store.state.auth.user.UserName
-          }}</span>
+          <span class="kt-header__topbar-welcome kt-hidden-mobile">
+            {{ $t("GENERAL.GREETING") }},
+          </span>
+          <span class="kt-header__topbar-username kt-hidden-mobile">
+            {{ $store.state.auth.user.UserName }}
+          </span>
           <img
             class="kt-hidden"
             alt="Pic"
@@ -161,10 +163,9 @@
           <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
           <span
             class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold"
-            >{{
-              $store.state.auth.user.UserName.slice(0, 1).toUpperCase()
-            }}</span
           >
+            {{ $store.state.auth.user.UserName.slice(0, 1).toUpperCase() }}
+          </span>
         </div>
       </div>
       <div
@@ -183,8 +184,8 @@
 import KTDropdownNotification from "@/views/theme/topbar/DropdownNotification.vue";
 /*import KTSearchDefault from "@/views/theme/topbar/SearchDefault.vue";
 import KTDropdownQuickAction from "@/views/theme/topbar/DropdownQuickAction.vue";
-import KTDropdownMyCart from "@/views/theme/topbar/DropdownMyCart.vue";
-import KTDropdownLanguage from "@/views/theme/topbar/DropdownLanguage.vue";*/
+import KTDropdownMyCart from "@/views/theme/topbar/DropdownMyCart.vue";*/
+import KTDropdownLanguage from "@/views/theme/topbar/DropdownLanguage.vue";
 import KTDropdownUser from "@/views/theme/topbar/DropdownUser.vue";
 import i18nService from "@/common/i18n.service.js";
 
@@ -201,7 +202,7 @@ export default {
     KTDropdownNotification,
     // KTDropdownQuickAction,
     // KTDropdownMyCart,
-    // KTDropdownLanguage,
+    KTDropdownLanguage,
     KTDropdownUser
   },
   methods: {

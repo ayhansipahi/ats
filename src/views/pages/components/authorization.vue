@@ -53,7 +53,7 @@
                 >
                   <template v-slot:first>
                     <b-form-select-option :value="null" disabled>
-                      Bir {{ field.label }} seçin
+                      {{ $t("FORMS.SELECT_DEFAULT", { name: field.label }) }}
                     </b-form-select-option>
                   </template>
                   <b-form-select-option
@@ -77,7 +77,7 @@
                     month: 'numeric',
                     day: 'numeric'
                   }"
-                  locale="tr"
+                  :locale="currentLang"
                 >
                 </b-form-datepicker>
               </template>
@@ -98,14 +98,14 @@
           <b-table-simple responsive id="auth-table" striped hover>
             <b-tbody>
               <b-tr v-for="page in pages" :key="page.Id">
-                <b-th> {{ page.Page }}</b-th>
+                <b-th> {{ $t(`ROLE_PAGE.${page.Id}`)}}</b-th>
                 <b-td>
                   <b-form-checkbox
                     :disabled="!editable"
                     v-model="getPageData(page.Id).Read"
                     @change="e => change(e, getPageData(page.Id), 'Read')"
                   >
-                    Görüntüleme
+                    {{ $t("FORMS.PERM_READ") }}
                   </b-form-checkbox>
                 </b-td>
                 <b-td>
@@ -114,7 +114,7 @@
                     v-model="getPageData(page.Id).Write"
                     @change="e => change(e, getPageData(page.Id), 'Write')"
                   >
-                    Ekleme
+                    {{ $t("FORMS.PERM_CREATE") }}
                   </b-form-checkbox></b-td
                 >
                 <b-td>
@@ -123,7 +123,7 @@
                     v-model="getPageData(page.Id).Update"
                     @change="e => change(e, getPageData(page.Id), 'Update')"
                   >
-                    Güncelleme
+                    {{ $t("FORMS.PERM_UPDATE") }}
                   </b-form-checkbox></b-td
                 >
                 <b-td>
@@ -132,7 +132,7 @@
                     v-model="getPageData(page.Id).Delete"
                     @change="e => change(e, getPageData(page.Id), 'Delete')"
                   >
-                    Silme
+                    {{ $t("FORMS.PERM_DELETE") }}
                   </b-form-checkbox>
                 </b-td>
               </b-tr>
@@ -161,11 +161,15 @@
             </b-btn>
           </template>
           <template v-if="editable && canEdit">
-            <b-btn variant="danger" @click="onReset">İptal</b-btn>
-            <b-btn variant="primary" type="submit" class="ml-1">Kaydet</b-btn>
+            <b-btn variant="danger" @click="onReset">{{
+              $t("FORMS.CANCEL")
+            }}</b-btn>
+            <b-btn variant="primary" type="submit" class="ml-1">{{
+              $t("FORMS.SAVE")
+            }}</b-btn>
           </template>
           <b-btn v-else variant="primary" @click="onReset" class="ml-1">
-            Kapat
+            {{ $t("FORMS.CLOSE") }}
           </b-btn>
         </b-row>
       </b-form>
@@ -174,6 +178,7 @@
 </template>
 
 <script>
+import i18nService from "../../../common/i18n.service";
 export default {
   name: "authorization",
   props: {
@@ -217,6 +222,9 @@ export default {
       return this.formXPages.filter(rp => {
         return rp.RoleId === this.item.Id || rp.UserId === this.item.Id;
       });
+    },
+    currentLang() {
+      return i18nService.getActiveLanguage();
     }
   },
   methods: {

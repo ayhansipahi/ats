@@ -9,7 +9,7 @@
       v-bind:class="{ 'kt-container--fluid': isFluid() }"
     >
       <div class="kt-footer__copyright">
-        Copyright &nbsp;&copy;&nbsp; 2020
+        {{ $t("GENERAL.COPY") }} &nbsp;&copy;&nbsp; 2020
       </div>
       <div class="kt-footer__menu">
         <!--        <a-->

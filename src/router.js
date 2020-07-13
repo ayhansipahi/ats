@@ -79,6 +79,10 @@ const router = new Router({
           component: () => import("./views/pages/role.vue")
         },
         {
+          path: "/log",
+          component: () => import("./views/pages/log.vue")
+        },
+        {
           name: "map",
           path: "/map",
           component: () => import("./views/pages/mapView.vue"),

@@ -7,9 +7,8 @@
       <div
         class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile"
       >
-        <!--begin::Aside-->
+        <!--begin::Aside->
         <div
-          v-if="false"
           class="kt-grid__item kt-grid__item--order-tablet-and-mobile-2 kt-grid kt-grid--hor kt-login__aside"
           :style="{ backgroundImage: `url(${backgroundImage})` }"
         >
@@ -40,7 +39,7 @@
             </div>
           </div>
         </div>
-        <!--begin::Aside-->
+        <!-begin::Aside-->
 
         <!--begin::Content-->
         <div

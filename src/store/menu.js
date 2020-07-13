@@ -137,6 +137,10 @@ const state = {
         {
           title: "Roller",
           page: "role"
+        },
+        {
+          title: "Kullanıcı Haraketler",
+          page: "log"
         }
       ]
     },

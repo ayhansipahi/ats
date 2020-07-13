@@ -35,7 +35,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -58,30 +58,39 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Alarm",
       fetching: false,
-      fields: [
+      selectedItem: null,
+      selectedItemEditable: false,
+      isCreating: false
+    };
+  },
+  computed: {
+    title() {
+      return this.$t("TITLE.alarm");
+    },
+    fields() {
+      return [
         {
           key: "AlarmStatus",
-          label: "Durum",
+          label: this.$t("FIELDS.alarm.AlarmStatus"),
           sortable: true,
           type: "text"
         },
         {
           key: "AlarmDetail",
-          label: "Detay",
+          label: this.$t("FIELDS.alarm.AlarmDetail"),
           sortable: true,
           type: "text"
         },
         {
           key: "Plaque",
-          label: "Araç Detay",
+          label: this.$t("FIELDS.alarm.Plaque"),
           sortable: true,
           type: "text"
         },
         {
           key: "AlarmTypeId",
-          label: "Tip",
+          label: this.$t("FIELDS.alarm.AlarmTypeId"),
           sortable: true,
           type: "select",
           options: "alarmType",
@@ -96,7 +105,7 @@ export default {
         },
         {
           key: "CreatedDate",
-          label: "Oluşturma Tarihi",
+          label: this.$t("FIELDS.CreatedDate"),
           sortable: true,
           type: "datetime",
           formatter: value => {
@@ -104,13 +113,8 @@ export default {
           },
           filterByFormatted: true
         }
-      ],
-      selectedItem: null,
-      selectedItemEditable: false,
-      isCreating: false
-    };
-  },
-  computed: {
+      ];
+    },
     ...mapState({
       items: state => state.alarm.items,
       errors: state => state.alarm.errors
@@ -150,10 +154,13 @@ export default {
     },
     onDelete(item) {
       this.$bvModal
-        .msgBoxConfirm(this.title + " silinsin mi?", {
-          okTitle: "Evet",
-          cancelTitle: "Hayır"
-        })
+        .msgBoxConfirm(
+          this.$t("MESSAGES.DELETE_CONFIRM", { name: this.title }),
+          {
+            okTitle: this.$t("MESSAGES.OK"),
+            cancelTitle: this.$t("MESSAGES.CANCEL")
+          }
+        )
         .then(value => (value ? this.deleteItem(item) : false))
         .then(() => (this.selectedItem = null));
     },
@@ -169,7 +176,7 @@ export default {
         })
         .then(data => {
           data === true
-            ? this.$toastr.success("İşlem Başarılı")
+            ? this.$toastr.success(this.$t("MESSAGES.SUCCESS"))
             : this.$toastr.error(data.Message);
         })
         .catch(err => {

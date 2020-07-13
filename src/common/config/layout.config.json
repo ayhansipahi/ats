@@ -99,7 +99,7 @@
 	},
 	"menu": {
 	  "self": {
-		"display": true,
+		"display": false,
 		"layout": "default",
 		"root-arrow": false,
 		"icon-style": "duotone"

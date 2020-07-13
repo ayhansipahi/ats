@@ -15,7 +15,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -34,51 +34,9 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Smtp",
       fetching: false,
       method: "",
       checkedStatus: false,
-      fields: [
-        {
-          key: "Email",
-          label: "Smtp E-posta",
-          sortable: true,
-          type: "email",
-          formType: "email",
-          required: true
-        },
-        {
-          key: "Password",
-          label: "Parola",
-          sortable: true,
-          type: "password",
-          required: true,
-          formType: "password"
-        },
-
-        {
-          key: "Host",
-          label: "Smtp Host",
-          sortable: true,
-          type: "text",
-          required: true
-        },
-        {
-          key: "Port",
-          label: "Smtp Port",
-          sortable: true,
-          type: "number",
-          required: true,
-          formType: "number"
-        },
-        {
-          key: "EnableSsl",
-          value: false,
-          label: "SMTP güvenli bağlantı ile mi çalışıyor (SSL)",
-          type: "boolean",
-          formType: "checkbox"
-        }
-      ],
       selectedItem: null,
       selectedItemEditable: false,
       isCreating: false
@@ -102,7 +60,7 @@ export default {
         })
         .then(data => {
           data === true
-            ? this.$toastr.success("İşlem Başarılı")
+            ? this.$toastr.success(this.$t("MESSAGES.SUCCESS"))
             : this.$toastr.error(data.Message);
         })
         .catch(err => {
@@ -120,6 +78,52 @@ export default {
     }
   },
   computed: {
+    title() {
+      return this.$t("TITLE.smtp");
+    },
+    fields() {
+      return [
+        {
+          key: "Email",
+          label: this.$t("FIELDS.smtp.Email"),
+          sortable: true,
+          type: "email",
+          formType: "email",
+          required: true
+        },
+        {
+          key: "Password",
+          label: this.$t("FIELDS.smtp.Password"),
+          sortable: true,
+          type: "password",
+          required: true,
+          formType: "password"
+        },
+
+        {
+          key: "Host",
+          label: this.$t("FIELDS.smtp.Host"),
+          sortable: true,
+          type: "text",
+          required: true
+        },
+        {
+          key: "Port",
+          label: this.$t("FIELDS.smtp.Port"),
+          sortable: true,
+          type: "number",
+          required: true,
+          formType: "number"
+        },
+        {
+          key: "EnableSsl",
+          label: this.$t("FIELDS.smtp.EnableSsl"),
+          value: false,
+          type: "boolean",
+          formType: "checkbox"
+        }
+      ];
+    },
     ...mapState({
       item: state => state.smtp.item
     })

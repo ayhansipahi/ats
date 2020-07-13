@@ -36,7 +36,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -60,42 +60,51 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "İstasyon",
       fetching: false,
-      fields: [
+      selectedItem: null,
+      selectedItemEditable: false,
+      isCreating: false
+    };
+  },
+  computed: {
+    title() {
+      return this.$t("TITLE.station");
+    },
+    fields() {
+      return [
         {
           key: "StationCode",
-          label: "İstasyon Kodu",
+          label: this.$t("FIELDS.station.StationCode"),
           sortable: true,
           type: "number"
         },
         {
           key: "StationName",
-          label: "İstasyon Adı",
+          label: this.$t("FIELDS.station.StationName"),
           sortable: true,
           type: "text"
         },
         {
           key: "StationType",
-          label: "İstasyon Tipi",
+          label: this.$t("FIELDS.station.StationType"),
           sortable: true,
           type: "text"
         },
         {
           key: "Latitude",
-          label: "Enlem",
+          label: this.$t("FIELDS.station.Latitude"),
           sortable: true,
           type: "text"
         },
         {
           key: "Longitude",
-          label: "Boylam",
+          label: this.$t("FIELDS.station.Longitude"),
           sortable: true,
           type: "text"
         },
         {
           key: "CreatedDate",
-          label: "Oluşturma Tarihi",
+          label: this.$t("FIELDS.CreateDate"),
           sortable: true,
           type: "datetime",
           editable: false,
@@ -107,13 +116,8 @@ export default {
           },
           filterByFormatted: true
         }
-      ],
-      selectedItem: null,
-      selectedItemEditable: false,
-      isCreating: false
-    };
-  },
-  computed: {
+      ];
+    },
     ...mapState({
       items: state => state.station.items
     }),
@@ -153,10 +157,13 @@ export default {
     },
     onDelete(item) {
       this.$bvModal
-        .msgBoxConfirm(this.title + " silinsin mi?", {
-          okTitle: "Evet",
-          cancelTitle: "Hayır"
-        })
+        .msgBoxConfirm(
+          this.$t("MESSAGES.DELETE_CONFIRM", { name: this.title }),
+          {
+            okTitle: this.$t("MESSAGES.OK"),
+            cancelTitle: this.$t("MESSAGES.CANCEL")
+          }
+        )
         .then(value => (value ? this.deleteItem(item) : false))
         .then(() => (this.selectedDriver = null));
     },
@@ -172,7 +179,7 @@ export default {
         })
         .then(data => {
           data === true
-            ? this.$toastr.success("İşlem Başarılı")
+            ? this.$toastr.success(this.$t("MESSAGES.SUCCESS"))
             : this.$toastr.error(data.Message);
         })
         .catch(err => {

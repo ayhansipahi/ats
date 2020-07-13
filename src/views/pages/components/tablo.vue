@@ -2,11 +2,16 @@
   <div class="bg-white p-4 mb-4">
     <b-row align-h="end">
       <b-col cols="8" sm="7" md="6" lg="5">
-        <b-input placeholder="Arama..." @input="filterAll" ref="filterInput" />
+        <b-input
+          :placeholder="$t('TABLE.SEARCH_PLACEHOLDER')"
+          @input="filterAll"
+          ref="filterInput"
+        />
       </b-col>
       <b-col cols="4" sm="3" md="2" lg="2" v-if="isCreateVisible">
         <b-btn class="col-12" variant="primary" @click="$emit('onNew')">
-          <b-icon-plus></b-icon-plus> Yeni
+          <b-icon-plus></b-icon-plus>
+          {{ $t("TABLE.NEW") }}
         </b-btn>
       </b-col>
     </b-row>
@@ -27,7 +32,7 @@
             <b-input
               v-if="field.key !== 'actions'"
               @input="e => filterScoped(e, field.key)"
-              :placeholder="`Filtrele (${field.label})`"
+              :placeholder="$t('TABLE.SEARCH_SCOPED', { name: field.label })"
               ref="scopedFilterInput"
               :scope="field.key"
             >
@@ -103,7 +108,7 @@ export default {
   computed: {
     _fields() {
       return this.isActionsVisible
-        ? [...this.fields, "actions"]
+        ? [...this.fields, { key: "actions", label: this.$t("TABLE.ACTIONS") }]
         : [...this.fields];
     },
     showTable() {

@@ -48,7 +48,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -77,15 +77,6 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Rol",
-      fields: [
-        {
-          key: "Name",
-          label: "Rol Adı",
-          sortable: true,
-          type: "text"
-        }
-      ],
       fetching: false,
       selectedItem: null,
       selectedItemEditable: false,
@@ -93,6 +84,19 @@ export default {
     };
   },
   computed: {
+    title() {
+      return this.$t("TITLE.role");
+    },
+    fields() {
+      return [
+        {
+          key: "Name",
+          label: this.$t("FIELDS.role.Name"),
+          sortable: true,
+          type: "text"
+        }
+      ];
+    },
     ...mapState({
       roles: state => state.role.roles,
       pages: state => state.role.pages,
@@ -118,10 +122,13 @@ export default {
     },
     onDelete(item) {
       this.$bvModal
-        .msgBoxConfirm(this.title + " silinsin mi?", {
-          okTitle: "Evet",
-          cancelTitle: "Hayır"
-        })
+        .msgBoxConfirm(
+          this.$t("MESSAGES.DELETE_CONFIRM", { name: this.title }),
+          {
+            okTitle: this.$t("MESSAGES.OK"),
+            cancelTitle: this.$t("MESSAGES.CANCEL")
+          }
+        )
         .then(value => (value ? this.deleteItem(item) : false))
         .then(() => (this.selectedItem = null));
     },

@@ -83,7 +83,7 @@ const state = () => ({
     {
       Id: 17,
       Page: "RisePage",
-      path: ""
+      path: "log"
     },
     {
       Id: 18,

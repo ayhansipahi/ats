@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import createPersistedState from "vuex-persistedstate";
+import createPersistedState from "vuex-persistedstate";
 // import SecureLS from "secure-ls";
 
 import auth from "./auth.module";
@@ -39,14 +39,15 @@ export default new Vuex.Store({
     menu,
     page,
     ...modules
-  }
-  //plugins: [
-  //createPersistedState({
-  // storage: {
-  //   getItem: key => ls.get(key),
-  //   setItem: (key, value) => ls.set(key, value),
-  //   removeItem: key => ls.remove(key)
-  // }
-  //})
-  // ]
+  },
+  plugins: [
+    createPersistedState({
+      paths: ["auth", "page", "user", "role", "menu"]
+      // storage: {
+      //   getItem: key => ls.get(key),
+      //   setItem: (key, value) => ls.set(key, value),
+      //   removeItem: key => ls.remove(key)
+      // }
+    })
+  ]
 });

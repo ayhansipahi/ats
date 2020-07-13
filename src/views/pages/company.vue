@@ -35,7 +35,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -59,30 +59,39 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Firmalar",
       fetching: false,
-      fields: [
+      selectedItem: null,
+      selectedItemEditable: false,
+      isCreating: false
+    };
+  },
+  computed: {
+    title() {
+      return this.$t("TITLE.company");
+    },
+    fields() {
+      return [
         {
           key: "CompanyName",
-          label: "Firma Adı",
+          label: this.$t("FIELDS.company.CompanyName"),
           sortable: true,
           type: "text"
         },
         {
           key: "CompanyTradeName",
-          label: "Firma Ticari Adı",
+          label: this.$t("FIELDS.company.CompanyTradeName"),
           sortable: true,
           type: "text"
         },
         {
           key: "CompanyEmail",
-          label: "E-Mail",
+          label: this.$t("FIELDS.company.CompanyEmail"),
           sortable: true,
           type: "text"
         },
         {
           key: "Phone",
-          label: "Telefon",
+          label: this.$t("FIELDS.company.Phone"),
           sortable: true,
           type: "text",
           formType: "text",
@@ -90,13 +99,13 @@ export default {
         },
         {
           key: "AuthorizedPerson",
-          label: "Yetkili Kişi",
+          label: this.$t("FIELDS.company.AuthorizedPerson"),
           sortable: true,
           type: "text"
         },
         {
           key: "AuthorizedPhone",
-          label: "Yetkili Telefon",
+          label: this.$t("FIELDS.company.AuthorizedPhone"),
           sortable: true,
           type: "text",
           formType: "text",
@@ -104,21 +113,21 @@ export default {
         },
         {
           key: "AuthorizedEmail",
-          label: "Yetkili E-mail",
+          label: this.$t("FIELDS.company.AuthorizedEmail"),
           sortable: true,
           type: "text",
           formType: "email"
         },
         {
           key: "LogoFilePath",
-          label: "Logo",
+          label: this.$t("FIELDS.company.LogoFilePath"),
           sortable: true,
           type: "image",
           formType: "text"
         },
         {
           key: "CreatedDate",
-          label: "Oluşturma Tarihi",
+          label: this.$t("FIELDS.CreateDate"),
           sortable: true,
           type: "datetime",
           editable: false,
@@ -130,13 +139,8 @@ export default {
           },
           filterByFormatted: true
         }
-      ],
-      selectedItem: null,
-      selectedItemEditable: false,
-      isCreating: false
-    };
-  },
-  computed: {
+      ];
+    },
     ...mapState({
       items: state => state.company.items,
       errors: state => state.company.errors
@@ -178,10 +182,13 @@ export default {
     },
     onDelete(item) {
       this.$bvModal
-        .msgBoxConfirm(this.title + " silinsin mi?", {
-          okTitle: "Evet",
-          cancelTitle: "Hayır"
-        })
+        .msgBoxConfirm(
+          this.$t("MESSAGES.DELETE_CONFIRM", { name: this.title }),
+          {
+            okTitle: this.$t("MESSAGES.OK"),
+            cancelTitle: this.$t("MESSAGES.CANCEL")
+          }
+        )
         .then(value => (value ? this.deleteItem(item) : false))
         .then(() => (this.selectedItem = null));
     },
@@ -197,7 +204,7 @@ export default {
         })
         .then(data => {
           data === true
-            ? this.$toastr.success("İşlem Başarılı")
+            ? this.$toastr.success(this.$t("MESSAGES.SUCCESS"))
             : this.$toastr.error(data.Message);
         })
         .catch(err => {

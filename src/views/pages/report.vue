@@ -2,12 +2,12 @@
   <div>
     <template v-if="canRead">
       <h1>
-        Under Construction
+        {{ $t("GENERAL.UNDER_CONSTRUCTION")}}
       </h1>
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>

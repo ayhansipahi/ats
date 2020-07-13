@@ -109,7 +109,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -129,13 +129,26 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Araç Hareketi",
       fetching: false,
-      fields: [
+      selectedItem: null,
+      selectedItemEditable: false,
+      isCreating: false,
+      startDate: null, // new Date(),
+      endDate: null, // new Date(),
+      formCompany: null,
+      formVehicle: null
+    };
+  },
+  computed: {
+    title() {
+      return this.$t("TITLE.vehicleTrack");
+    },
+    fields() {
+      return [
         { options: "company", optionName: "CompanyName", formHide: true },
         {
           key: "VehicleId",
-          label: "Plaka",
+          label: this.$t("FIELDS.vehicleTrack.VehicleId"),
           sortable: true,
           type: "select",
           options: "vehicle",
@@ -150,7 +163,7 @@ export default {
         },
         {
           key: "DriverId",
-          label: "Şöför",
+          label: this.$t("FIELDS.vehicleTrack.DriverId"),
           sortable: true,
           type: "select",
           options: "driver",
@@ -165,41 +178,41 @@ export default {
         },
         {
           key: "Km",
-          label: "KM",
+          label: this.$t("FIELDS.vehicleTrack.Km"),
           sortable: true,
           type: "number",
           formType: "number"
         },
         {
           key: "Speed",
-          label: "Hız",
+          label: this.$t("FIELDS.vehicleTrack.Speed"),
           sortable: true,
           type: "number",
           formType: "number"
         },
         {
           key: "Latitude",
-          label: "Enlem",
+          label: this.$t("FIELDS.vehicleTrack.Latitude"),
           sortable: true,
           type: "string",
           formType: "string"
         },
         {
           key: "Longitude",
-          label: "Boylam",
+          label: this.$t("FIELDS.vehicleTrack.Longitude"),
           sortable: true,
           type: "string",
           formType: "string"
         },
         {
           key: "Location",
-          label: "Konum",
+          label: this.$t("FIELDS.vehicleTrack.Location"),
           sortable: true,
           type: "string"
         },
         {
           key: "CreatedDate",
-          label: "Oluşturma Tarihi",
+          label: this.$t("FIELDS.CreateDate"),
           sortable: true,
           type: "datetime",
           editable: false,
@@ -211,17 +224,8 @@ export default {
           },
           filterByFormatted: true
         }
-      ],
-      selectedItem: null,
-      selectedItemEditable: false,
-      isCreating: false,
-      startDate: null, // new Date(),
-      endDate: null, // new Date(),
-      formCompany: null,
-      formVehicle: null
-    };
-  },
-  computed: {
+      ];
+    },
     ...mapState({
       items: state => state.vehicleDetails.items
     }),

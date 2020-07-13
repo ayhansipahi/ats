@@ -3,7 +3,9 @@
     <b-form @submit.prevent="onSubmit">
       <b-row>
         <b-col>
-          <h3>{{ title }} {{ isCreate ? "Oluştur" : "Detayı" }}</h3>
+          <h3>
+            {{ title }} {{ isCreate ? $t("FORMS.CREATE") : $t("FORMS.DETAIL") }}
+          </h3>
         </b-col>
       </b-row>
       <b-row>
@@ -39,7 +41,7 @@
                 >
                   <template v-slot:first>
                     <b-form-select-option :value="null" disabled>
-                      Bir {{ field.label }} seçin
+                      {{ $t("FORMS.SELECT_DEFAULT", { name: field.label }) }}
                     </b-form-select-option>
                   </template>
                   <b-form-select-option
@@ -63,7 +65,7 @@
                 >
                   <template v-slot:first>
                     <b-form-select-option :value="null" disabled>
-                      Bir {{ field.label }} seçin
+                      {{ $t("FORMS.SELECT_DEFAULT", { name: field.label }) }}
                     </b-form-select-option>
                   </template>
                   <b-form-select-option
@@ -87,7 +89,7 @@
                     month: 'numeric',
                     day: 'numeric'
                   }"
-                  locale="tr"
+                  :locale="currentLang"
                 >
                 </b-form-datepicker>
               </template>
@@ -105,7 +107,8 @@
                 <b-form-checkbox
                   v-model="formItem[field.key]"
                   :disabled="field.formDisable || !selfEditable"
-                  >{{ field.label }}
+                >
+                  {{ field.label }}
                 </b-form-checkbox>
               </template>
             </b-form-group>
@@ -115,7 +118,7 @@
       <b-row align-h="end">
         <template v-if="!isCreate">
           <b-btn
-            v-if="isVehicle"
+            v-if="isVehicle && !selfEditable"
             variant="success"
             @click="
               $router.push({
@@ -124,7 +127,7 @@
             "
           >
             <b-icon-eye-fill />
-            Canlı İzle
+            {{ $t("FORMS.WATCH_LIVE") }}
           </b-btn>
           <b-btn v-if="canDelete" variant="ghost" @click="onDelete">
             <b-icon-trash variant="danger"></b-icon-trash>
@@ -145,10 +148,12 @@
           </b-btn>
         </template>
         <template v-if="selfEditable && canEdit">
-          <b-btn variant="danger" v-if="canBeHidden" @click="onReset"
-            >İptal</b-btn
-          >
-          <b-btn variant="primary" type="submit" class="ml-1">Kaydet</b-btn>
+          <b-btn variant="danger" v-if="canBeHidden" @click="onReset">
+            {{ $t("FORMS.CANCEL") }}
+          </b-btn>
+          <b-btn variant="primary" type="submit" class="ml-1">
+            {{ $t("FORMS.SAVE") }}
+          </b-btn>
         </template>
         <template v-else>
           <b-btn
@@ -157,7 +162,7 @@
             @click="onReset"
             class="ml-1"
           >
-            Kapat
+            {{ $t("FORMS.CLOSE") }}
           </b-btn>
         </template>
       </b-row>
@@ -166,6 +171,8 @@
 </template>
 
 <script>
+import i18nService from "../../../common/i18n.service";
+
 export default {
   name: "tprsForm",
   props: {
@@ -195,6 +202,11 @@ export default {
       formItem: { ...this.item },
       selfEditable: this.editable
     };
+  },
+  computed: {
+    currentLang() {
+      return i18nService.getActiveLanguage();
+    }
   },
   methods: {
     onSubmit() {

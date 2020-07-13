@@ -1,35 +1,35 @@
 <template>
   <div>
-    <template v-if="canRead">
+    <template v-if="true">
+      <h1>
+        {{ $t("GENERAL.UNDER_CONSTRUCTION") }}
+      </h1>
+    </template>
+    <template v-else-if="canRead">
       <tprsTable
         v-if="selectedItem === null"
         :items="items"
         :isBusy="fetching"
         :fields="fields"
         :options="options"
-        :isCreateVisible="canWrite"
-        :canDelete="canDelete"
-        :canEdit="canUpdate"
-        @onNew="onNew"
+        :isCreateVisible="false"
+        :canDelete="false"
+        :canEdit="false"
         @onSelect="item => onSelect(item, false)"
-        @onDelete="onDelete"
-        @onEdit="item => onSelect(item, true)"
         @onFilter="onCancel"
       ></tprsTable>
 
       <tprsForm
+        :key="selectedItem && selectedItem.Id"
         v-if="selectedItem !== null"
         :title="title"
-        :key="selectedItem && selectedItem.Id"
         :item="selectedItem"
         :fields="fields"
         :editable="selectedItemEditable"
         :isCreate="isCreating"
         :options="options"
-        :isCreateVisible="canWrite"
-        :canDelete="canDelete"
-        :canEdit="canUpdate"
-        @onSave="onSave"
+        :canDelete="false"
+        :canEdit="false"
         @onCancel="onCancel"
         @onDelete="onDelete"
       ></tprsForm>
@@ -41,21 +41,15 @@
     </div>
   </div>
 </template>
-
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import tprsTable from "./components/tablo";
 import tprsForm from "./components/form";
 import { SET_BREADCRUMB } from "../../store/breadcrumbs.module";
-import {
-  FETCH_SENSOR,
-  SAVE_SENSOR,
-  CREATE_SENSOR,
-  DELETE_SENSOR
-} from "../../store/modules/sensor";
+import { FETCH_LOG, DELETE_LOG } from "../../store/modules/log";
 import permission from "./mixins/permission";
 export default {
-  name: "sensor",
+  name: "log",
   components: { tprsTable, tprsForm },
   mixins: [permission],
   data() {
@@ -68,37 +62,45 @@ export default {
   },
   computed: {
     title() {
-      return this.$t("TITLE.sensor");
+      return this.$t("TITLE.log");
     },
     fields() {
       return [
         {
-          key: "SensorCode",
-          label: this.$t("FIELDS.sensor.SensorCode"),
-          sortable: true,
-          type: "number"
-        },
-        {
-          key: "SensorName",
-          label: this.$t("FIELDS.sensor.SensorName"),
+          key: "table",
+          label: this.$t("FIELDS.log.table"),
           sortable: true,
           type: "text"
         },
         {
-          key: "Explanation",
-          label: this.$t("FIELDS.sensor.Explanation"),
+          key: "method",
+          label: this.$t("FIELDS.log.method"),
           sortable: true,
           type: "text"
+        },
+        {
+          key: "user",
+          label: this.$t("FIELDS.log.user"),
+          sortable: true,
+          type: "text"
+        },
+        {
+          key: "requestJson",
+          label: this.$t("FIELDS.log.requestJson"),
+          sortable: true,
+          type: "textarea"
+        },
+        {
+          key: "responseJson",
+          label: this.$t("FIELDS.log.responseJson"),
+          sortable: true,
+          type: "textarea"
         },
         {
           key: "CreatedDate",
-          label: this.$t("FIELDS.CreateDate"),
+          label: this.$t("FIELDS.CreatedDate"),
           sortable: true,
           type: "datetime",
-          editable: false,
-          formType: "datetime",
-          formDisable: true,
-          formHide: true,
           formatter: value => {
             return this.$moment(value).format("DD.MM.YYYY");
           },
@@ -107,31 +109,15 @@ export default {
       ];
     },
     ...mapState({
-      items: state => state.sensor.items
-    }),
-    ...mapGetters({
-      vehicle: "getVehicles",
-      device: "getDevices"
-    }),
-    optionsList() {
-      return this.fields
-        .filter(field => field.hasOwnProperty("options"))
-        .map(field => field.options);
-    },
-    options() {
-      return this.optionsList.reduce((p, n) => {
-        p[n] = this[n];
-        return p;
-      }, {});
-    }
+      items: state => state.alarm.items,
+      errors: state => state.alarm.errors
+    })
   },
   methods: {
     ...mapActions({
-      fetchItems: FETCH_SENSOR,
+      fetchItems: FETCH_LOG,
       setBreadCrumb: SET_BREADCRUMB,
-      saveItem: SAVE_SENSOR,
-      createItem: CREATE_SENSOR,
-      deleteItem: DELETE_SENSOR
+      deleteItem: DELETE_LOG
     }),
     fetchOptions() {
       this.optionsList.forEach(option => {
@@ -153,46 +139,10 @@ export default {
           }
         )
         .then(value => (value ? this.deleteItem(item) : false))
-        .then(() => (this.selectedDriver = null));
-    },
-    onSave(item) {
-      (this.isCreating ? this.createItem : this.saveItem)(item)
-        .then(data => {
-          if (data.IsSuccess) {
-            this.reset();
-            return true;
-          } else {
-            return data;
-          }
-        })
-        .then(data => {
-          data === true
-            ? this.$toastr.success(this.$t("MESSAGES.SUCCESS"))
-            : this.$toastr.error(data.Message);
-        })
-        .catch(err => {
-          if (typeof this.errors === "object") {
-            Object.keys(this.errors).forEach(key => {
-              const errorTitle = this.fields.find(field => field.key === key)
-                .label;
-              const errorText = this.errors[key];
-              this.$toastr.error(`<b>${errorTitle}</b> <br/>${errorText}`);
-            });
-          } else {
-            this.$toastr.error(err.message);
-          }
-        });
+        .then(() => (this.selectedItem = null));
     },
     onCancel() {
       this.reset();
-    },
-    onNew() {
-      this.selectedItem = this.fields.reduce((p, n) => {
-        p[n.key] = n.type === "multiselect" ? [] : null;
-        return p;
-      }, {});
-      this.selectedItemEditable = true;
-      this.isCreating = true;
     },
     reset() {
       this.selectedItem = null;

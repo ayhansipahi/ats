@@ -20,17 +20,17 @@
       <!--begin::Signin-->
       <div class="kt-login__form">
         <div class="kt-login__title">
-          <h3>Tüpraş Araç Takip Sistemi</h3>
+          <h3>{{ $t("AUTH.LOGIN.TITLE") }}</h3>
         </div>
 
         <!--begin::Form-->
         <b-form class="kt-form" @submit.stop.prevent="onSubmit">
-          <div v-if="false" role="alert" class="alert alert-info">
+          <!--<div role="alert" class="alert alert-info">
             <div class="alert-text">
               Use account <strong>admin@demo.com</strong> and password
               <strong>demo</strong> to continue.
             </div>
-          </div>
+          </div>-->
 
           <div
             role="alert"
@@ -44,7 +44,7 @@
 
           <b-form-group
             id="example-input-group-1"
-            label="Kullanıcı Adı"
+            :label="$t('AUTH.INPUT.USERNAME')"
             label-for="example-input-1"
           >
             <b-form-input
@@ -56,13 +56,17 @@
             ></b-form-input>
 
             <b-form-invalid-feedback id="input-1-live-feedback">
-              Kullanıcı adı gerekli
+              {{
+                $t("AUTH.VALIDATION.REQUIRED", {
+                  name: $t("AUTH.INPUT.USERNAME")
+                })
+              }}
             </b-form-invalid-feedback>
           </b-form-group>
 
           <b-form-group
             id="example-input-group-2"
-            label="Şifre"
+            :label="$t('AUTH.INPUT.PASSWORD')"
             label-for="example-input-2"
           >
             <b-form-input
@@ -75,7 +79,11 @@
             ></b-form-input>
 
             <b-form-invalid-feedback id="input-2-live-feedback">
-              Şifre gerekli
+              {{
+                $t("AUTH.VALIDATION.REQUIRED", {
+                  name: $t("AUTH.INPUT.PASSWORD")
+                })
+              }}
             </b-form-invalid-feedback>
           </b-form-group>
 

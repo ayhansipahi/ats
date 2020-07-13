@@ -34,7 +34,7 @@
     </template>
     <div v-else>
       <b-alert variant="danger" show>
-        You don't have permission to see this page
+        {{ $t("GENERAL.NO_PERMISSION") }}
       </b-alert>
     </div>
   </div>
@@ -58,12 +58,21 @@ export default {
   mixins: [permission],
   data() {
     return {
-      title: "Şoför",
       fetching: false,
-      fields: [
+      selectedItem: null,
+      selectedItemEditable: false,
+      isCreating: false
+    };
+  },
+  computed: {
+    title() {
+      return this.$t("TITLE.driver");
+    },
+    fields() {
+      return [
         {
           key: "TCKN",
-          label: "TC",
+          label: this.$t("FIELDS.driver.TCKN"),
           sortable: true,
           type: "text",
           formType: "text",
@@ -71,14 +80,14 @@ export default {
         },
         {
           key: "DriverName",
-          label: "Adı",
+          label: this.$t("FIELDS.driver.DriverName"),
           sortable: true,
           type: "text",
           formRequired: true
         },
         {
           key: "Phone",
-          label: "Telefon",
+          label: this.$t("FIELDS.driver.Phone"),
           sortable: true,
           type: "text",
           formType: "text",
@@ -86,20 +95,20 @@ export default {
         },
         {
           key: "Email",
-          label: "E-Posta",
+          label: this.$t("FIELDS.driver.Email"),
           sortable: true,
           type: "text",
           formType: "email"
         },
         {
           key: "Address",
-          label: "Adres",
+          label: this.$t("FIELDS.driver.Address"),
           sortable: true,
           type: "text"
         },
         {
           key: "CreatedDate",
-          label: "Oluşturma Tarihi",
+          label: this.$t("FIELDS.CreateDate"),
           sortable: true,
           type: "datetime",
           editable: false,
@@ -111,13 +120,8 @@ export default {
           },
           filterByFormatted: true
         }
-      ],
-      selectedItem: null,
-      selectedItemEditable: false,
-      isCreating: false
-    };
-  },
-  computed: {
+      ];
+    },
     ...mapState({
       items: state => state.driver.items
     })
@@ -136,10 +140,13 @@ export default {
     },
     onDelete(item) {
       this.$bvModal
-        .msgBoxConfirm(this.title + " silinsin mi?", {
-          okTitle: "Evet",
-          cancelTitle: "Hayır"
-        })
+        .msgBoxConfirm(
+          this.$t("MESSAGES.DELETE_CONFIRM", { name: this.title }),
+          {
+            okTitle: this.$t("MESSAGES.OK"),
+            cancelTitle: this.$t("MESSAGES.CANCEL")
+          }
+        )
         .then(value => (value ? this.deleteItem(item) : false))
         .then(() => (this.selectedItem = null));
     },
@@ -155,7 +162,7 @@ export default {
         })
         .then(data => {
           data === true
-            ? this.$toastr.success("İşlem Başarılı")
+            ? this.$toastr.success(this.$t("MESSAGES.SUCCESS"))
             : this.$toastr.error(data.Message);
         })
         .catch(err => {
