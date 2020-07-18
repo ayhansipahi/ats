@@ -29,7 +29,7 @@ export async function loadLanguageAsync () {
     if (i18n.locale !== lang) setI18nLanguage(lang)
     return Promise.resolve()
   }
-  const response = await axios.get(`https://sleepy-boyd-146210.netlify.app/${lang}.json`);
+  const response = await axios.get(`https://sleepy-boyd-146210.netlify.app/functions/${lang}.json`);
   let msgs = response.data;
   loadedLanguages.push(lang);
   i18n.setLocaleMessage(lang, msgs);
