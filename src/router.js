@@ -6,7 +6,7 @@ import {
   ADD_BODY_CLASSNAME,
   REMOVE_BODY_CLASSNAME
 } from "./store/htmlclass.module";
-
+import { loadLanguageAsync } from "./common/plugins/vue-i18n";
 Vue.use(Router);
 
 const router = new Router({
@@ -83,6 +83,10 @@ const router = new Router({
           component: () => import("./views/pages/log.vue")
         },
         {
+          path: "/i18n",
+          component: () => import("./views/pages/i18n.vue")
+        },
+        {
           name: "map",
           path: "/map",
           component: () => import("./views/pages/mapView.vue"),
@@ -144,8 +148,9 @@ const router = new Router({
 });
 
 // Ensure we checked auth before each page load.
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   store.dispatch(ADD_BODY_CLASSNAME, "kt-page--loading");
+  await loadLanguageAsync();
   if (to.name === "login") next();
   else
     store.dispatch(VERIFY_AUTH).then(res => {

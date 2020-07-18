@@ -69,6 +69,14 @@
               height="38"
             ></b-img>
           </template>
+          <template v-else-if="row.field.type === 'textarea'">
+            <b-textarea
+              :key="field.key"
+              :value="row.item[field.key]"
+              readonly="readonly"
+            >
+            </b-textarea>
+          </template>
           <template v-else>{{ row.item[field.key] }}</template>
         </template>
       </b-table>

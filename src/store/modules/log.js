@@ -19,7 +19,7 @@ const getters = {
 
 const actions = {
   [FETCH_LOG](context) {
-    return ApiService.query("Log/get-all", {
+    return ApiService.query("Log/get-all-with-paging", {
       params: {
         pageNumber: 1,
         pageSize: 100

@@ -1,17 +1,11 @@
 <template>
   <div>
-    <template v-if="true">
-      <h1>
-        {{ $t("GENERAL.UNDER_CONSTRUCTION") }}
-      </h1>
-    </template>
-    <template v-else-if="canRead">
+    <template v-if="canRead">
       <tprsTable
         v-if="selectedItem === null"
         :items="items"
         :isBusy="fetching"
         :fields="fields"
-        :options="options"
         :isCreateVisible="false"
         :canDelete="false"
         :canEdit="false"
@@ -27,7 +21,6 @@
         :fields="fields"
         :editable="selectedItemEditable"
         :isCreate="isCreating"
-        :options="options"
         :canDelete="false"
         :canEdit="false"
         @onCancel="onCancel"
@@ -67,31 +60,31 @@ export default {
     fields() {
       return [
         {
-          key: "table",
+          key: "Table",
           label: this.$t("FIELDS.log.table"),
           sortable: true,
           type: "text"
         },
         {
-          key: "method",
+          key: "Method",
           label: this.$t("FIELDS.log.method"),
           sortable: true,
           type: "text"
         },
         {
-          key: "user",
+          key: "User",
           label: this.$t("FIELDS.log.user"),
           sortable: true,
           type: "text"
         },
         {
-          key: "requestJson",
+          key: "RequestJson",
           label: this.$t("FIELDS.log.requestJson"),
           sortable: true,
           type: "textarea"
         },
         {
-          key: "responseJson",
+          key: "ResponseJson",
           label: this.$t("FIELDS.log.responseJson"),
           sortable: true,
           type: "textarea"
@@ -109,8 +102,8 @@ export default {
       ];
     },
     ...mapState({
-      items: state => state.alarm.items,
-      errors: state => state.alarm.errors
+      items: state => state.log.items,
+      errors: state => state.log.errors
     })
   },
   methods: {
@@ -119,12 +112,6 @@ export default {
       setBreadCrumb: SET_BREADCRUMB,
       deleteItem: DELETE_LOG
     }),
-    fetchOptions() {
-      this.optionsList.forEach(option => {
-        const actionName = `FETCH_${option.toUpperCase()}`;
-        this.$store.dispatch(actionName);
-      });
-    },
     onSelect(item, editable) {
       this.selectedItem = item;
       this.selectedItemEditable = editable;
@@ -158,7 +145,6 @@ export default {
       }
     ]);
     this.fetching = true;
-    await this.fetchOptions();
     await this.fetchItems();
     this.fetching = false;
   }

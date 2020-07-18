@@ -35,14 +35,8 @@ module.exports = {
         config: {
           path: __dirname
         }
-      },
-      sass: {
-        prependData: `@import "@/assets/sass/global/integration/frameworks/vue/vuetify/variables.scss"`
-      },
-      scss: {
-        prependData: `@import "@/assets/sass/global/integration/frameworks/vue/vuetify/variables.scss";`
       }
     }
   },
-  transpileDependencies: ["vuetify"]
+  transpileDependencies: []
 };

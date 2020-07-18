@@ -3,6 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import axios from "axios";
 import store from "./store";
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+
 
 import VueSignalR from "./lib/signalrConnect";
 
@@ -19,7 +23,7 @@ window.JQuery = require("jquery");
 window.toastr = require("toastr");
 
 Vue.use(VueToastr2);
-
+Vue.use(ElementUI);
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyAhJg3hOUR4QqA_SsYyyen139UNZ4WSn8A",
@@ -62,7 +66,6 @@ import "perfect-scrollbar";
 
 // Vue 3rd party plugins
 import i18n from "./common/plugins/vue-i18n";
-import vuetify from "./common/plugins/vuetify";
 import "./common/plugins/bootstrap-vue";
 import "./common/plugins/perfect-scrollbar";
 import "./common/plugins/highlight-js";
@@ -79,6 +82,5 @@ new Vue({
   router,
   store,
   i18n,
-  vuetify,
   render: h => h(App)
 }).$mount("#app");
