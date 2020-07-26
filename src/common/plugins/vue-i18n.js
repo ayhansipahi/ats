@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueI18n from "vue-i18n";
-import axios from 'axios';
-import i18nService from "../i18n.service"
+import i18nService from "../i18n.service";
+import ApiService from "@/common/api.service";
 
 Vue.use(VueI18n);
 
@@ -15,22 +15,30 @@ const i18n = new VueI18n({
 
 export default i18n;
 
-const loadedLanguages = []
+const loadedLanguages = [];
 
-function setI18nLanguage (lang) {
-  i18n.locale = lang
-  document.querySelector('html').setAttribute('lang', lang)
-  return lang
+function setI18nLanguage(lang) {
+  i18n.locale = lang;
+  document.querySelector("html").setAttribute("lang", lang);
+  return lang;
 }
 
-export async function loadLanguageAsync () {
-  const lang = i18nService.getActiveLanguage()
+export async function loadLanguageAsync() {
+  const lang = i18nService.getActiveLanguage();
   if (loadedLanguages.includes(lang)) {
-    if (i18n.locale !== lang) setI18nLanguage(lang)
-    return Promise.resolve()
+    if (i18n.locale !== lang) setI18nLanguage(lang);
+    return Promise.resolve();
   }
-  const response = await axios.get(`https://sleepy-boyd-146210.netlify.app/functions/${lang}.json`);
-  let msgs = response.data;
+  const response = await ApiService.query("Language/get", { params: {
+      languageCode: lang
+    }});
+  let msgs = {};
+  try {
+    msgs = JSON.parse(response.data.Data.Value);
+  } catch (e) {
+    console.error("invalid language json");
+  }
+
   loadedLanguages.push(lang);
   i18n.setLocaleMessage(lang, msgs);
   setI18nLanguage(lang);
