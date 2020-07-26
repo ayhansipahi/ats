@@ -29,14 +29,16 @@ export async function loadLanguageAsync() {
     if (i18n.locale !== lang) setI18nLanguage(lang);
     return Promise.resolve();
   }
-  const response = await ApiService.query("Language/get", { params: {
+  const response = await ApiService.query("Language/get", {
+    params: {
       languageCode: lang
-    }});
+    }
+  });
   let msgs = {};
   try {
     msgs = JSON.parse(response.data.Data.Value);
   } catch (e) {
-    console.error("invalid language json");
+    throw "invalid language json";
   }
 
   loadedLanguages.push(lang);
