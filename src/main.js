@@ -3,11 +3,11 @@ import App from "./App.vue";
 import router from "./router";
 import axios from "axios";
 import store from "./store";
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
-
-
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import VueLodash from "vue-lodash";
+import lodash from "lodash";
+import { API_URL, SIGNALR_URL } from "@/common/config";
 import VueSignalR from "./lib/signalrConnect";
 
 import VueToastr2 from "vue-toastr-2";
@@ -33,11 +33,12 @@ Vue.use(VueGoogleMaps, {
 });
 
 Vue.prototype.$axios = axios.create({
-  baseURL: "https://tuprasatsapi.azurewebsites.net/"
+  baseURL: API_URL
 });
 
-Vue.use(VueSignalR, "https://tuprasatsapi.azurewebsites.net/realtimedatahub");
+Vue.use(VueSignalR, SIGNALR_URL);
 Vue.use(require("vue-moment"));
+Vue.use(VueLodash, { lodash });
 
 import { VueMaskDirective } from "v-mask";
 Vue.directive("mask", VueMaskDirective);
@@ -71,7 +72,6 @@ import "./common/plugins/perfect-scrollbar";
 import "./common/plugins/highlight-js";
 import "@babel/polyfill";
 import "@mdi/font/css/materialdesignicons.css";
-
 // API service init
 ApiService.init();
 
