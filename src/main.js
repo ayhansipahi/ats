@@ -7,7 +7,7 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import VueLodash from "vue-lodash";
 import lodash from "lodash";
-import { API_URL, SIGNALR_URL } from "@/common/config";
+import { SIGNALR_URL } from "@/common/config";
 import VueSignalR from "./lib/signalrConnect";
 
 import VueToastr2 from "vue-toastr-2";
@@ -32,9 +32,7 @@ Vue.use(VueGoogleMaps, {
   }
 });
 
-Vue.prototype.$axios = axios.create({
-  baseURL: API_URL
-});
+Vue.prototype.$axios = axios.create();
 
 Vue.use(VueSignalR, SIGNALR_URL);
 Vue.use(require("vue-moment"));

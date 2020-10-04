@@ -98,7 +98,7 @@
           <b-table-simple responsive id="auth-table" striped hover>
             <b-tbody>
               <b-tr v-for="page in pages" :key="page.Id">
-                <b-th> {{ $t(`ROLE_PAGE.${page.Id}`)}}</b-th>
+                <b-th> {{ $t(`ROLE_PAGE.${page.Id}`) }}</b-th>
                 <b-td>
                   <b-form-checkbox
                     :disabled="!editable"

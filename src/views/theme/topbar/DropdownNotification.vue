@@ -39,7 +39,7 @@ export default {
       return this.$store.state.alarm.live;
     },
     backgroundImage() {
-      return process.env.BASE_URL + "assets/media/misc/bg-1.jpg";
+      return process.env.BASE_URL + "/assets/media/misc/bg-1.jpg";
     }
   }
 };

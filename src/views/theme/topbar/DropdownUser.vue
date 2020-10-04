@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     backgroundImage() {
-      return process.env.BASE_URL + "assets/media/misc/bg-1.jpg";
+      return process.env.BASE_URL + "/assets/media/misc/bg-1.jpg";
     }
   }
 };

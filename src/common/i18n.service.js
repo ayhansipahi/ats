@@ -5,12 +5,12 @@ const i18nService = {
     {
       lang: "tr",
       name: "Türkçe",
-      flag: process.env.BASE_URL + "assets/media/flags/218-turkey.svg"
+      flag: process.env.BASE_URL + "/assets/media/flags/218-turkey.svg"
     },
     {
       lang: "en",
       name: "English",
-      flag: process.env.BASE_URL + "assets/media/flags/226-united-states.svg"
+      flag: process.env.BASE_URL + "/assets/media/flags/226-united-states.svg"
     }
   ],
 

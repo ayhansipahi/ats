@@ -50,7 +50,7 @@ class SocketConnection extends EventEmitter {
   async start(options = {}) {
     this.options = Object.assign(defaultOptions, options);
 
-    await this._initialize();
+    //await this._initialize();
   }
 
   async authenticate(accessToken, options = {}) {

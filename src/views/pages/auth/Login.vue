@@ -206,7 +206,7 @@ export default {
       errors: state => state.auth.errors
     }),
     backgroundImage() {
-      return process.env.BASE_URL + "assets/media/bg/bg-4.jpg";
+      return process.env.BASE_URL + "/assets/media/bg/bg-4.jpg";
     }
   }
 };

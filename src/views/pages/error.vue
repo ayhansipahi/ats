@@ -24,7 +24,7 @@ export default {
   mounted() {},
   computed: {
     backgroundImage() {
-      return process.env.BASE_URL + "assets/media/error/bg1.jpg";
+      return process.env.BASE_URL + "/assets/media/error/bg1.jpg";
     }
   }
 };

@@ -57,25 +57,25 @@ export default {
           type: 0
         },
         {
-          svg: process.env.BASE_URL + "assets/media/files/doc.svg",
+          svg: process.env.BASE_URL + "/assets/media/files/doc.svg",
           text: "AirPlus Requirements",
           desc: "by Grog John",
           type: 1
         },
         {
-          svg: process.env.BASE_URL + "assets/media/files/pdf.svg",
+          svg: process.env.BASE_URL + "/assets/media/files/pdf.svg",
           text: "TechNav Documentation",
           desc: "by Mary Broun",
           type: 1
         },
         {
-          svg: process.env.BASE_URL + "assets/media/files/zip.svg",
+          svg: process.env.BASE_URL + "/assets/media/files/zip.svg",
           text: "All Framework Docs",
           desc: "by Nick Stone",
           type: 1
         },
         {
-          svg: process.env.BASE_URL + "assets/media/files/xml.svg",
+          svg: process.env.BASE_URL + "/assets/media/files/xml.svg",
           text: "AirPlus Requirements",
           desc: "by Tim Hardy",
           type: 1
@@ -85,25 +85,25 @@ export default {
           type: 0
         },
         {
-          img: process.env.BASE_URL + "assets/media/users/user1.jpg",
+          img: process.env.BASE_URL + "/assets/media/users/user1.jpg",
           text: "Jimmy Curry",
           desc: "Software Developer",
           type: 1
         },
         {
-          img: process.env.BASE_URL + "assets/media/users/user2.jpg",
+          img: process.env.BASE_URL + "/assets/media/users/user2.jpg",
           text: "Milena Gibson",
           desc: "UI Designer",
           type: 1
         },
         {
-          img: process.env.BASE_URL + "assets/media/users/user3.jpg",
+          img: process.env.BASE_URL + "/assets/media/users/user3.jpg",
           text: "Stefan JohnStefan",
           desc: "Marketing Manager",
           type: 1
         },
         {
-          img: process.env.BASE_URL + "assets/media/users/user4.jpg",
+          img: process.env.BASE_URL + "/assets/media/users/user4.jpg",
           text: "Anna Strong",
           desc: "Software Developer",
           type: 1
