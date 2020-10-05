@@ -3,13 +3,13 @@
     <template v-if="canRead">
       <div class="bg-white p-4 mb-4">
         <b-table
-            v-if="selectedItem === null"
-            :responsive="true"
-            id="my-table"
-            :items="items"
-            :fields="fields"
-            striped
-            hover
+          v-if="selectedItem === null"
+          :responsive="true"
+          id="my-table"
+          :items="items"
+          :fields="fields"
+          striped
+          hover
         >
           <template v-for="field in fields" v-slot:[`cell(${field.key})`]="row">
             <template v-if="row.field.type === 'action'">
@@ -26,14 +26,11 @@
               <b-icon-arrow-left></b-icon-arrow-left>
             </b-nav-item>
             <b-nav-item disabled>
-              {{selectedItem.ReportName}}
+              {{ selectedItem.ReportName }}
             </b-nav-item>
           </b-nav>
-          <reportView
-              :report="selectedItem"
-          />
+          <reportView :report="selectedItem" />
         </div>
-
       </div>
     </template>
     <div v-else>
@@ -45,16 +42,15 @@
 </template>
 
 <script>
-
-import {mapActions, mapState} from "vuex";
-import {SET_BREADCRUMB} from "@/store/breadcrumbs.module";
-import {FETCH_REPORT} from "@/store/modules/report";
+import { mapActions, mapState } from "vuex";
+import { SET_BREADCRUMB } from "@/store/breadcrumbs.module";
+import { FETCH_REPORT } from "@/store/modules/report";
 import permission from "./mixins/permission";
-import reportView from "./components/reportView.vue"
+import reportView from "./components/reportView.vue";
 
 export default {
   name: "report",
-  components: {reportView},
+  components: { reportView },
   mixins: [permission],
   data() {
     return {

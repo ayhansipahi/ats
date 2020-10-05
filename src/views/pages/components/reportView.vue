@@ -37,7 +37,6 @@ export default {
           invokeAction: "DXXRDV"
         }
       };
-      console.log(viewerOptions);
       ko.applyBindings(viewerOptions, this.$refs.viewer);
     }
   },
