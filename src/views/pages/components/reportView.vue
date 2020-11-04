@@ -15,7 +15,7 @@ import "devexpress-reporting/dist/css/dx-reportdesigner.css";
 import ko from "knockout";
 import "devexpress-reporting/dx-webdocumentviewer";
 
-import { BASE_URL } from "@/common/config";
+import { API_URL } from "@/common/config";
 
 export default {
   name: "reportView",
@@ -30,7 +30,7 @@ export default {
       var viewerOptions = {
         reportUrl: ko.observable(this.report.ReportValue), // The URL of a report.
         requestOptions: {
-          host: BASE_URL,
+          host: API_URL,
           // Use this line if you use an ASP.NET MVC backend
           //invokeAction: "/WebDocumentViewer/Invoke"
           // Uncomment this line if you use an ASP.NET Core backend

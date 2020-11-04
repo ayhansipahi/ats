@@ -609,9 +609,7 @@ export default {
       );
       langToUpdate.Value = JSON.stringify(this.language);
       ApiService.post("Language/update", langToUpdate).then(({ data }) => {
-        debugger;
         if (data.IsSuccess) {
-          debugger;
           this.$i18n.setLocaleMessage(
             data.Data.LanguageCode.toLowerCase(),
             JSON.parse(data.Data.Value)
